@@ -1,0 +1,38 @@
+Package: ShinyAppBuilder
+Type: Package
+Title: Viewing OHDSI results via shiny modules
+Version: 1.0.1
+Date: 2022-07-02
+Authors@R: c(
+  person("Jenna", "Reps", email = "jreps@its.jnj.com", role = c("aut", "cre")),
+  person("Josh", "Ide", role = c("aut")),
+  person("Jamie", "Gibert", role = c("aut"))
+  )
+Maintainer: Jenna Reps <jreps@its.jnj.com>
+Description: Interactively view analysis results across different types of analyses.
+License: Apache License 2.0
+URL: https://ohdsi.github.io/shinyModuleViewer, https://github.com/OHDSI/shinyModuleViewer
+BugReports: https://github.com/OHDSI/shinyModuleViewer/issues
+VignetteBuilder: knitr
+Depends:
+  R (>= 3.3.0)
+Imports:
+  dplyr,
+  jsonlite,
+  keyring,
+  OhdsiShinyModules,
+  ParallelLogger (>= 2.0.0),
+  rlang,
+  shiny,
+  shinydashboard
+Suggests:
+  Eunomia,
+  knitr,
+  rmarkdown,
+  testthat
+Remotes:
+  ohdsi/Eunomia,
+  ohdsi/ParallelLogger,
+  ohdsi/OhdsiShinyModules
+RoxygenNote: 7.2.1
+Encoding: UTF-8

@@ -1,0 +1,81 @@
+{
+  "shinyModules": [
+  {
+    "order": 1,
+    "id": "about", 
+    "tabName": "About", 
+    "tabText": "About",
+    "shinyModulePackage":"OhdsiShinyModules",
+    "uiFunction": "aboutViewer",
+    "serverFunction": "aboutServer",
+    "databaseConnectionKeyService": "null",
+    "databaseConnectionKeyUsername": "null",
+    "infoBoxFile": "aboutHelperFile()",
+    "icon": "info",
+    "keyring": true
+  },
+  
+  {
+    "order": 2,
+    "id": "cohortGenerator", 
+    "tabName": "CohortGenerator", 
+    "tabText": "CohortGenerator",
+    "shinyModulePackage":"OhdsiShinyModules",
+    "uiFunction": "cohortGeneratorViewer",
+    "serverFunction": "cohortGeneratorServer",
+    "databaseConnectionKeyService": "resultDatabaseSettings",
+    "databaseConnectionKeyUsername": "cohortGenerator",
+    "infoBoxFile": "cohortGeneratorHelperFile()",
+    "icon": "info",
+    "keyring": true
+  },
+  
+   {
+    "order": 3,
+    "id": "description", 
+    "tabName": "Description", 
+    "tabText": "Description",
+    "shinyModulePackage":"OhdsiShinyModules",
+    "uiFunction": "descriptionViewer",
+    "serverFunction": "descriptionServer",
+    "databaseConnectionKeyService": "resultDatabaseSettings",
+    "databaseConnectionKeyUsername": "description",
+    "infoBoxFile": "descriptionHelperFile()",
+    "icon": "table",
+    "keyring": true
+  },
+  
+  {
+    "order": 4,
+    "id": "estimation", 
+    "tabName": "Estimation", 
+    "tabText": "Estimation",
+    "shinyModulePackage":"OhdsiShinyModules",
+    "uiFunction": "estimationViewer",
+    "serverFunction": "estimationServer",
+    "databaseConnectionKeyService": "resultDatabaseSettings",
+    "databaseConnectionKeyUsername": "estimation",
+    "infoBoxFile": "estimationHelperFile()",
+    "icon": "table",
+    "keyring": true
+  },
+  
+  {
+    "order": 5,
+    "id": "prediction", 
+    "tabName": "Prediction", 
+    "tabText": "Prediction",
+    "shinyModulePackage":"OhdsiShinyModules",
+    "uiFunction": "predictionViewer",
+    "serverFunction": "predictionServer",
+    "databaseConnectionKeyService": "resultDatabaseSettings",
+    "databaseConnectionKeyUsername": "prediction",
+    "infoBoxFile": "predictionHelperFile()",
+    "icon": "chart-line",
+    "keyring": true
+  }
+  
+ 
+  
+  ]
+}
