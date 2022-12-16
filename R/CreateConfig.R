@@ -308,16 +308,14 @@ createDefaultCohortDiagnosticsConfig <- function(
       dbms = 'sqlite',
       tablePrefix = 'cd_',
       schema = 'main',
-      vocabularyDatabaseSchema = 'main',
-      databaseTable = 'database',
-      cohortTable = 'cohort'
+      vocabularyDatabaseSchema = 'main'
     ),
     useKeyring = T
 ){
 
   result <- createModuleConfig(
     moduleId = 'cohortDiagnostics',
-    tabName = "Cohort Level Diagnostics",
+    tabName = "CohortDiagnostics",
     shinyModulePackage = 'OhdsiShinyModules',
     moduleUiFunction = "cohortDiagnosticsView",
     moduleServerFunction = "cohortDiagnosticsSever",

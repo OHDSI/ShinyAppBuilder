@@ -86,14 +86,21 @@ server <- function(config, connection){
           # add the connection 
           argsList$connectionHandler <- connection
         }
-        
-        
         # run the server
-        do.call(
-          what = eval(parse(text = paste0(module$shinyModulePackage, "::",module$serverFunction))),
-          args = argsList
-        )
 
+        tryCatch({
+
+          shiny::withProgress({
+            do.call(
+              what = eval(parse(text = paste0(module$shinyModulePackage, "::",module$serverFunction))),
+              args = argsList
+            )
+          }, message = paste("Loading module", module$moduleId))
+
+        }, error = function (err) {
+          ParallelLogger::logError("Failed to load module ", module$tabName)
+          shiny::showNotification("Error loading module, check configuration/logs.", type = "error")
+        })
       }
       
     }
