@@ -33,6 +33,6 @@ Suggests:
 Remotes:
   ohdsi/Eunomia,
   ohdsi/ParallelLogger,
-  ohdsi/OhdsiShinyModules@cohortDiagnostics
+  ohdsi/OhdsiShinyModules@develop
 RoxygenNote: 7.2.1
 Encoding: UTF-8
