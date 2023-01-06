@@ -287,3 +287,44 @@ createDefaultCohortGeneratorConfig <- function(
   
   return(result)
 }
+
+#' createDefaultCohortDiagnosticsConfig
+#'
+#' @description
+#' Create an R list with the characterization config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for a characterization module
+#'
+#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
+#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
+#'
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultCohortDiagnosticsConfig <- function(
+    resultDatabaseDetails = list(
+      dbms = 'sqlite',
+      tablePrefix = 'cd_',
+      schema = 'main',
+      vocabularyDatabaseSchema = 'main'
+    ),
+    useKeyring = T
+){
+
+  result <- createModuleConfig(
+    moduleId = 'cohortDiagnostics',
+    tabName = "CohortDiagnostics",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "cohortDiagnosticsView",
+    moduleServerFunction = "cohortDiagnosticsSever",
+    moduleDatabaseConnectionKeyUsername = "cohortDiagnostics",
+    moduleInfoBoxFile =  "cohortDiagnosticsHelperFile()",
+    moduleIcon = "users",
+    resultDatabaseDetails = resultDatabaseDetails,
+    useKeyring = useKeyring
+  )
+
+  return(result)
+}

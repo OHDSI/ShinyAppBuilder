@@ -3,6 +3,7 @@
 export(addModuleConfig)
 export(createDefaultAboutConfig)
 export(createDefaultCharacterizationConfig)
+export(createDefaultCohortDiagnosticsConfig)
 export(createDefaultCohortGeneratorConfig)
 export(createDefaultEstimationConfig)
 export(createDefaultPredictionConfig)
