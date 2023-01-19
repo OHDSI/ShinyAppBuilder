@@ -1,4 +1,9 @@
 # ShinyAppBuilder
+
+[![Build Status](https://github.com/OHDSI/ShinyAppBuilder/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/ShinyAppBuilder/actions?query=workflow%3AR-CMD-check)
+
+[![codecov.io](https://codecov.io/github/OHDSI/ShinyAppBuilder/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/ShinyAppBuilder?branch=main)
+
 Create shiny apps using modules from OhdsiShinyModules or custom modules
 
 # Example: Running a local shiny app
