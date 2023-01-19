@@ -3,6 +3,10 @@ title: "Using Shiny App Builder"
 author: "Jenna Reps, Jamie Gilbert, Josh Ide"
 date: "`r Sys.Date() `"
 output: html_document
+vignette: >
+  %\VignetteIndexEntry{guide}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
