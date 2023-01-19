@@ -70,11 +70,6 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
           
-      - name: use r-reticulate environment
-        run: |
-          reticulate::use_condaenv("r-reticulate", required = TRUE)
-        shell: Rscript {0}
-
       - uses: r-lib/actions/check-r-package@v2
         with:
           args: 'c("--no-manual", "--as-cran")'
