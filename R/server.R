@@ -99,7 +99,10 @@ server <- function(config, connection){
 
         }, error = function (err) {
           ParallelLogger::logError("Failed to load module ", module$tabName)
-          shiny::showNotification("Error loading module, check configuration/logs.", type = "error")
+          shiny::showNotification(
+            paste0("Error loading module: ", err),
+            type = "error"
+          )
         })
       }
       

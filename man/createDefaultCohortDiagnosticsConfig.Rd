@@ -6,8 +6,7 @@
 \usage{
 createDefaultCohortDiagnosticsConfig(
   resultDatabaseDetails = list(dbms = "sqlite", tablePrefix = "cd_", schema = "main",
-    vocabularyDatabaseSchema = "main", databaseTable = "database", cohortTable =
-    "cohort"),
+    vocabularyDatabaseSchema = "main"),
   useKeyring = T
 )
 }

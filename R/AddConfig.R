@@ -18,7 +18,7 @@ addModuleConfig <- function(
     moduleConfig
 ){
   
-  moduleConfig$order <- length(config)+1
+  moduleConfig$order <- length(config$shinyModules)+1
   config$shinyModules[[length(config$shinyModules)+1]] <- moduleConfig
   
   return(config)
