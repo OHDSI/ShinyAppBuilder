@@ -29,7 +29,8 @@ Suggests:
   Eunomia,
   knitr,
   rmarkdown,
-  testthat
+  testthat,
+  markdown
 Remotes:
   ohdsi/Eunomia,
   ohdsi/ParallelLogger,
