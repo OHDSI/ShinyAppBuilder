@@ -30,7 +30,8 @@ Suggests:
   knitr,
   rmarkdown,
   testthat,
-  markdown
+  markdown,
+  remotes
 Remotes:
   ohdsi/Eunomia,
   ohdsi/ParallelLogger,
