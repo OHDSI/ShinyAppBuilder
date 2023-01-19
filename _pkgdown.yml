@@ -1,0 +1,66 @@
+template:
+  params:
+    bootswatch: cosmo
+
+home:
+  links:
+  - text: Ask a question
+    href: http://forums.ohdsi.org
+
+navbar:
+  structure:
+    left:
+    - home
+    - reference
+    - articles
+    - news
+    right: [hades, github]
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      text: Changelog
+      href: news/index.html
+    github:
+      icon: fa-github fa-lg
+      href: https://github.com/OHDSI/ShinyAppBuilder
+    hades:
+      text: hadesLogo
+      href: https://ohdsi.github.io/Hades
+
+reference:
+  - title: "Shiny App config"
+    desc: >
+      These functions initialize a shiny app config, add modules and save/load the config.
+    contents:
+      - initializeModuleConfig
+      - addModuleConfig
+      - saveConfig
+      - loadConfig
+  - title: "Create module config"
+    desc: >
+      These functions create shiny module config settings.
+    contents:
+      - createModuleConfig
+      - createDefaultAboutConfig
+      - createDefaultPredictionConfig
+      - createDefaultEstimationConfig
+      - createDefaultCharacterizationConfig
+      - createDefaultCohortGeneratorConfig
+      - createDefaultCohortDiagnosticsConfig
+  - title: "Create or view shiny app"
+    desc: >
+      These functions create a shiny app or create and open the shiny app.
+    contents:
+      - createShinyApp
+      - viewShiny
+  - title: "ShinyAppBuilder"
+    desc: >
+      A package for building shiny apps from OHDSI shiny modules.
+    contents:
+      - ShinyAppBuilder
+

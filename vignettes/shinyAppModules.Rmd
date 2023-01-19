@@ -1,0 +1,294 @@
+---
+title: "Using Shiny App Builder"
+author: "Jenna Reps, Jamie Gilbert, Josh Ide"
+date: "`r Sys.Date() `"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Using the Shiny App Builder
+
+The shiny app builder provides a way to combine different shiny modules into a single app.  For example, if you have a characterization study, an estimation study and a prediction study that are related as they all use the same cohorts, then you may want to view the results in a single shiny app.  This can be done by using `ShinyAppBuilder` to combine the characterization, estimation and prediction shiny modules in `OhdsiShinyModule`. The main source of shiny modules is the `OhdsiShinyModule` R package, however, it is possible to add modules from other R packages.
+
+In this vignette we provide examples on how to use the `ShinyAppBuilder` to create flexible shiny apps for exploring OHDSI results.
+
+The `ShinyAppBuilder` requires that all results to be explored by the shiny app are saved into a single database (i.e., all results for the different shiny modules in an app are saved into the same database), as a single database connection is shared across shiny modules. 
+
+# Example 1
+
+To create a shiny app that contains four shiny modules:
+
+- About (an introduction to the shiny app)
+- Cohort Generation (details about generated cohorts)
+- Cohort Method (details about causal inference studies via the cohort method)
+- Prediction (details about patient level prediction models)
+
+All of these are available as shiny modules in `OhdsiShinyModules`.  
+
+## Creating module config settings 
+To create the shiny app via `ShinyAppBuilder` we first need to create a config specification for all the shiny modules we wish to include into the single shiny app.  A config can be created using `createModuleConfig`.  
+
+```{r echo=FALSE}
+
+inputsForConfig <- data.frame(
+  Inputs = c('moduleId','tabName','shinyModulePackage',
+      'moduleUiFunction', 'moduleServerFunction',
+      'moduleDatabaseConnectionKeyService',
+      'moduleDatabaseConnectionKeyUsername',
+      'moduleInfoBoxFile',
+      'moduleIcon','resultDatabaseDetails','useKeyring'
+),
+
+Description = c("a unique id for the shiny app", "The menu text for the module", "The R package that contains the shiny module", "The name of the module's UI function", "The name of the module's server function", 
+                "A name for the keyring service/environment variable to store the result database details",
+                "A name for the keyring username/environment variable to store the result database details",
+                "The function in the shinyModulePackage package that contains the helper information",
+                "An icon to use in the menu for this module",
+                "A list containing the results details: dbms, tablePrefix, cohortTablePrefix, databaseTablePrefix, schema, databaseTable, incidenceTablePrefix",
+                "Whether to use keyring of environmental variables")
+)
+
+knitr::kable(inputsForConfig)
+
+```
+
+Note: it is possible to add shiny modules from any R package by setting `shinyModulePackage` to the R package with the UI and server functions and then specifying the UI function as `moduleUiFunction` and server function as `moduleServerFunction`.  However, the server function must take as input `id` (the module id as standard for shiny server modules) and `resultDatabaseSettings` (a list containing the database result details required when extracting the results from the database).
+
+## Creating the about module config 
+
+For the about module we will use the about shiny modules in `OhdsiShinyModule`.  The UI is named `aboutViewer`, the server is named `aboutServer` and the about helper function is called `aboutHelperFile()`. The about module does not have any results, so `moduleDatabaseConnectionKeyService`, `moduleDatabaseConnectionKeyUsername` and `resultDatabaseDetails` are NULL.  As the about module provides information about the shiny app, the 'info' icon seems appropriate. The inputs into `createModuleConfig` for an about module are:
+
+```{r eval=FALSE}
+
+aboutModule <- createModuleConfig(
+      moduleId = 'about',
+      tabName = "About",
+      shinyModulePackage = "OhdsiShinyModule",
+      moduleUiFunction = 'aboutViewer',
+      moduleServerFunction = 'aboutServer',
+      moduleDatabaseConnectionKeyService = NULL,
+      moduleDatabaseConnectionKeyUsername = NULL,
+      moduleInfoBoxFile =  "aboutHelperFile()",
+      moduleIcon = 'info',
+      resultDatabaseDetails = NULL,
+      useKeyring = TRUE
+    )
+
+```
+
+For simplicity, the `ShinyAppBuilder` contains a function called `createDefaultAboutConfig` with these default about settings into `createModuleConfig`, this is quicker to use than `createModuleConfig` if you are using a standard about module.  Alternatively, you could just run:
+
+```{r eval=FALSE}
+
+aboutModule <- createDefaultAboutConfig(
+      resultDatabaseDetails = NULL,
+      useKeyring = TRUE
+    )
+
+```
+
+## Creating the prediction module config 
+
+To add a prediction module you can the `OhdsiShinyModule` functions: `aboutPrediction` for the module UI, `aboutPrediction` for the module server and `aboutPredictionFile()` for the about helper function. A suitable icon is `chart-line`.  For the prediction module, results in the database format created by the `PatientLevelPrediction` package must be in a database that will be connected to when viewing the shiny app.  The `resultDatabaseDetails` input is a list that must specify the details about the result tables:
+
+- dbms (the database management system with the results e.g., 'sqlite')
+- tablePrefix (a string that is prefixed to the prediction result tables e.g., 'plp_')
+- cohortTablePrefix (a string that is prefixed to the cohort table result e.g., 'cg_')
+- databaseTablePrefix (a string that is prefixed to the database table result e.g., '')
+- schema (the schema with the result tables e.g., 'main')
+- databaseTable (the name of the database table e.g., 'DATABASE_META_DATA')
+
+```{r eval=FALSE}
+
+resultDatabaseDetails <- list(
+      dbms = 'sqlite',
+      tablePrefix = 'plp_',
+      cohortTablePrefix = 'cg_',
+      databaseTablePrefix = '',
+      schema = 'main',
+      databaseTable = 'DATABASE_META_DATA'
+    )
+
+predictionModule <- createModuleConfig(
+    moduleId = 'prediction',
+    tabName = "Prediction",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "predictionViewer",
+    moduleServerFunction = "predictionServer",
+    moduleDatabaseConnectionKeyService ="resultDatabaseDetails",
+    moduleDatabaseConnectionKeyUsername = "prediction",
+    moduleInfoBoxFile =  "predictionHelperFile()",
+    moduleIcon = "chart-line",
+    resultDatabaseDetails = resultDatabaseDetails,
+    useKeyring = TRUE
+    )
+
+```
+
+For simplicity, the `ShinyAppBuilder` contains a function called `createDefaultPredictionConfig` with these default prediction settings, however, you must still specify whether you want to use keyring `useKeyring` and you must specify the `resultDatabaseDetails`.  Atlernatively, you could just run:
+
+```{r eval=FALSE}
+
+resultDatabaseDetails <- list(
+      dbms = 'sqlite',
+      tablePrefix = 'plp_',
+      cohortTablePrefix = 'cg_',
+      databaseTablePrefix = '',
+      schema = 'main',
+      databaseTable = 'DATABASE_META_DATA'
+    )
+
+predictionModule <- createDefaultPredictionConfig(
+      resultDatabaseDetails = resultDatabaseDetails,
+      useKeyring = TRUE
+    )
+
+```
+
+## Creating the cohort generation and cohort method using default functions
+
+We have default config creation for cohort method and cohort generation in `ShinyAppBuilder`:
+
+```{r eval=FALSE}
+
+resultDatabaseDetails <- list(
+      dbms = 'sqlite',
+      tablePrefix = 'cm_',
+      cohortTablePrefix = 'cg_',
+      databaseTablePrefix = '',
+      schema = 'main',
+      databaseTable = 'DATABASE_META_DATA'
+    )
+
+cohortMethodModule <- createDefaultEstimationConfig(
+      resultDatabaseDetails = resultDatabaseDetails,
+      useKeyring = TRUE
+    )
+
+cohortGeneratorModule <- createDefaultCohortGeneratorConfig()
+
+```
+
+## Combining config settings
+
+Next step is to combine the module config settings into a shiny app config.  First we use `initializeModuleConfig()` to create an empty shiny app config and then we use `addModuleConfig()` to add each of the module configs we previously created:
+
+
+```{r eval=FALSE}
+
+library(dplyr)
+shinyAppConfig <- initializeModuleConfig() %>%
+  addModuleConfig(aboutModule) %>%
+  addModuleConfig(cohortGeneratorModule) %>%
+  addModuleConfig(cohortMethodModule) %>%
+  addModuleConfig(predictionModule)
+
+```
+
+It is possible to save the shiny app config using `saveConfig(shinyAppConfig, 'save location')` and load a previously saved shiny app config `shinyAppConfig <- loadConfig('save location')`
+
+## View Shiny App
+
+### Create a shiny app for a shiny server
+
+To run the shiny app on a shiny server, specify the connection details to the result database and then just add the following lines of code
+
+```{r eval=FALSE}
+# create a connection to the result database
+connectionDetails <- DatabaseConnector::createConnectionDetails() 
+connection <- ResultModelManager::ConnectionHandler$new(connectionDetails)
+
+createShinyApp(shinyAppConfig, connection)
+```
+
+
+### View shiny app
+
+To just view the shiny app locally, specify the connection details to the result database and then just add the following lines of code
+
+```{r eval=FALSE}
+# create a connection to the result database
+connectionDetails <- DatabaseConnector::createConnectionDetails() 
+connection <- ResultModelManager::ConnectionHandler$new(connectionDetails)
+
+viewShiny(shinyAppConfig, connection)
+```
+
+# Example 1 Full Code To View Locally
+
+```{r eval=FALSE}
+library(ShinyAppBuilder)
+library(dplyr)
+
+aboutModule <- createModuleConfig(
+      moduleId = 'about',
+      tabName = "About",
+      shinyModulePackage = "OhdsiShinyModule",
+      moduleUiFunction = 'aboutViewer',
+      moduleServerFunction = 'aboutServer',
+      moduleDatabaseConnectionKeyService = NULL,
+      moduleDatabaseConnectionKeyUsername = NULL,
+      moduleInfoBoxFile =  "aboutHelperFile()",
+      moduleIcon = 'info',
+      resultDatabaseDetails = NULL,
+      useKeyring = TRUE
+    )
+
+resultDatabaseDetails <- list(
+      dbms = 'sqlite',
+      tablePrefix = 'plp_',
+      cohortTablePrefix = 'cg_',
+      databaseTablePrefix = '',
+      schema = 'main',
+      databaseTable = 'DATABASE_META_DATA'
+    )
+
+predictionModule <- createModuleConfig(
+    moduleId = 'prediction',
+    tabName = "Prediction",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "predictionViewer",
+    moduleServerFunction = "predictionServer",
+    moduleDatabaseConnectionKeyService ="resultDatabaseDetails",
+    moduleDatabaseConnectionKeyUsername = "prediction",
+    moduleInfoBoxFile =  "predictionHelperFile()",
+    moduleIcon = "chart-line",
+    resultDatabaseDetails = resultDatabaseDetails,
+    useKeyring = TRUE
+    )
+
+resultDatabaseDetails <- list(
+      dbms = 'sqlite',
+      tablePrefix = 'cm_',
+      cohortTablePrefix = 'cg_',
+      databaseTablePrefix = '',
+      schema = 'main',
+      databaseTable = 'DATABASE_META_DATA'
+    )
+
+cohortMethodModule <- createDefaultEstimationConfig(
+      resultDatabaseDetails = resultDatabaseDetails,
+      useKeyring = TRUE
+    )
+
+cohortGeneratorModule <- createDefaultCohortGeneratorConfig()
+
+
+# add the modules into a single shiny config
+shinyAppConfig <- initializeModuleConfig() %>%
+  addModuleConfig(aboutModule) %>%
+  addModuleConfig(cohortGeneratorModule) %>%
+  addModuleConfig(cohortMethodModule) %>%
+  addModuleConfig(predictionModule)
+
+
+# add connection details to result database
+connectionDetails <- DatabaseConnector::createConnectionDetails() 
+connection <- ResultModelManager::ConnectionHandler$new(connectionDetails)
+
+viewShiny(shinyAppConfig, connection)
+
+```
