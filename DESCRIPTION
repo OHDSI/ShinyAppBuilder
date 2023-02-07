@@ -1,7 +1,7 @@
 Package: ShinyAppBuilder
 Type: Package
 Title: Viewing OHDSI results via shiny modules
-Version: 1.0.2
+Version: 1.1.0
 Date: 2023-01-19
 Authors@R: c(
   person("Jenna", "Reps", email = "jreps@its.jnj.com", role = c("aut", "cre")),
@@ -20,7 +20,7 @@ Imports:
   dplyr,
   jsonlite,
   keyring,
-  OhdsiShinyModules,
+  OhdsiShinyModules (>= 1.0.2),
   ParallelLogger (>= 2.0.0),
   rlang,
   shiny,
