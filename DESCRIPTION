@@ -1,8 +1,8 @@
 Package: ShinyAppBuilder
 Type: Package
-Title: Viewing OHDSI results via shiny modules
-Version: 1.1.0
-Date: 2023-01-19
+Title: Viewing OHDSI Results Via Shiny Modules
+Version: 1.1.1
+Date: 2023-2-8
 Authors@R: c(
   person("Jenna", "Reps", email = "jreps@its.jnj.com", role = c("aut", "cre")),
   person("Josh", "Ide", role = c("aut")),
@@ -11,8 +11,8 @@ Authors@R: c(
 Maintainer: Jenna Reps <jreps@its.jnj.com>
 Description: Interactively view analysis results across different types of analyses.
 License: Apache License 2.0
-URL: https://ohdsi.github.io/shinyModuleViewer, https://github.com/OHDSI/shinyModuleViewer
-BugReports: https://github.com/OHDSI/shinyModuleViewer/issues
+URL: https://ohdsi.github.io/ShinyAppBuilder, https://github.com/OHDSI/ShinyAppBuilder
+BugReports: https://github.com/OHDSI/ShinyAppBuilder/issues
 VignetteBuilder: knitr
 Depends:
   R (>= 3.3.0)

@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viewing OHDSI results via shiny modules • ShinyAppBuilder</title>
+<title>Viewing OHDSI Results Via Shiny Modules • ShinyAppBuilder</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Viewing OHDSI results via shiny modules">
+<script src="pkgdown.js"></script><meta property="og:title" content="Viewing OHDSI Results Via Shiny Modules">
 <meta property="og:description" content="Interactively view analysis results across different types of analyses.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ShinyAppBuilder</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
       </span>
     </div>
 
@@ -90,18 +90,20 @@
 <div class="section level1">
 <div class="page-header"><h1 id="shinyappbuilder">ShinyAppBuilder<a class="anchor" aria-label="anchor" href="#shinyappbuilder"></a>
 </h1></div>
-<p><a href="https://github.com/OHDSI/ShinyAppBuilder/actions?query=workflow%3AR-CMD-check" class="external-link"><img src="https://github.com/OHDSI/ShinyAppBuilder/workflows/R-CMD-check/badge.svg" alt="Build Status"></a></p>
-<p><a href="https://codecov.io/github/OHDSI/ShinyAppBuilder?branch=main" class="external-link"><img src="https://codecov.io/github/OHDSI/ShinyAppBuilder/coverage.svg?branch=main" alt="codecov.io"></a></p>
+<p><a href="https://github.com/OHDSI/ShinyAppBuilder/actions?query=workflow%3AR-CMD-check" class="external-link"><img src="https://github.com/OHDSI/ShinyAppBuilder/workflows/R-CMD-check/badge.svg" alt="Build Status"></a> <a href="https://codecov.io/github/OHDSI/ShinyAppBuilder?branch=main" class="external-link"><img src="https://codecov.io/github/OHDSI/ShinyAppBuilder/coverage.svg?branch=main" alt="codecov.io"></a></p>
+<p>ShinyAppBuilder is part of <a href="https://ohdsi.github.io/Hades/" class="external-link">HADES</a>.</p>
+</div>
+<div class="section level1">
+<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h1>
 <p>Create shiny apps using modules from OhdsiShinyModules or custom modules</p>
 </div>
 <div class="section level1">
-<h1 id="example-running-a-local-shiny-app">Example: Running a local shiny app<a class="anchor" aria-label="anchor" href="#example-running-a-local-shiny-app"></a>
+<h1 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h1>
 <p>To create a shiny viewer to explore CohortDiagnostic results, Characterization results, PatientLevelPrediction results and CohortMethod results:</p>
 <pre class="{r}"><code># install dependencies
-install.packages('dplyr')
 remotes::install_github('ohdsi/ResultModelManager')
-remotes::install_github('ohdsi/OhdsiShinyModules')
 remotes::install_github('ohdsi/ShinyAppBuilder')
 
 library(dplyr)
@@ -182,12 +184,78 @@ connection &lt;- ResultModelManager::ConnectionHandler$new(connectionDetails)
 #         at the specified connection
 ShinyAppBuilder::viewShiny(config = config, connection = connection)</code></pre>
 <p>If the connection works and there is results in the database, then an interactive shiny app will open.</p>
-</div>
-<div class="section level1">
-<h1 id="example-running-a-on-a-shiny-server">Example: Running a on a shiny server<a class="anchor" aria-label="anchor" href="#example-running-a-on-a-shiny-server"></a>
-</h1>
+<div class="section level2">
+<h2 id="running-a-on-a-shiny-server">Running a on a shiny server<a class="anchor" aria-label="anchor" href="#running-a-on-a-shiny-server"></a>
+</h2>
 <p>If running the shiny app on a server, you create the config as in Example 1, but instead of <code><a href="reference/viewShiny.html">ShinyAppBuilder::viewShiny</a></code> use:</p>
 <pre class="{r}"><code><span><span class="fu">ShinyAppBuilder</span><span class="fu">::</span><span class="fu"><a href="reference/createShinyApp.html">createShinyApp</a></span><span class="op">(</span>config <span class="op">=</span> <span class="va">config</span>, connection <span class="op">=</span> <span class="va">connection</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="section level1">
+<h1 id="technology">Technology<a class="anchor" aria-label="anchor" href="#technology"></a>
+</h1>
+<p>ShinyAppBuilder is an R package.</p>
+</div>
+<div class="section level1">
+<h1 id="system-requirements">System Requirements<a class="anchor" aria-label="anchor" href="#system-requirements"></a>
+</h1>
+<p>Running the package requires R.</p>
+</div>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
+<ol style="list-style-type: decimal">
+<li><p>See the instructions <a href="https://ohdsi.github.io/Hades/rSetup.html" class="external-link">here</a> for configuring your R environment, including Java.</p></li>
+<li><p>In R, use the following commands to download and install ShinyAppBuilder:</p></li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/ShinyAppBuilder"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level1">
+<h1 id="user-documentation">User Documentation<a class="anchor" aria-label="anchor" href="#user-documentation"></a>
+</h1>
+<p>Documentation can be found on the <a href="https://ohdsi.github.io/ShinyAppBuilder/" class="external-link">package website</a>.</p>
+<p>PDF versions of the documentation are also available:</p>
+<ul>
+<li>Vignette: <a href="https://raw.githubusercontent.com/OHDSI/ShinyAppBuilder/main/inst/doc/shinyAppModules.pdf" class="external-link">Using Shiny App Builder</a>
+</li>
+<li>Package manual: <a href="https://raw.githubusercontent.com/OHDSI/ShinyAppBuilder/main/extras/ShinyAppBuilder.pdf" class="external-link">ShinyAppBuilder.pdf</a>
+</li>
+</ul>
+</div>
+<div class="section level1">
+<h1 id="support">Support<a class="anchor" aria-label="anchor" href="#support"></a>
+</h1>
+<ul>
+<li>Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers" class="external-link">OHDSI Forum</a>
+</li>
+<li>We use the <a href="https://github.com/OHDSI/ShinyAppBuilder/issues" class="external-link">GitHub issue tracker</a> for all bugs/issues/enhancements</li>
+</ul>
+</div>
+<div class="section level1">
+<h1 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h1>
+<p>Read <a href="https://ohdsi.github.io/Hades/contribute.html" class="external-link">here</a> how you can contribute to this package.</p>
+</div>
+<div class="section level1">
+<h1 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h1>
+<p>ShinyAppBuilder is licensed under Apache License 2.0.</p>
+</div>
+<div class="section level1">
+<h1 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
+</h1>
+<p>ShinyAppBuilder is being developed in R Studio.</p>
+<div class="section level3">
+<h3 id="development-status">Development status<a class="anchor" aria-label="anchor" href="#development-status"></a>
+</h3>
+<p>Under development</p>
+</div>
+</div>
+<div class="section level1">
+<h1 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h1>
 </div>
 
   </div>
@@ -196,8 +264,8 @@ ShinyAppBuilder::viewShiny(config = config, connection = connection)</code></pre
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/OHDSI/shinyModuleViewer/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/OHDSI/shinyModuleViewer/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/OHDSI/ShinyAppBuilder/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/OHDSI/ShinyAppBuilder/issues" class="external-link">Report a bug</a></li>
 <li><a href="http://forums.ohdsi.org" class="external-link">Ask a question</a></li>
 </ul>
 </div>
