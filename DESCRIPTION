@@ -34,7 +34,6 @@ Suggests:
   remotes
 Remotes:
   ohdsi/Eunomia,
-  ohdsi/ParallelLogger,
   ohdsi/OhdsiShinyModules
 RoxygenNote: 7.2.1
 Encoding: UTF-8
