@@ -139,4 +139,15 @@ testthat::expect_equal(conf$uiFunction,"predictionViewer")
 testthat::expect_equal(conf$serverFunction,"predictionServer")
 testthat::expect_equal(conf$shinyModulePackage,"OhdsiShinyModules")
 
+conf <- createDefaultSCCSConfig(useKeyring = F)
+testthat::expect_equal(conf$uiFunction,"sccsView")
+testthat::expect_equal(conf$serverFunction,"sccsServer")
+testthat::expect_equal(conf$shinyModulePackage,"OhdsiShinyModules")
+
+conf <- createDefaultMetaConfig(useKeyring = F)
+testthat::expect_equal(conf$uiFunction,"evidenceSynthesisViewer")
+testthat::expect_equal(conf$serverFunction,"evidenceSynthesisServer")
+testthat::expect_equal(conf$shinyModulePackage,"OhdsiShinyModules")
+
+
 })
