@@ -24,10 +24,10 @@ ui <- function(config){
     shiny::tags$li(
       shiny::div(
         shiny::img(
-          src = OhdsiShinyModules::getLogoImage(),
+          src = "https://www.ohdsi.org/wp-content/uploads/2015/02/h243-ohdsi-logo-with-text.png",
           title = "OHDSI",
-          height = "40px",
-          width = "40px"
+          height = "50px",
+          width = "200px"
         ),
         style = "padding-top:0px; padding-bottom:0px;"
       ),
@@ -50,7 +50,18 @@ ui <- function(config){
           eval(parse(text = paste0(module$shinyModulePackage,"::" ,module$uiFunction)))(id = module$id)
         )
       })
+      ),
+    
+    shiny::tags$footer(
+      shiny::h6(
+        paste0(
+        "Generated with OhdsiShinyModules v", 
+        utils::packageVersion('OhdsiShinyModules'),
+        ' and ShinyAppBuilder v',
+        utils::packageVersion('ShinyAppBuilder')
       )
+    )
+    )
     
   )
   

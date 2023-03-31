@@ -6,7 +6,7 @@
 \usage{
 createDefaultSCCSConfig(
   resultDatabaseDetails = list(tablePrefix = "sccs_", cohortTablePrefix = "cg_",
-    databaseTablePrefix = "", schema = schema, databaseTable = "DATABASE_META_DATA"),
+    databaseTablePrefix = "", schema = "main", databaseTable = "DATABASE_META_DATA"),
   useKeyring = T
 )
 }

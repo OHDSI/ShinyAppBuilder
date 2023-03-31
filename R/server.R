@@ -17,6 +17,9 @@
 server <- function(config, connection){
   return(
   shiny::shinyServer(function(input, output, session) {
+    
+    # pointless code to use OhdsiShinyModules to prevent warning
+    useless <- OhdsiShinyModules::getLogoImage()
 
   #============= 
   # sidebar menu 

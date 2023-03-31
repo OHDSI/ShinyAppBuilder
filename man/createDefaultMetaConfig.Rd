@@ -6,7 +6,7 @@
 \usage{
 createDefaultMetaConfig(
   resultDatabaseDetails = list(tablePrefix = "es_", cmTablePrefix = "cm_",
-    sccsTablePrefix = "sccs_", cgTablePrefix = "cg_", schema = schema, databaseMetaData =
+    sccsTablePrefix = "sccs_", cgTablePrefix = "cg_", schema = "main", databaseMetaData =
     "DATABASE_META_DATA"),
   useKeyring = T
 )

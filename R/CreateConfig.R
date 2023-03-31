@@ -365,7 +365,7 @@ createDefaultSCCSConfig <- function(
     tablePrefix = 'sccs_',
     cohortTablePrefix = 'cg_',
     databaseTablePrefix = '',
-    schema = schema,
+    schema = 'main',
     databaseTable = 'DATABASE_META_DATA'
   ),
   useKeyring = T
@@ -408,7 +408,7 @@ createDefaultMetaConfig <- function(
     cmTablePrefix = 'cm_',
     sccsTablePrefix = 'sccs_',
     cgTablePrefix = 'cg_',
-    schema = schema,
+    schema = 'main',
     databaseMetaData = 'DATABASE_META_DATA'
   ),
   useKeyring = T
