@@ -49,9 +49,11 @@ reference:
       - createDefaultAboutConfig
       - createDefaultPredictionConfig
       - createDefaultEstimationConfig
+      - createDefaultSCCSConfig
       - createDefaultCharacterizationConfig
       - createDefaultCohortGeneratorConfig
       - createDefaultCohortDiagnosticsConfig
+      - createDefaultMetaConfig
   - title: "Create or view shiny app"
     desc: >
       These functions create a shiny app or create and open the shiny app.
