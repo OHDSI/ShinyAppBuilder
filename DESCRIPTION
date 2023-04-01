@@ -1,8 +1,8 @@
 Package: ShinyAppBuilder
 Type: Package
 Title: Viewing OHDSI Results Via Shiny Modules
-Version: 1.1.1
-Date: 2023-2-8
+Version: 1.1.2
+Date: 2023-3-29
 Authors@R: c(
   person("Jenna", "Reps", email = "jreps@its.jnj.com", role = c("aut", "cre")),
   person("Josh", "Ide", role = c("aut")),
@@ -35,5 +35,5 @@ Suggests:
 Remotes:
   ohdsi/Eunomia,
   ohdsi/OhdsiShinyModules
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Encoding: UTF-8

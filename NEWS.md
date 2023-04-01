@@ -1,3 +1,8 @@
+ShinyAppBuilder v1.1.2
+======================
+- added package versions to footer
+- fixed logo
+
 ShinyAppBuilder v1.1.1
 ======================
 

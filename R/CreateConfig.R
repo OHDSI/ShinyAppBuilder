@@ -207,7 +207,7 @@ createDefaultEstimationConfig <- function(
     moduleServerFunction = "estimationServer",
     moduleDatabaseConnectionKeyUsername = "estimation",
     moduleInfoBoxFile =  "estimationHelperFile()",
-    moduleIcon = "table",
+    moduleIcon = "chart-column",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
@@ -296,7 +296,7 @@ createDefaultCohortGeneratorConfig <- function(
     moduleServerFunction = "cohortGeneratorServer",
     moduleDatabaseConnectionKeyUsername = "cohortGenerator",
     moduleInfoBoxFile =  "cohortGeneratorHelperFile()",
-    moduleIcon = "info",
+    moduleIcon = "user-gear",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
@@ -342,5 +342,90 @@ createDefaultCohortDiagnosticsConfig <- function(
     useKeyring = useKeyring
   )
 
+  return(result)
+}
+
+#' createDefaultSCCSConfig
+#'
+#' @description
+#' Create an R list with the SCCS config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for an sccs module
+#'
+#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
+#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
+#'
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultSCCSConfig <- function(
+  resultDatabaseDetails = list(
+    tablePrefix = 'sccs_',
+    cohortTablePrefix = 'cg_',
+    databaseTablePrefix = '',
+    schema = 'main',
+    databaseTable = 'DATABASE_META_DATA'
+  ),
+  useKeyring = T
+){
+  
+  result <- createModuleConfig(
+    moduleIcon = "people-arrows",
+    moduleId = 'sscs', 
+    tabName = 'SCCS',
+    shinyModulePackage = "OhdsiShinyModules",
+    moduleUiFunction = "sccsView",
+    moduleServerFunction = "sccsServer",
+    moduleDatabaseConnectionKeyUsername = 'sccs', 
+    moduleInfoBoxFile = "sccsHelperFile()",
+    resultDatabaseDetails = resultDatabaseDetails,
+    useKeyring = useKeyring
+  )
+  
+  return(result)
+}
+
+#' createDefaultMetaConfig
+#'
+#' @description
+#' Create an R list with the Meta, or EvidenceSynthesis, config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for a Meta, or EvidenceSynthesis, module
+#'
+#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
+#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
+#'
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultMetaConfig <- function(
+  resultDatabaseDetails = list(
+    tablePrefix = 'es_',
+    cmTablePrefix = 'cm_',
+    sccsTablePrefix = 'sccs_',
+    cgTablePrefix = 'cg_',
+    schema = 'main',
+    databaseMetaData = 'DATABASE_META_DATA'
+  ),
+  useKeyring = T
+){
+  
+  result <- createModuleConfig(
+    moduleIcon = "sliders",
+    moduleId = 'EvidenceSynthesis', #namespace ns() 
+    tabName = 'Meta',
+    shinyModulePackage = "OhdsiShinyModules",
+    moduleUiFunction = "evidenceSynthesisViewer",
+    moduleServerFunction = "evidenceSynthesisServer",
+    moduleDatabaseConnectionKeyUsername = 'es', 
+    moduleInfoBoxFile = "evidenceSynthesisHelperFile()",
+    resultDatabaseDetails = resultDatabaseDetails,
+    useKeyring = useKeyring
+  )
+  
   return(result)
 }

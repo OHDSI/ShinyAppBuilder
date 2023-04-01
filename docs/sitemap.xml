@@ -19,6 +19,9 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/ShinyAppBuilder.html</loc>
+  </url>
+  <url>
     <loc>/reference/addModuleConfig.html</loc>
   </url>
   <url>
@@ -37,7 +40,13 @@
     <loc>/reference/createDefaultEstimationConfig.html</loc>
   </url>
   <url>
+    <loc>/reference/createDefaultMetaConfig.html</loc>
+  </url>
+  <url>
     <loc>/reference/createDefaultPredictionConfig.html</loc>
+  </url>
+  <url>
+    <loc>/reference/createDefaultSCCSConfig.html</loc>
   </url>
   <url>
     <loc>/reference/createModuleConfig.html</loc>
@@ -56,9 +65,6 @@
   </url>
   <url>
     <loc>/reference/saveConfig.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ShinyAppBuilder.html</loc>
   </url>
   <url>
     <loc>/reference/viewShiny.html</loc>
