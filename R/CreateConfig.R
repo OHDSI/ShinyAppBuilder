@@ -290,7 +290,7 @@ createDefaultCohortGeneratorConfig <- function(
   
   result <- createModuleConfig(
     moduleId = 'cohortGenerator',
-    tabName = "CohortGenerator",
+    tabName = "Cohorts",
     shinyModulePackage = 'OhdsiShinyModules',
     moduleUiFunction = "cohortGeneratorViewer",
     moduleServerFunction = "cohortGeneratorServer",
