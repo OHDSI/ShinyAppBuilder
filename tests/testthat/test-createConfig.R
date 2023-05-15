@@ -149,5 +149,9 @@ testthat::expect_equal(conf$uiFunction,"evidenceSynthesisViewer")
 testthat::expect_equal(conf$serverFunction,"evidenceSynthesisServer")
 testthat::expect_equal(conf$shinyModulePackage,"OhdsiShinyModules")
 
+conf <- createDefaultPhevaluatorConfig(useKeyring = F)
+testthat::expect_equal(conf$uiFunction,"phevaluatorViewer")
+testthat::expect_equal(conf$serverFunction,"phevaluatorServer")
+testthat::expect_equal(conf$shinyModulePackage,"OhdsiShinyModules")
 
 })

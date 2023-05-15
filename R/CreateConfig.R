@@ -429,3 +429,31 @@ createDefaultMetaConfig <- function(
   
   return(result)
 }
+
+createDefaultPhevaluatorConfig <- function(
+    resultDatabaseDetails = list(
+      dbms = 'sqlite',
+      tablePrefix = 'pv_',
+      cohortTablePrefix = 'cg_',
+      databaseTablePrefix = '',
+      schema = 'main',
+      databaseTable = 'DATABASE_META_DATA'
+    ),
+    useKeyring = T
+){
+  
+  result <- createModuleConfig(
+    moduleId = 'phevaluator',
+    tabName = "PheValuator",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "phevaluatorViewer",
+    moduleServerFunction = "phevaluatorServer",
+    moduleDatabaseConnectionKeyUsername = "phevaluator",
+    moduleInfoBoxFile =  "phevaluatorHelperFile()",
+    moduleIcon = "gauge",
+    resultDatabaseDetails = resultDatabaseDetails,
+    useKeyring = useKeyring
+  )
+  
+  return(result)
+}
