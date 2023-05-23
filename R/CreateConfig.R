@@ -430,6 +430,21 @@ createDefaultMetaConfig <- function(
   return(result)
 }
 
+#' createDefaultPhevaluatorConfig
+#'
+#' @description
+#' Create an R list with the phevaluator config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for a phevaluator module
+#' 
+#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
+#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
+#'                             
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
 createDefaultPhevaluatorConfig <- function(
     resultDatabaseDetails = list(
       dbms = 'sqlite',
@@ -451,6 +466,50 @@ createDefaultPhevaluatorConfig <- function(
     moduleDatabaseConnectionKeyUsername = "phevaluator",
     moduleInfoBoxFile =  "phevaluatorHelperFile()",
     moduleIcon = "gauge",
+    resultDatabaseDetails = resultDatabaseDetails,
+    useKeyring = useKeyring
+  )
+  
+  return(result)
+}
+
+#' createDefaultDatasourcesConfig
+#'
+#' @description
+#' Create an R list with the datasources config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for a datasources module
+#' 
+#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
+#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
+#'                             
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultDatasourcesConfig <- function(
+  resultDatabaseDetails = list(
+    dbms = 'sqlite',
+    tablePrefix = 'cg_',
+    cohortTablePrefix = 'cg_',
+    databaseTablePrefix = '',
+    schema = 'main',
+    databaseTable = 'DATABASE_META_DATA',
+    incidenceTablePrefix = 'i_'
+  ),
+  useKeyring = T
+){
+  
+  result <- createModuleConfig(
+    moduleId = 'datasources',
+    tabName = "Data Sources",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "datasourcesViewer",
+    moduleServerFunction = "datasourcesServer",
+    moduleDatabaseConnectionKeyUsername = "datasources",
+    moduleInfoBoxFile =  "datasourcesHelperFile()",
+    moduleIcon = "database",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
