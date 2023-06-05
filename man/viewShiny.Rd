@@ -4,7 +4,12 @@
 \alias{viewShiny}
 \title{viewShiny}
 \usage{
-viewShiny(config, connection = NULL, connectionDetails = NUL)
+viewShiny(
+  config,
+  connection = NULL,
+  connectionDetails = NULL,
+  usePooledConnection = TRUE
+)
 }
 \arguments{
 \item{config}{The json with the app config}

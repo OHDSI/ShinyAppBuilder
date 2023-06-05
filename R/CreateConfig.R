@@ -26,7 +26,7 @@
 #' @param tabName   The name of the tab in the shiny app (this will be the side menu button text)      
 #' @param shinyModulePackage  The R package to find the server and UI functions
 #' @param moduleUiFunction  The name of the UI function in the R package shinyModulePackage
-#' @param moduleServerFunction  The name of the server function in the R package shinyModulePackage
+#' @param moduleServerFunction  The name of the server function in the R package shinyModulePackage. If null package will try to try to load ui, helper and moduleServer from local session
 #' @param moduleDatabaseConnectionKeyService  The keyring service or the system environment variable with the result database details
 #' @param moduleDatabaseConnectionKeyUsername The keyring username or the system environment variable with the result database details
 #' @param moduleInfoBoxFile  The function in the R package shinyModulePackage that contains info text
