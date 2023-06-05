@@ -22,6 +22,7 @@ Imports:
   keyring,
   OhdsiShinyModules (>= 1.0.2),
   ParallelLogger (>= 2.0.0),
+  ResultModelManager (>= 0.4.0),
   rlang,
   shiny,
   shinydashboard
@@ -35,5 +36,6 @@ Suggests:
 Remotes:
   ohdsi/Eunomia,
   ohdsi/OhdsiShinyModules
+  ohdsi/ResultModelManager
 RoxygenNote: 7.2.3
 Encoding: UTF-8

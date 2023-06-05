@@ -4,15 +4,22 @@
 \alias{createShinyApp}
 \title{createShinyApp}
 \usage{
-createShinyApp(config, connection)
+createShinyApp(
+  config,
+  connection = NULL,
+  connectionDetails = NULL,
+  usePooledConnection = TRUE
+)
 }
 \arguments{
 \item{config}{The json with the app config}
 
 \item{connection}{A connection to the results}
+
+\item{connectionDetails}{A DatabaseConnector::connectionDetails connection to the results database}
 }
 \value{
-The shiny app will open
+Shiny app instance
 }
 \description{
 Create a shiny app for a shiny server

@@ -24,18 +24,31 @@
 #' 
 #' @param config  The json with the app config     
 #' @param connection  A connection to the results                       
+#' @param connectionDetails  A DatabaseConnector::connectionDetails connection to the results database
 #' @return
-#' The shiny app will open
+#' Shiny app instance
 #'
 #' @export
-createShinyApp <- function(config,connection){
-  
-  if(missing(config)){
+createShinyApp <- function(config, connection = NULL, connectionDetails = NULL, usePooledConnection = TRUE) {
+
+  if (missing(connection) || is.null(connection)) {
+    checkmate::assertClass(connectionDetails, "ConnectionDetails", null.ok = TRUE)
+    if (usePooledConnection) {
+      connection <- ResultModelManager::PooledConnectionHandler$new(connectionDetails = connectionDetails)
+    } else {
+      connection <- ResultModelManager::ConnectionHandler$new(connectionDetails = connectionDetails)
+    }
+    on.exit(connection$finalize())
+  }
+
+  if (missing(config)) {
     ParallelLogger::logInfo('Using default config')
     config <- ParallelLogger::loadSettingsFromJson(system.file('shiny', 'config.json', package = 'shinyModuleViewer'))
   }
-  
-  app <- shiny::shinyApp(ui(config=config), server(config = config, connection = connection))
+
+  app <- shiny::shinyApp(ui(config = config),
+                         server(config = config,
+                                connection = connection))
   return(app)
 }
 
@@ -47,18 +60,20 @@ createShinyApp <- function(config,connection){
 #' @details
 #' User specifies the json config and connection
 #' 
-#' @param config  The json with the app config     
-#' @param connection  A connection to the results                       
+#' @inheritParams createShinyApp
 #' @return
 #' The shiny app will open
 #'
 #' @export
-viewShiny <- function(config,connection){
-  
-  app <- createShinyApp(
-    config = config,
-    connection = connection
-    )
-  
+viewShiny <- function(config,
+                      connection = NULL,
+                      connectionDetails = NULL,
+                      usePooledConnection = TRUE) {
+
+  app <- createShinyApp(config = config,
+                        connection = connection,
+                        connectionDetails = connectionDetails,
+                        usePooledConnection = usePooledConnection)
+
   shiny::runApp(app)
 }

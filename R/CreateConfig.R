@@ -65,6 +65,8 @@ createModuleConfig <- function(
     icon = moduleIcon,
     keyring = useKeyring
   )
+
+  class(result) <- "shinyModuleConfig"
   
   if(!is.null(moduleDatabaseConnectionKeyService)){
     if(useKeyring){
@@ -123,7 +125,8 @@ createDefaultAboutConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+
+  class(result) <- c(class(result), "aboutModuleConfig")
   return(result)
 }
 
@@ -167,7 +170,7 @@ createDefaultPredictionConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "predictionModuleConfig")
   return(result)
 }
 
@@ -211,7 +214,7 @@ createDefaultEstimationConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "estimationModuleConfig")
   return(result)
 }
 
@@ -255,7 +258,8 @@ createDefaultCharacterizationConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+
+  class(result) <- c(class(result), "characterizationModuleConfig")
   return(result)
 }
 
@@ -300,7 +304,8 @@ createDefaultCohortGeneratorConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+
+  class(result) <- c(class(result), "cohortGeneratorModuleConfig")
   return(result)
 }
 
@@ -341,7 +346,7 @@ createDefaultCohortDiagnosticsConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-
+  class(result) <- c(class(result), "cohortDiagnosticsModuleConfig")
   return(result)
 }
 
@@ -383,7 +388,7 @@ createDefaultSCCSConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "cohortSCCSModuleConfig")
   return(result)
 }
 
@@ -426,7 +431,7 @@ createDefaultMetaConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "cohortMetaModuleConfig")
   return(result)
 }
 
@@ -469,7 +474,7 @@ createDefaultPhevaluatorConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "phevaluatorModuleConfig")
   return(result)
 }
 
@@ -513,6 +518,6 @@ createDefaultDatasourcesConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "datasourcesModuleConfig")
   return(result)
 }
