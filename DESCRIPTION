@@ -17,6 +17,8 @@ VignetteBuilder: knitr
 Depends:
   R (>= 3.3.0)
 Imports:
+  checkmate,
+  DatabaseConnector,
   dplyr,
   jsonlite,
   keyring,
