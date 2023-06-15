@@ -25,6 +25,7 @@
 #' @param config  The json with the app config     
 #' @param connection  A connection to the results                       
 #' @param connectionDetails  A DatabaseConnector::connectionDetails connection to the results database
+#' @param usePooledConnection  use a pooled database connection or not - set to true for multi-user environments (default)
 #' @return
 #' Shiny app instance
 #'
