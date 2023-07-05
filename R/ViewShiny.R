@@ -22,18 +22,29 @@
 #' @details
 #' User specifies the json config and connection
 #' 
-#' @param config  The json with the app config     
-#' @param connection  A connection to the results                       
-#' @param connectionDetails  A DatabaseConnector::connectionDetails connection to the results database
-#' @param usePooledConnection  use a pooled database connection or not - set to true for multi-user environments (default)
+#' @param config                The json with the app config
+#' @param connection            A connection to the results
+#' @param connectionDetails     A DatabaseConnector::connectionDetails connection to the results database
+#' @param usePooledConnection   Use a pooled database connection or not - set to true for multi-user environments (default)
 #' @return
 #' Shiny app instance
 #'
 #' @export
-createShinyApp <- function(config, connection = NULL, connectionDetails = NULL, usePooledConnection = TRUE) {
+createShinyApp <- function(config,
+                           connection = NULL,
+                           connectionDetails = NULL,
+                           usePooledConnection = TRUE) {
 
   if (missing(connection) || is.null(connection)) {
-    checkmate::assertClass(connectionDetails, "ConnectionDetails", null.ok = TRUE)
+    checkmate::assertClass(connectionDetails, "ConnectionDetails")
+
+    if (connectionDetails$dbms != "sqlite") {
+      if (length(list.files(connectionDetails$pathToDriver, pattern = connectionDetails$dbms)) == 0) {
+        DatabaseConnector::downloadJdbcDrivers(dbms = connectionDetails$dbms,
+                                               pathToDriver = connectionDetails$pathToDriver)
+      }
+    }
+
     if (usePooledConnection) {
       connection <- ResultModelManager::PooledConnectionHandler$new(connectionDetails = connectionDetails)
     } else {
@@ -74,7 +85,8 @@ viewShiny <- function(config,
   app <- createShinyApp(config = config,
                         connection = connection,
                         connectionDetails = connectionDetails,
-                        usePooledConnection = usePooledConnection)
+                        usePooledConnection = usePooledConnection,
+                        pathToDriver = pathToDriver)
 
   shiny::runApp(app)
 }

@@ -18,7 +18,7 @@ createShinyApp(
 
 \item{connectionDetails}{A DatabaseConnector::connectionDetails connection to the results database}
 
-\item{usePooledConnection}{use a pooled database connection or not - set to true for multi-user environments (default)}
+\item{usePooledConnection}{Use a pooled database connection or not - set to true for multi-user environments (default)}
 }
 \value{
 Shiny app instance
