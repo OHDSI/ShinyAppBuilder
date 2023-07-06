@@ -452,12 +452,8 @@ createDefaultMetaConfig <- function(
 #' @export
 createDefaultPhevaluatorConfig <- function(
     resultDatabaseDetails = list(
-      dbms = 'sqlite',
       tablePrefix = 'pv_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA'
+      schema = 'main'
     ),
     useKeyring = T
 ){
@@ -494,21 +490,17 @@ createDefaultPhevaluatorConfig <- function(
 #'
 #' @export
 createDefaultDatasourcesConfig <- function(
-  resultDatabaseDetails = list(
-    dbms = 'sqlite',
-    tablePrefix = 'cg_',
-    cohortTablePrefix = 'cg_',
-    databaseTablePrefix = '',
-    schema = 'main',
-    databaseTable = 'DATABASE_META_DATA',
-    incidenceTablePrefix = 'i_'
-  ),
+    resultDatabaseDetails = list(
+      tablePrefix = 'ds_',
+      schema = 'main',
+      databaseMetaData = 'DATABASE_META_DATA'
+    ),
   useKeyring = T
 ){
   
   result <- createModuleConfig(
     moduleId = 'datasources',
-    tabName = "Data Sources",
+    tabName = "Datasources",
     shinyModulePackage = 'OhdsiShinyModules',
     moduleUiFunction = "datasourcesViewer",
     moduleServerFunction = "datasourcesServer",

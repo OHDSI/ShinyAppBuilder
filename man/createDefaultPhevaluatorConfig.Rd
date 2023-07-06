@@ -5,9 +5,7 @@
 \title{createDefaultPhevaluatorConfig}
 \usage{
 createDefaultPhevaluatorConfig(
-  resultDatabaseDetails = list(dbms = "sqlite", tablePrefix = "pv_", cohortTablePrefix =
-    "cg_", databaseTablePrefix = "", schema = "main", databaseTable =
-    "DATABASE_META_DATA"),
+  resultDatabaseDetails = list(tablePrefix = "pv_", schema = "main"),
   useKeyring = T
 )
 }

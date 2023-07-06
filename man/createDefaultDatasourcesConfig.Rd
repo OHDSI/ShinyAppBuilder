@@ -5,9 +5,8 @@
 \title{createDefaultDatasourcesConfig}
 \usage{
 createDefaultDatasourcesConfig(
-  resultDatabaseDetails = list(dbms = "sqlite", tablePrefix = "cg_", cohortTablePrefix =
-    "cg_", databaseTablePrefix = "", schema = "main", databaseTable =
-    "DATABASE_META_DATA", incidenceTablePrefix = "i_"),
+  resultDatabaseDetails = list(tablePrefix = "ds_", schema = "main", databaseMetaData =
+    "DATABASE_META_DATA"),
   useKeyring = T
 )
 }
