@@ -85,8 +85,7 @@ viewShiny <- function(config,
   app <- createShinyApp(config = config,
                         connection = connection,
                         connectionDetails = connectionDetails,
-                        usePooledConnection = usePooledConnection,
-                        pathToDriver = pathToDriver)
+                        usePooledConnection = usePooledConnection)
 
   shiny::runApp(app)
 }
