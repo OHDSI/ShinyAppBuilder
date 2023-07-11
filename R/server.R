@@ -46,8 +46,14 @@ server <- function(config, connection){
   
   
   lapply(config$shinyModules, function(module){
+    if (!is.null(module$shinyModulePackage)) {
+      moduleInfoBox <- parse(text = paste0(module$shinyModulePackage, "::", module$infoBoxFile))
+    } else {
+      moduleInfoBox <- module$infoBoxFile
+    }
+
     shiny::observeEvent(eval(parse(text = paste0('input$', module$tabName, 'Info'))), {
-      showInfoBox(module$tabName, eval(parse(text = paste0(module$shinyModulePackage, "::",module$infoBoxFile))))
+      showInfoBox(module$tabName, eval(moduleInfoBox))
     })
   }
   )
@@ -108,10 +114,14 @@ server <- function(config, connection){
         # run the server
 
         tryCatch({
-
+          if (!is.null(module$shinyModulePackage)) {
+            serverFunc <- parse(text = paste0(module$shinyModulePackage, "::", module$serverFunction))
+          } else {
+            serverFunc <- module$serverFunction
+          }
           shiny::withProgress({
             do.call(
-              what = eval(parse(text = paste0(module$shinyModulePackage, "::",module$serverFunction))),
+              what = eval(serverFunc),
               args = argsList
             )
           }, message = paste("Loading module", module$moduleId))

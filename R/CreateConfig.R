@@ -26,7 +26,7 @@
 #' @param tabName   The name of the tab in the shiny app (this will be the side menu button text)      
 #' @param shinyModulePackage  The R package to find the server and UI functions
 #' @param moduleUiFunction  The name of the UI function in the R package shinyModulePackage
-#' @param moduleServerFunction  The name of the server function in the R package shinyModulePackage
+#' @param moduleServerFunction  The name of the server function in the R package shinyModulePackage. If null package will try to try to load ui, helper and moduleServer from local session
 #' @param moduleDatabaseConnectionKeyService  The keyring service or the system environment variable with the result database details
 #' @param moduleDatabaseConnectionKeyUsername The keyring username or the system environment variable with the result database details
 #' @param moduleInfoBoxFile  The function in the R package shinyModulePackage that contains info text
@@ -65,6 +65,8 @@ createModuleConfig <- function(
     icon = moduleIcon,
     keyring = useKeyring
   )
+
+  class(result) <- "shinyModuleConfig"
   
   if(!is.null(moduleDatabaseConnectionKeyService)){
     if(useKeyring){
@@ -123,7 +125,8 @@ createDefaultAboutConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+
+  class(result) <- c(class(result), "aboutModuleConfig")
   return(result)
 }
 
@@ -167,7 +170,7 @@ createDefaultPredictionConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "predictionModuleConfig")
   return(result)
 }
 
@@ -211,7 +214,7 @@ createDefaultEstimationConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "estimationModuleConfig")
   return(result)
 }
 
@@ -255,7 +258,8 @@ createDefaultCharacterizationConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+
+  class(result) <- c(class(result), "characterizationModuleConfig")
   return(result)
 }
 
@@ -300,7 +304,8 @@ createDefaultCohortGeneratorConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+
+  class(result) <- c(class(result), "cohortGeneratorModuleConfig")
   return(result)
 }
 
@@ -341,7 +346,7 @@ createDefaultCohortDiagnosticsConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-
+  class(result) <- c(class(result), "cohortDiagnosticsModuleConfig")
   return(result)
 }
 
@@ -383,7 +388,7 @@ createDefaultSCCSConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "cohortSCCSModuleConfig")
   return(result)
 }
 
@@ -426,7 +431,7 @@ createDefaultMetaConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "cohortMetaModuleConfig")
   return(result)
 }
 
@@ -465,7 +470,7 @@ createDefaultPhevaluatorConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "phevaluatorModuleConfig")
   return(result)
 }
 
@@ -505,6 +510,6 @@ createDefaultDatasourcesConfig <- function(
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
   )
-  
+  class(result) <- c(class(result), "datasourcesModuleConfig")
   return(result)
 }
