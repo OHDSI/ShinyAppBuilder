@@ -4,12 +4,14 @@
 \alias{viewShiny}
 \title{viewShiny}
 \usage{
-viewShiny(config, connection)
+viewShiny(config, connection, resultDatabaseSettings)
 }
 \arguments{
 \item{config}{The json with the app config}
 
 \item{connection}{A connection to the results}
+
+\item{resultDatabaseSettings}{A list with the result schema and table prefixes}
 }
 \value{
 The shiny app will open

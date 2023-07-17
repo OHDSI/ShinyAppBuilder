@@ -4,12 +4,22 @@
 \alias{createShinyApp}
 \title{createShinyApp}
 \usage{
-createShinyApp(config, connection)
+createShinyApp(
+  config,
+  connection,
+  resultDatabaseSettings = list(schema = "main", cgTablePrefix = "cg_", cdTablePrefix =
+    "cd_", cTablePrefix = "c_", plpTablePrefix = "plp_", pvTablePrefix = "pv_",
+    cmTablePrefix = "cm_", sccsTablePrefix = "sccs_", esTablePrefix = "es_",
+    incidenceTablePrefix = "i_", databaseTable = "database_meta_table",
+    databaseTablePrefix = "")
+)
 }
 \arguments{
 \item{config}{The json with the app config}
 
 \item{connection}{A connection to the results}
+
+\item{resultDatabaseSettings}{A list with the result schema and table prefixes}
 }
 \value{
 The shiny app will open

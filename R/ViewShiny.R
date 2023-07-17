@@ -23,19 +23,44 @@
 #' User specifies the json config and connection
 #' 
 #' @param config  The json with the app config     
-#' @param connection  A connection to the results                       
+#' @param connection  A connection to the results   
+#' @param resultDatabaseSettings A list with the result schema and table prefixes                  
 #' @return
 #' The shiny app will open
 #'
 #' @export
-createShinyApp <- function(config,connection){
+createShinyApp <- function(
+    config,
+    connection,
+    resultDatabaseSettings = list(
+      schema = 'main',
+      cgTablePrefix = 'cg_',
+      cdTablePrefix = 'cd_',
+      cTablePrefix = 'c_',
+      plpTablePrefix = 'plp_',
+      pvTablePrefix = 'pv_',
+      cmTablePrefix = 'cm_',
+      sccsTablePrefix = 'sccs_',
+      esTablePrefix = 'es_',
+      incidenceTablePrefix = 'i_',
+      databaseTable = 'database_meta_table',
+      databaseTablePrefix = ''
+    )
+      ){
   
   if(missing(config)){
     ParallelLogger::logInfo('Using default config')
     config <- ParallelLogger::loadSettingsFromJson(system.file('shiny', 'config.json', package = 'shinyModuleViewer'))
   }
   
-  app <- shiny::shinyApp(ui(config=config), server(config = config, connection = connection))
+  app <- shiny::shinyApp(
+    ui = ui(config = config), 
+    server = server(
+      config = config, 
+      connection = connection,
+      resultDatabaseSettings = resultDatabaseSettings
+      )
+    )
   return(app)
 }
 
@@ -48,16 +73,22 @@ createShinyApp <- function(config,connection){
 #' User specifies the json config and connection
 #' 
 #' @param config  The json with the app config     
-#' @param connection  A connection to the results                       
+#' @param connection  A connection to the results  
+#' @param resultDatabaseSettings A list with the result schema and table prefixes                  
 #' @return
 #' The shiny app will open
 #'
 #' @export
-viewShiny <- function(config,connection){
+viewShiny <- function(
+    config,
+    connection, 
+    resultDatabaseSettings
+    ){
   
   app <- createShinyApp(
     config = config,
-    connection = connection
+    connection = connection,
+    resultDatabaseSettings = resultDatabaseSettings
     )
   
   shiny::runApp(app)

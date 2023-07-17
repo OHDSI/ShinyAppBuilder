@@ -10,12 +10,8 @@ createModuleConfig(
   shinyModulePackage = "OhdsiShinyModules",
   moduleUiFunction = "aboutViewer",
   moduleServerFunction = "aboutServer",
-  moduleDatabaseConnectionKeyService = "resultDatabaseDetails",
-  moduleDatabaseConnectionKeyUsername = NULL,
   moduleInfoBoxFile = "aboutHelperFile()",
-  moduleIcon = "info",
-  resultDatabaseDetails,
-  useKeyring = TRUE
+  moduleIcon = "info"
 )
 }
 \arguments{
@@ -29,17 +25,9 @@ createModuleConfig(
 
 \item{moduleServerFunction}{The name of the server function in the R package shinyModulePackage}
 
-\item{moduleDatabaseConnectionKeyService}{The keyring service or the system environment variable with the result database details}
-
-\item{moduleDatabaseConnectionKeyUsername}{The keyring username or the system environment variable with the result database details}
-
 \item{moduleInfoBoxFile}{The function in the R package shinyModulePackage that contains info text}
 
 \item{moduleIcon}{The icon to use for the side menu button}
-
-\item{resultDatabaseDetails}{A list containing the result database schema (schema), the tablePrefix for the results and other optional settings}
-
-\item{useKeyring}{whether to save the resultDatabaseDetails to a keyring or system environmental variable}
 }
 \value{
 An R list with the module config settings

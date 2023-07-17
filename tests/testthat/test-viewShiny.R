@@ -5,7 +5,10 @@ test_that("shiny works", {
   config <- initializeModuleConfig() 
   config <-  addModuleConfig(config, createDefaultAboutConfig())
   
-  app <- createShinyApp(config = config, connection = NULL)
+  app <- createShinyApp(
+    config = config, 
+    connection = NULL
+    )
   
   testthat::expect_s3_class(app, "shiny.appobj")
   
