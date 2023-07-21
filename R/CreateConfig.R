@@ -329,7 +329,7 @@ createDefaultDatasourcesConfig <- function(
   
   result <- createModuleConfig(
     moduleId = 'datasources',
-    tabName = "Data Sources",
+    tabName = "DataSources",
     shinyModulePackage = 'OhdsiShinyModules',
     moduleUiFunction = "datasourcesViewer",
     moduleServerFunction = "datasourcesServer",
