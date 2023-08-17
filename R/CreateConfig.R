@@ -339,7 +339,7 @@ createDefaultCohortDiagnosticsConfig <- function(
     tabName = "CohortDiagnostics",
     shinyModulePackage = 'OhdsiShinyModules',
     moduleUiFunction = "cohortDiagnosticsView",
-    moduleServerFunction = "cohortDiagnosticsSever",
+    moduleServerFunction = "cohortDiagnosticsServer",
     moduleDatabaseConnectionKeyUsername = "cohortDiagnostics",
     moduleInfoBoxFile =  "cohortDiagnosticsHelperFile()",
     moduleIcon = "users",
