@@ -14,6 +14,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#' @description
+#' Create sub menu item s3 object from a ui and server for the sub menu item
+#' @export
+#' @param tabName
+#' @param text
+#' @param uiFunction
+#' @param serverFunction
+#' @param parentId
+#' @param icon
+#' @param packageName
+createSubModuleItem <- function(tabName,
+                                text,
+                                uiFunction,
+                                parentId,
+                                serverFunction = NULL,
+                                icon = NULL,
+                                packageName = NULL) {
+
+  if (!is.null(packageName) && !is.null(uiFunction)) {
+    uiFunction <- parse(text = paste0(packageName, "::", uiFunction))
+  }
+  if (!is.null(packageName) && !is.null(serverFunction)) {
+    serverFunction <- parse(text = paste0(packageName, "::", serverFunction))
+  }
+
+  subMenuItem <- list(
+    text = text,
+    tabName = paste0(parentId, "-", tabName),
+    uiFunction = uiFunction,
+    serverFunction = serverFunction,
+    icon = icon
+  )
+  class(subMenuItem) <- "sabSubMenuItem"
+  return(subMenuItem)
+}
+
 #' createModuleConfig
 #'
 #' @description
@@ -27,6 +63,7 @@
 #' @param shinyModulePackage  The R package to find the server and UI functions
 #' @param moduleUiFunction  The name of the UI function in the R package shinyModulePackage
 #' @param moduleServerFunction  The name of the server function in the R package shinyModulePackage. If null package will try to try to load ui, helper and moduleServer from local session
+#' @param modulesubModules List Sub module items to be selected from. If this is present, the UI will ignore moduleUiFunction and moduleServerFunction
 #' @param moduleDatabaseConnectionKeyService  The keyring service or the system environment variable with the result database details
 #' @param moduleDatabaseConnectionKeyUsername The keyring username or the system environment variable with the result database details
 #' @param moduleInfoBoxFile  The function in the R package shinyModulePackage that contains info text
@@ -39,18 +76,20 @@
 #'
 #' @export
 createModuleConfig <- function(
- moduleId = 'about',
- tabName = "About",
- shinyModulePackage = 'OhdsiShinyModules',
- moduleUiFunction = "aboutViewer",
- moduleServerFunction = "aboutServer",
- moduleDatabaseConnectionKeyService = 'resultDatabaseDetails',
- moduleDatabaseConnectionKeyUsername = NULL,
- moduleInfoBoxFile =  "aboutHelperFile()",
- moduleIcon = "info",
- resultDatabaseDetails,
- useKeyring = TRUE
-){
+  moduleId = 'about',
+  tabName = "About",
+  shinyModulePackage = 'OhdsiShinyModules',
+  moduleUiFunction = "aboutViewer",
+  moduleServerFunction = "aboutServer",
+  moduleSubModules = list(),
+  moduleDataSourceFunction = NULL,
+  moduleDatabaseConnectionKeyService = 'resultDatabaseDetails',
+  moduleDatabaseConnectionKeyUsername = NULL,
+  moduleInfoBoxFile = "aboutHelperFile()",
+  moduleIcon = "info",
+  resultDatabaseDetails,
+  useKeyring = TRUE
+) {
 
   result <- list(
     id = moduleId,
@@ -59,6 +98,8 @@ createModuleConfig <- function(
     shinyModulePackage = shinyModulePackage,
     uiFunction = moduleUiFunction,
     serverFunction = moduleServerFunction,
+    dataSourceFunction = moduleDataSourceFunction,
+    subModules = moduleSubModules,
     databaseConnectionKeyService = moduleDatabaseConnectionKeyService,
     databaseConnectionKeyUsername = moduleDatabaseConnectionKeyUsername,
     infoBoxFile = moduleInfoBoxFile,
@@ -67,29 +108,29 @@ createModuleConfig <- function(
   )
 
   class(result) <- "shinyModuleConfig"
-  
-  if(!is.null(moduleDatabaseConnectionKeyService)){
-    if(useKeyring){
+
+  if (!is.null(moduleDatabaseConnectionKeyService)) {
+    if (useKeyring) {
       # setup key
       keyring::key_set_with_value(
-        service = moduleDatabaseConnectionKeyService, 
-        username = moduleDatabaseConnectionKeyUsername, 
+        service = moduleDatabaseConnectionKeyService,
+        username = moduleDatabaseConnectionKeyUsername,
         password = as.character(
           jsonlite::toJSON(
             resultDatabaseDetails
           ))
       )
-    } else{
-      
+    } else {
+
       var.name <- paste0(moduleDatabaseConnectionKeyService, '_', moduleDatabaseConnectionKeyUsername)
       var.value <- jsonlite::toJSON(
         resultDatabaseDetails
       )
       do.call(Sys.setenv, as.list(stats::setNames(var.value, var.name)))
-      
+
     }
   }
-  
+
   return(result)
 }
 
@@ -111,7 +152,7 @@ createModuleConfig <- function(
 createDefaultAboutConfig <- function(
   resultDatabaseDetails,
   useKeyring = T
-){
+) {
   result <- createModuleConfig(
     moduleId = 'about',
     tabName = "About",
@@ -120,7 +161,7 @@ createDefaultAboutConfig <- function(
     moduleServerFunction = "aboutServer",
     moduleDatabaseConnectionKeyService = NULL,
     moduleDatabaseConnectionKeyUsername = NULL,
-    moduleInfoBoxFile =  "aboutHelperFile()",
+    moduleInfoBoxFile = "aboutHelperFile()",
     moduleIcon = "info",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -146,18 +187,18 @@ createDefaultAboutConfig <- function(
 #'
 #' @export
 createDefaultPredictionConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'plp_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA',
-      incidenceTablePrefix = 'i_'
-    ),
-    useKeyring = T
-){
-  
+  resultDatabaseDetails = list(
+    dbms = 'sqlite',
+    tablePrefix = 'plp_',
+    cohortTablePrefix = 'cg_',
+    databaseTablePrefix = '',
+    schema = 'main',
+    databaseTable = 'DATABASE_META_DATA',
+    incidenceTablePrefix = 'i_'
+  ),
+  useKeyring = T
+) {
+
   result <- createModuleConfig(
     moduleId = 'prediction',
     tabName = "Prediction",
@@ -165,7 +206,7 @@ createDefaultPredictionConfig <- function(
     moduleUiFunction = "predictionViewer",
     moduleServerFunction = "predictionServer",
     moduleDatabaseConnectionKeyUsername = "prediction",
-    moduleInfoBoxFile =  "predictionHelperFile()",
+    moduleInfoBoxFile = "predictionHelperFile()",
     moduleIcon = "chart-line",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -190,18 +231,18 @@ createDefaultPredictionConfig <- function(
 #'
 #' @export
 createDefaultEstimationConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'cm_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA',
-      incidenceTablePrefix = 'i_'
-    ),
-    useKeyring = T
-){
-  
+  resultDatabaseDetails = list(
+    dbms = 'sqlite',
+    tablePrefix = 'cm_',
+    cohortTablePrefix = 'cg_',
+    databaseTablePrefix = '',
+    schema = 'main',
+    databaseTable = 'DATABASE_META_DATA',
+    incidenceTablePrefix = 'i_'
+  ),
+  useKeyring = T
+) {
+
   result <- createModuleConfig(
     moduleId = 'estimation',
     tabName = "Estimation",
@@ -209,7 +250,7 @@ createDefaultEstimationConfig <- function(
     moduleUiFunction = "estimationViewer",
     moduleServerFunction = "estimationServer",
     moduleDatabaseConnectionKeyUsername = "estimation",
-    moduleInfoBoxFile =  "estimationHelperFile()",
+    moduleInfoBoxFile = "estimationHelperFile()",
     moduleIcon = "chart-column",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -234,18 +275,18 @@ createDefaultEstimationConfig <- function(
 #'
 #' @export
 createDefaultCharacterizationConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'c_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA',
-      incidenceTablePrefix = 'i_'
-    ),
-    useKeyring = T
-){
-  
+  resultDatabaseDetails = list(
+    dbms = 'sqlite',
+    tablePrefix = 'c_',
+    cohortTablePrefix = 'cg_',
+    databaseTablePrefix = '',
+    schema = 'main',
+    databaseTable = 'DATABASE_META_DATA',
+    incidenceTablePrefix = 'i_'
+  ),
+  useKeyring = T
+) {
+
   result <- createModuleConfig(
     moduleId = 'characterization',
     tabName = "Characterization",
@@ -253,7 +294,7 @@ createDefaultCharacterizationConfig <- function(
     moduleUiFunction = "descriptionViewer",
     moduleServerFunction = "descriptionServer",
     moduleDatabaseConnectionKeyUsername = "description",
-    moduleInfoBoxFile =  "descriptionHelperFile()",
+    moduleInfoBoxFile = "descriptionHelperFile()",
     moduleIcon = "table",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -280,18 +321,18 @@ createDefaultCharacterizationConfig <- function(
 #'
 #' @export
 createDefaultCohortGeneratorConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'cg_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA',
-      incidenceTablePrefix = 'i_'
-    ),
-    useKeyring = T
-){
-  
+  resultDatabaseDetails = list(
+    dbms = 'sqlite',
+    tablePrefix = 'cg_',
+    cohortTablePrefix = 'cg_',
+    databaseTablePrefix = '',
+    schema = 'main',
+    databaseTable = 'DATABASE_META_DATA',
+    incidenceTablePrefix = 'i_'
+  ),
+  useKeyring = T
+) {
+
   result <- createModuleConfig(
     moduleId = 'cohortGenerator',
     tabName = "Cohorts",
@@ -299,7 +340,7 @@ createDefaultCohortGeneratorConfig <- function(
     moduleUiFunction = "cohortGeneratorViewer",
     moduleServerFunction = "cohortGeneratorServer",
     moduleDatabaseConnectionKeyUsername = "cohortGenerator",
-    moduleInfoBoxFile =  "cohortGeneratorHelperFile()",
+    moduleInfoBoxFile = "cohortGeneratorHelperFile()",
     moduleIcon = "user-gear",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -325,23 +366,61 @@ createDefaultCohortGeneratorConfig <- function(
 #'
 #' @export
 createDefaultCohortDiagnosticsConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'cd_',
-      schema = 'main',
-      vocabularyDatabaseSchema = 'main'
-    ),
-    useKeyring = T
-){
+  resultDatabaseDetails = list(
+    dbms = 'sqlite',
+    tablePrefix = 'cd_',
+    schema = 'main',
+    vocabularyDatabaseSchema = 'main'
+  ),
+  useKeyring = T
+) {
 
   result <- createModuleConfig(
     moduleId = 'cohortDiagnostics',
     tabName = "CohortDiagnostics",
     shinyModulePackage = 'OhdsiShinyModules',
-    moduleUiFunction = "cohortDiagnosticsView",
+    moduleUiFunction = NULL,
     moduleServerFunction = "cohortDiagnosticsServer",
+    moduleDataSourceFunction = "createCdDatabaseDataSource",
+    moduleSubModules = list(
+      createSubModuleItem(tabName = "cohortDefinitions",
+                          text = "Cohort Definitions",
+                          parentId = 'cohortDiagnostics',
+                          uiFunction = "cohortDefinitionsView",
+                          packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "databaseInformation", text = "Database Information", packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "cohortCounts", text = "Cohort Counts", packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "indexEvents", text = "Index Event Breakdown", packageName = "OhdsiShinyModules"),
+      createSubModuleItem(tabName = "characterization",
+                          text = "Cohort Characterization",
+                          parentId = 'cohortDiagnostics',
+                          uiFunction = "cohortDiagCharacterizationView",
+                          packageName = "OhdsiShinyModules"),
+      createSubModuleItem(tabName = "compareCharacterization",
+                          text = "Compare Cohort Characterization",
+                          parentId = 'cohortDiagnostics',
+                          uiFunction = "compareCohortCharacterizationView",
+                          packageName = "OhdsiShinyModules")
+      # createSubMenuItem(tabName = "compareCohortCharacterization", text = "Compare Cohort Characterization", packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "timeDistribution", text = "Time Distributions", packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "cohortOverlap", text = "Cohort Overlap", packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "inclusionRules", text = "Inclusion Rules", packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "incidenceRates", text = "Incidence", packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "visitContext",
+      #                   text = "Visit Context",
+      #                   parentId = 'cohortDiagnostics',
+      #                   uiFunction = "visitContextUi",
+      #                   packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "conceptsInDataSource",
+      #                   text = "Concepts In Data Source",
+      #                   parentId = 'cohortDiagnostics',
+      #                   uiFunction = "conceptsInDataSourceUi",
+      #                   packageName = "OhdsiShinyModules")
+      # createSubMenuItem(tabName = "orphanConcepts", text = "Orphan Concepts", packageName = "OhdsiShinyModules"),
+      # createSubMenuItem(tabName = "indexEventBreakdown", text = "Index Event Breakdown", packageName = "OhdsiShinyModules")
+    ),
     moduleDatabaseConnectionKeyUsername = "cohortDiagnostics",
-    moduleInfoBoxFile =  "cohortDiagnosticsHelperFile()",
+    moduleInfoBoxFile = "cohortDiagnosticsHelperFile()",
     moduleIcon = "users",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -374,16 +453,16 @@ createDefaultSCCSConfig <- function(
     databaseTable = 'DATABASE_META_DATA'
   ),
   useKeyring = T
-){
-  
+) {
+
   result <- createModuleConfig(
     moduleIcon = "people-arrows",
-    moduleId = 'sscs', 
+    moduleId = 'sscs',
     tabName = 'SCCS',
     shinyModulePackage = "OhdsiShinyModules",
     moduleUiFunction = "sccsView",
     moduleServerFunction = "sccsServer",
-    moduleDatabaseConnectionKeyUsername = 'sccs', 
+    moduleDatabaseConnectionKeyUsername = 'sccs',
     moduleInfoBoxFile = "sccsHelperFile()",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -417,8 +496,8 @@ createDefaultMetaConfig <- function(
     databaseMetaData = 'DATABASE_META_DATA'
   ),
   useKeyring = T
-){
-  
+) {
+
   result <- createModuleConfig(
     moduleIcon = "sliders",
     moduleId = 'EvidenceSynthesis', #namespace ns() 
@@ -426,7 +505,7 @@ createDefaultMetaConfig <- function(
     shinyModulePackage = "OhdsiShinyModules",
     moduleUiFunction = "evidenceSynthesisViewer",
     moduleServerFunction = "evidenceSynthesisServer",
-    moduleDatabaseConnectionKeyUsername = 'es', 
+    moduleDatabaseConnectionKeyUsername = 'es',
     moduleInfoBoxFile = "evidenceSynthesisHelperFile()",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -451,13 +530,13 @@ createDefaultMetaConfig <- function(
 #'
 #' @export
 createDefaultPhevaluatorConfig <- function(
-    resultDatabaseDetails = list(
-      tablePrefix = 'pv_',
-      schema = 'main'
-    ),
-    useKeyring = T
-){
-  
+  resultDatabaseDetails = list(
+    tablePrefix = 'pv_',
+    schema = 'main'
+  ),
+  useKeyring = T
+) {
+
   result <- createModuleConfig(
     moduleId = 'phevaluator',
     tabName = "PheValuator",
@@ -465,7 +544,7 @@ createDefaultPhevaluatorConfig <- function(
     moduleUiFunction = "phevaluatorViewer",
     moduleServerFunction = "phevaluatorServer",
     moduleDatabaseConnectionKeyUsername = "phevaluator",
-    moduleInfoBoxFile =  "phevaluatorHelperFile()",
+    moduleInfoBoxFile = "phevaluatorHelperFile()",
     moduleIcon = "gauge",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring
@@ -490,14 +569,14 @@ createDefaultPhevaluatorConfig <- function(
 #'
 #' @export
 createDefaultDatasourcesConfig <- function(
-    resultDatabaseDetails = list(
-      tablePrefix = 'ds_',
-      schema = 'main',
-      databaseMetaData = 'DATABASE_META_DATA'
-    ),
+  resultDatabaseDetails = list(
+    tablePrefix = 'ds_',
+    schema = 'main',
+    databaseMetaData = 'DATABASE_META_DATA'
+  ),
   useKeyring = T
-){
-  
+) {
+
   result <- createModuleConfig(
     moduleId = 'datasources',
     tabName = "Datasources",
@@ -505,7 +584,7 @@ createDefaultDatasourcesConfig <- function(
     moduleUiFunction = "datasourcesViewer",
     moduleServerFunction = "datasourcesServer",
     moduleDatabaseConnectionKeyUsername = "datasources",
-    moduleInfoBoxFile =  "datasourcesHelperFile()",
+    moduleInfoBoxFile = "datasourcesHelperFile()",
     moduleIcon = "database",
     resultDatabaseDetails = resultDatabaseDetails,
     useKeyring = useKeyring

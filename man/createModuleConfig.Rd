@@ -10,6 +10,8 @@ createModuleConfig(
   shinyModulePackage = "OhdsiShinyModules",
   moduleUiFunction = "aboutViewer",
   moduleServerFunction = "aboutServer",
+  moduleSubModules = list(),
+  moduleDataSourceFunction = NULL,
   moduleDatabaseConnectionKeyService = "resultDatabaseDetails",
   moduleDatabaseConnectionKeyUsername = NULL,
   moduleInfoBoxFile = "aboutHelperFile()",
@@ -40,6 +42,8 @@ createModuleConfig(
 \item{resultDatabaseDetails}{A list containing the result database schema (schema), the tablePrefix for the results and other optional settings}
 
 \item{useKeyring}{whether to save the resultDatabaseDetails to a keyring or system environmental variable}
+
+\item{modulesubModules}{List Sub module items to be selected from. If this is present, the UI will ignore moduleUiFunction and moduleServerFunction}
 }
 \value{
 An R list with the module config settings
