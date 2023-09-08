@@ -1,8 +1,8 @@
 Package: ShinyAppBuilder
 Type: Package
 Title: Viewing OHDSI Results Via Shiny Modules
-Version: 1.1.2
-Date: 2023-3-29
+Version: 1.2.0
+Date: 2023-7-21
 Authors@R: c(
   person("Jenna", "Reps", email = "jreps@its.jnj.com", role = c("aut", "cre")),
   person("Josh", "Ide", role = c("aut")),
@@ -20,9 +20,7 @@ Imports:
   checkmate,
   DatabaseConnector,
   dplyr,
-  jsonlite,
-  keyring,
-  OhdsiShinyModules (>= 1.0.2),
+  OhdsiShinyModules (>= 1.2.0),
   ParallelLogger (>= 2.0.0),
   ResultModelManager (>= 0.4.0),
   rlang,
@@ -30,6 +28,7 @@ Imports:
   shinydashboard
 Suggests:
   Eunomia,
+  jsonlite,
   knitr,
   rmarkdown,
   testthat,

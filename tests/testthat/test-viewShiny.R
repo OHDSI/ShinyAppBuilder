@@ -1,19 +1,24 @@
 context("view shiny")
 
 test_that("shiny works", {
-
-  config <- initializeModuleConfig()
-  config <- addModuleConfig(config, createDefaultAboutConfig())
-
+  
+  config <- initializeModuleConfig() 
+  config <-  addModuleConfig(config, createDefaultAboutConfig())
+  
+  # check app fails when NULL connection
+  expect_error(createShinyApp(config = config, connection = NULL))
+  expect_error(createShinyApp(config = config, connection = NULL, connectionDetails = list()))
+ 
+  # create a connection and check app works
   tdb <- tempfile(fileext = "sqlite")
   on.exit(unlink(tdb))
   testCd <- DatabaseConnector::createConnectionDetails("sqlite", server = tdb)
-  app <- createShinyApp(config = config, connectionDetails = testCd)
-
-  expect_error(createShinyApp(config = config, connection = NULL))
-  expect_error(createShinyApp(config = config, connection = NULL, connectionDetails = list()))
-
+  app <- createShinyApp(
+    config = config, 
+    connectionDetails = testCd
+  )
   testthat::expect_s3_class(app, "shiny.appobj")
+
 
   shiny::testServer(
     app = app,

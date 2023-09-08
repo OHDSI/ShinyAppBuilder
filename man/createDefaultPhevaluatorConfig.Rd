@@ -4,15 +4,7 @@
 \alias{createDefaultPhevaluatorConfig}
 \title{createDefaultPhevaluatorConfig}
 \usage{
-createDefaultPhevaluatorConfig(
-  resultDatabaseDetails = list(tablePrefix = "pv_", schema = "main"),
-  useKeyring = T
-)
-}
-\arguments{
-\item{resultDatabaseDetails}{A list containing the result database schema (schema), the tablePrefix for the results and other optional settings}
-
-\item{useKeyring}{whether to save the resultDatabaseDetails to a keyring or system environmental variable}
+createDefaultPhevaluatorConfig()
 }
 \value{
 An R list with the module config settings

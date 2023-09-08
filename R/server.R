@@ -14,32 +14,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-server <- function(config, connection){
+server <- function(config, connection, resultDatabaseSettings){
   return(
-  shiny::shinyServer(function(input, output, session) {
-    
-    # pointless code to use OhdsiShinyModules to prevent warning
-    useless <- OhdsiShinyModules::getLogoImage()
-
-  #============= 
-  # sidebar menu 
-  #============= 
-  output$sidebarMenu <- shinydashboard::renderMenu(
-    do.call(
-      shinydashboard::sidebarMenu, 
-      c(
-        lapply(config$shinyModules, function(module){
-          addInfo(
-            item = shinydashboard::menuItem(
-              text = module$tabText, 
-              tabName = module$tabName, 
-              icon = shiny::icon(module$icon)
+    shiny::shinyServer(function(input, output, session) {
+      
+      # pointless code to use OhdsiShinyModules to prevent warning
+      useless <- OhdsiShinyModules::getLogoImage()
+      
+      #============= 
+      # sidebar menu 
+      #============= 
+      output$sidebarMenu <- shinydashboard::renderMenu(
+        do.call(
+          shinydashboard::sidebarMenu, 
+          c(
+            lapply(config$shinyModules, function(module){
+              addInfo(
+                item = shinydashboard::menuItem(
+                  text = module$tabText, 
+                  tabName = module$tabName, 
+                  icon = shiny::icon(module$icon)
+                ), 
+                infoId = paste0(module$tabName,"Info")
+              )
+            }
             ), 
-            infoId = paste0(module$tabName,"Info")
+            id = "menu"
           )
-        }
-        ), 
-        id = "menu"
+        )
       )
     )
   )
@@ -69,77 +71,33 @@ server <- function(config, connection){
     runServer[[input$menu]] <- runServer[[input$menu]] +1 
     
     #lapply(config$shinyModules, function(module){
-      
-    for(module in config$shinyModules){
-      if(input$menu == module$tabName & runServer[[module$tabName]]==1){
+            # run the server
+            tryCatch({
+              
+              shiny::withProgress({
+                do.call(
+                  what = eval(parse(text = paste0(module$shinyModulePackage, "::",module$serverFunction))),
+                  args = list(
+                    id = module$id,
+                    connectionHandler = connection,
+                    resultDatabaseSettings = resultDatabaseSettings
+                  )
+                )
+              }, message = paste("Loading module", module$moduleId)
+              )
+              
+            }, error = function (err) {
+              ParallelLogger::logError("Failed to load module ", module$tabName)
+              shiny::showNotification(
+                paste0("Error loading module: ", err),
+                type = "error"
+              )
+            }
+            )
+          }}
         
-        if(is.null(module$databaseConnectionKeyService)){
-          argsList <- list(
-            id = module$id
-          )
-        } else{
-          
-          
-          if(module$keyring){
-            # use keyring
-          argsList <- list(
-            id = module$id,
-            resultDatabaseSettings = jsonlite::fromJSON(
-              keyring::key_get(
-                module$databaseConnectionKeyService, 
-                module$databaseConnectionKeyUsername
-              )
-            )
-          )
-          } else{
-            # use environmental variables
-            argsList <- list(
-              id = module$id,
-              resultDatabaseSettings = jsonlite::fromJSON(
-                    Sys.getenv(
-                      paste0(
-                        module$databaseConnectionKeyService, 
-                        '_', 
-                        module$databaseConnectionKeyUsername
-                        )
-                      )
-                    )
-              )
-            
-            
-          }
-          # add the connection 
-          argsList$connectionHandler <- connection
-        }
-        # run the server
-
-        tryCatch({
-          if (!is.null(module$shinyModulePackage)) {
-            serverFunc <- parse(text = paste0(module$shinyModulePackage, "::", module$serverFunction))
-          } else {
-            serverFunc <- module$serverFunction
-          }
-          shiny::withProgress({
-            do.call(
-              what = eval(serverFunc),
-              args = argsList
-            )
-          }, message = paste("Loading module", module$moduleId))
-
-        }, error = function (err) {
-          ParallelLogger::logError("Failed to load module ", module$tabName)
-          shiny::showNotification(
-            paste0("Error loading module: ", err),
-            type = "error"
-          )
-        })
-      }
+      })
       
-    }
-    
-    #)
-  })
-  
 
   # HELPER FUNCTIONS
   
