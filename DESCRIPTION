@@ -17,9 +17,12 @@ VignetteBuilder: knitr
 Depends:
   R (>= 3.3.0)
 Imports:
+  checkmate,
+  DatabaseConnector,
   dplyr,
   OhdsiShinyModules (>= 1.2.0),
   ParallelLogger (>= 2.0.0),
+  ResultModelManager (>= 0.4.0),
   rlang,
   shiny,
   shinydashboard
@@ -33,6 +36,7 @@ Suggests:
   remotes
 Remotes:
   ohdsi/Eunomia,
-  ohdsi/OhdsiShinyModules
+  ohdsi/OhdsiShinyModules,
+  ohdsi/ResultModelManager
 RoxygenNote: 7.2.3
 Encoding: UTF-8

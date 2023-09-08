@@ -202,10 +202,8 @@ To run the shiny app on a shiny server, specify the connection details to the re
 
 ```{r eval=FALSE}
 # create a connection to the result database
-connectionDetails <- DatabaseConnector::createConnectionDetails() 
-connection <- ResultModelManager::ConnectionHandler$new(connectionDetails)
-
-createShinyApp(shinyAppConfig, connection)
+connectionDetails <- DatabaseConnector::createConnectionDetails()
+createShinyApp(shinyAppConfig, connectionDetails = connectionDetails)
 ```
 
 
@@ -215,10 +213,8 @@ To just view the shiny app locally, specify the connection details to the result
 
 ```{r eval=FALSE}
 # create a connection to the result database
-connectionDetails <- DatabaseConnector::createConnectionDetails() 
-connection <- ResultModelManager::ConnectionHandler$new(connectionDetails)
-
-viewShiny(shinyAppConfig, connection)
+connectionDetails <- DatabaseConnector::createConnectionDetails()
+viewShiny(shinyAppConfig, connectionDetails = connectionDetails)
 ```
 
 # Example 1 Full Code To View Locally
@@ -290,9 +286,7 @@ shinyAppConfig <- initializeModuleConfig() %>%
 
 
 # add connection details to result database
-connectionDetails <- DatabaseConnector::createConnectionDetails() 
-connection <- ResultModelManager::ConnectionHandler$new(connectionDetails)
-
-viewShiny(shinyAppConfig, connection)
+connectionDetails <- DatabaseConnector::createConnectionDetails()
+viewShiny(shinyAppConfig, connectionDetails = connectionDetails)
 
 ```

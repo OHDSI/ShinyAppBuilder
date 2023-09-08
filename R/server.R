@@ -43,32 +43,34 @@ server <- function(config, connection, resultDatabaseSettings){
           )
         )
       )
-      
-      
-      
-      lapply(config$shinyModules, function(module){
-        shiny::observeEvent(eval(parse(text = paste0('input$', module$tabName, 'Info'))), {
-          showInfoBox(module$tabName, eval(parse(text = paste0(module$shinyModulePackage, "::",module$infoBoxFile))))
-        })
-      }
-      )
-      
-      # MODULE SERVERS HERE
-      runServer <- shiny::reactiveValues() 
-      for(module in  config$shinyModules){
-        runServer[[module$tabName]] <- 0
-      }
-      
-      shiny::observeEvent(input$menu,{ 
-        
-        runServer[[input$menu]] <- runServer[[input$menu]] +1 
-        
-        for(module in config$shinyModules){
-          # if the selected tab is the module and it is the first click
-          # run module server
-          if(input$menu == module$tabName & runServer[[module$tabName]]==1){
-            
-            
+    )
+  )
+  
+  
+  lapply(config$shinyModules, function(module){
+    if (!is.null(module$shinyModulePackage)) {
+      moduleInfoBox <- parse(text = paste0(module$shinyModulePackage, "::", module$infoBoxFile))
+    } else {
+      moduleInfoBox <- module$infoBoxFile
+    }
+
+    shiny::observeEvent(eval(parse(text = paste0('input$', module$tabName, 'Info'))), {
+      showInfoBox(module$tabName, eval(moduleInfoBox))
+    })
+  }
+  )
+  
+  # MODULE SERVERS HERE
+  runServer <- shiny::reactiveValues() 
+  for(module in  config$shinyModules){
+    runServer[[module$tabName]] <- 0
+  }
+  
+  shiny::observeEvent(input$menu,{ 
+    
+    runServer[[input$menu]] <- runServer[[input$menu]] +1 
+    
+    #lapply(config$shinyModules, function(module){
             # run the server
             tryCatch({
               

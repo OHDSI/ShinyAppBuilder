@@ -18,8 +18,8 @@ ui <- function(config){
   return(
     shinydashboard::dashboardPage(
   skin = "black",
-  
-  shinydashboard::dashboardHeader( 
+
+  shinydashboard::dashboardHeader(
     title = "OHDSI Analysis Viewer",
     shiny::tags$li(
       shiny::div(
@@ -34,36 +34,43 @@ ui <- function(config){
       class = "dropdown"
     )
   ),
-  
-  shinydashboard::dashboardSidebar( 
-    shinydashboard::sidebarMenuOutput("sidebarMenu") 
-  ), # end sidebar 
-  
+
+  shinydashboard::dashboardSidebar(
+    shinydashboard::sidebarMenuOutput("sidebarMenu")
+  ), # end sidebar
+
   # ADD EACH MODULE SHINY AS A TAB ITEM
   shinydashboard::dashboardBody(
-    
+
     do.call(
-      shinydashboard::tabItems, 
+      shinydashboard::tabItems,
       lapply(config$shinyModules, function(module){
+
+        if (!is.null(module$shinyModulePackage)) {
+          uiFunction <- parse(text = paste0(module$shinyModulePackage,"::" ,module$uiFunction))
+        } else {
+          uiFunction <- module$uiFunction
+        }
+
         shinydashboard::tabItem(
-          tabName = module$tabName, 
-          eval(parse(text = paste0(module$shinyModulePackage,"::" ,module$uiFunction)))(id = module$id)
+          tabName = module$tabName,
+          eval(uiFunction)(id = module$id)
         )
       })
       ),
-    
+
     shiny::tags$footer(
       shiny::h6(
         paste0(
-        "Generated with OhdsiShinyModules v", 
+        "Generated with OhdsiShinyModules v",
         utils::packageVersion('OhdsiShinyModules'),
         ' and ShinyAppBuilder v',
         utils::packageVersion('ShinyAppBuilder')
       )
     )
     )
-    
+
   )
-  
+
 )
 )}

@@ -54,6 +54,8 @@ createModuleConfig <- function(
     infoBoxFile = moduleInfoBoxFile,
     icon = moduleIcon
   )
+
+  class(result) <- "shinyModuleConfig"
   
   return(result)
 }
@@ -82,7 +84,8 @@ createDefaultAboutConfig <- function(
     moduleInfoBoxFile =  "aboutHelperFile()",
     moduleIcon = "info"
   )
-  
+
+  class(result) <- c(class(result), "aboutModuleConfig")
   return(result)
 }
 
@@ -111,7 +114,7 @@ createDefaultPredictionConfig <- function(
     moduleInfoBoxFile =  "patientLevelPredictionHelperFile()",
     moduleIcon = "chart-line"
   )
-  
+  class(result) <- c(class(result), "predictionModuleConfig")
   return(result)
 }
 
@@ -139,7 +142,7 @@ createDefaultCohortMethodConfig <- function(
     moduleInfoBoxFile =  "cohortMethodHelperFile()",
     moduleIcon = "chart-column"
   )
-  
+  class(result) <- c(class(result), "estimationModuleConfig")
   return(result)
 }
 
@@ -167,7 +170,8 @@ createDefaultCharacterizationConfig <- function(
     moduleInfoBoxFile =  "characterizationHelperFile()",
     moduleIcon = "table"
   )
-  
+
+  class(result) <- c(class(result), "characterizationModuleConfig")
   return(result)
 }
 
@@ -196,7 +200,8 @@ createDefaultCohortGeneratorConfig <- function(
     moduleInfoBoxFile =  "cohortGeneratorHelperFile()",
     moduleIcon = "user-gear"
   )
-  
+
+  class(result) <- c(class(result), "cohortGeneratorModuleConfig")
   return(result)
 }
 
@@ -224,7 +229,7 @@ createDefaultCohortDiagnosticsConfig <- function(
     moduleInfoBoxFile =  "cohortDiagnosticsHelperFile()",
     moduleIcon = "users"
   )
-
+  class(result) <- c(class(result), "cohortDiagnosticsModuleConfig")
   return(result)
 }
 
@@ -252,7 +257,7 @@ createDefaultSccsConfig <- function(
     moduleServerFunction = "sccsServer",
     moduleInfoBoxFile = "sccsHelperFile()"
   )
-  
+  class(result) <- c(class(result), "cohortSCCSModuleConfig")
   return(result)
 }
 
@@ -280,7 +285,7 @@ createDefaultEvidenceSynthesisConfig <- function(
     moduleServerFunction = "evidenceSynthesisServer",
     moduleInfoBoxFile = "evidenceSynthesisHelperFile()"
   )
-  
+  class(result) <- c(class(result), "cohortMetaModuleConfig")
   return(result)
 }
 
@@ -308,7 +313,7 @@ createDefaultPhevaluatorConfig <- function(
     moduleInfoBoxFile =  "phevaluatorHelperFile()",
     moduleIcon = "gauge"
   )
-  
+  class(result) <- c(class(result), "phevaluatorModuleConfig")
   return(result)
 }
 
@@ -336,6 +341,6 @@ createDefaultDatasourcesConfig <- function(
     moduleInfoBoxFile =  "datasourcesHelperFile()",
     moduleIcon = "database"
   )
-  
+  class(result) <- c(class(result), "datasourcesModuleConfig")
   return(result)
 }

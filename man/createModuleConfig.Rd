@@ -23,7 +23,7 @@ createModuleConfig(
 
 \item{moduleUiFunction}{The name of the UI function in the R package shinyModulePackage}
 
-\item{moduleServerFunction}{The name of the server function in the R package shinyModulePackage}
+\item{moduleServerFunction}{The name of the server function in the R package shinyModulePackage. If null package will try to try to load ui, helper and moduleServer from local session}
 
 \item{moduleInfoBoxFile}{The function in the R package shinyModulePackage that contains info text}
 
