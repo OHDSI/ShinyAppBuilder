@@ -17,7 +17,8 @@ createDefaultResultDatabaseSettings(
   plpTablePrefix = "plp_",
   cmTablePrefix = "cm_",
   sccsTablePrefix = "sccs_",
-  esTablePrefix = "es_"
+  esTablePrefix = "es_",
+  pvTablePrefix = "pv_"
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ createDefaultResultDatabaseSettings(
 \item{sccsTablePrefix}{The table prefix for the self controlled case series results}
 
 \item{esTablePrefix}{The table prefix for the evidence synthesis method results}
+
+\item{pvTablePrefix}{The table prefix for the phevaluator results}
 }
 \value{
 An R list with the module config settings

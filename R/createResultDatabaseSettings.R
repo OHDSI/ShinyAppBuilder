@@ -19,6 +19,7 @@
 #' @param cmTablePrefix The table prefix for the cohort method results
 #' @param sccsTablePrefix The table prefix for the self controlled case series results
 #' @param esTablePrefix The table prefix for the evidence synthesis method results
+#' @param pvTablePrefix The table prefix for the phevaluator results
 #' 
 #' @return
 #' An R list with the module config settings
@@ -38,7 +39,8 @@ createDefaultResultDatabaseSettings <- function(
     plpTablePrefix = 'plp_',
     cmTablePrefix = 'cm_',
     sccsTablePrefix = 'sccs_',
-    esTablePrefix = 'es_'
+    esTablePrefix = 'es_',
+    pvTablePrefix = 'pv_'
 ){
   
   resultDatabaseSettings <- list(
@@ -54,7 +56,8 @@ createDefaultResultDatabaseSettings <- function(
     plpTablePrefix = plpTablePrefix,
     cmTablePrefix = cmTablePrefix,
     sccsTablePrefix = sccsTablePrefix,
-    esTablePrefix = esTablePrefix
+    esTablePrefix = esTablePrefix,
+    pvTablePrefix = pvTablePrefix
   )
   
   return(resultDatabaseSettings)

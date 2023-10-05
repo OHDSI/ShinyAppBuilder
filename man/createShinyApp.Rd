@@ -11,7 +11,7 @@ createShinyApp(
     "cd_", cTablePrefix = "c_", plpTablePrefix = "plp_", pvTablePrefix = "pv_",
     cmTablePrefix = "cm_", sccsTablePrefix = "sccs_", esTablePrefix = "es_",
     incidenceTablePrefix = "i_", databaseTable = "database_meta_table",
-    databaseTablePrefix = "")
+    databaseTablePrefix = ""),
   connectionDetails = NULL,
   usePooledConnection = TRUE
 )
@@ -22,7 +22,7 @@ createShinyApp(
 \item{connection}{A connection to the results}
 
 \item{resultDatabaseSettings}{A list with the result schema and table prefixes}
-  
+
 \item{connectionDetails}{A DatabaseConnector::connectionDetails connection to the results database}
 
 \item{usePooledConnection}{Use a pooled database connection or not - set to true for multi-user environments (default)}
