@@ -34,20 +34,7 @@
 createShinyApp <- function(
     config,
     connection,
-    resultDatabaseSettings = list(
-      schema = 'main',
-      cgTablePrefix = 'cg_',
-      cdTablePrefix = 'cd_',
-      cTablePrefix = 'c_',
-      plpTablePrefix = 'plp_',
-      pvTablePrefix = 'pv_',
-      cmTablePrefix = 'cm_',
-      sccsTablePrefix = 'sccs_',
-      esTablePrefix = 'es_',
-      incidenceTablePrefix = 'i_',
-      databaseTable = 'database_meta_table',
-      databaseTablePrefix = ''
-    ),
+    resultDatabaseSettings = createDefaultResultDatabaseSettings(),
   connectionDetails = NULL,
   usePooledConnection = TRUE
       ){
@@ -79,7 +66,7 @@ createShinyApp <- function(
   
   if(missing(config)){
     ParallelLogger::logInfo('Using default config')
-    config <- ParallelLogger::loadSettingsFromJson(system.file('shiny', 'config.json', package = 'shinyModuleViewer'))
+    config <- ParallelLogger::loadSettingsFromJson(system.file('shiny', 'config.json', package = 'shinyAppBuilder'))
   }
   
   app <- shiny::shinyApp(
@@ -110,7 +97,7 @@ createShinyApp <- function(
 viewShiny <- function(
     config,
     connection, 
-    resultDatabaseSettings,
+    resultDatabaseSettings  = createDefaultResultDatabaseSettings(),
     connectionDetails = NULL,
     usePooledConnection = TRUE
     ){

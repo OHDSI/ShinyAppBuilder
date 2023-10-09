@@ -7,7 +7,7 @@
 viewShiny(
   config,
   connection,
-  resultDatabaseSettings,
+  resultDatabaseSettings = createDefaultResultDatabaseSettings(),
   connectionDetails = NULL,
   usePooledConnection = TRUE
 )

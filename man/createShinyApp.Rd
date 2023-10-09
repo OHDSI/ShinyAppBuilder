@@ -7,11 +7,7 @@
 createShinyApp(
   config,
   connection,
-  resultDatabaseSettings = list(schema = "main", cgTablePrefix = "cg_", cdTablePrefix =
-    "cd_", cTablePrefix = "c_", plpTablePrefix = "plp_", pvTablePrefix = "pv_",
-    cmTablePrefix = "cm_", sccsTablePrefix = "sccs_", esTablePrefix = "es_",
-    incidenceTablePrefix = "i_", databaseTable = "database_meta_table",
-    databaseTablePrefix = ""),
+  resultDatabaseSettings = createDefaultResultDatabaseSettings(),
   connectionDetails = NULL,
   usePooledConnection = TRUE
 )

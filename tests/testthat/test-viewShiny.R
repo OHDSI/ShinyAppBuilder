@@ -66,9 +66,7 @@ test_that("shiny outside package loads", {
     moduleUiFunction = fooModuleUi,
     moduleServerFunction = fooModule,
     moduleInfoBoxFile = "fooHelpInfo()",
-    moduleIcon = "info",
-    useKeyring = FALSE,
-    resultDatabaseDetails = list()
+    moduleIcon = "info"
   )
 
   config <- addModuleConfig(config, moduleConfig)
