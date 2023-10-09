@@ -32,58 +32,20 @@ library(ShinyAppBuilder)
 library(ShinyAppBuilder)
 config <- initializeModuleConfig() %>%
   addModuleConfig(
-    createDefaultAboutConfig(
-      resultDatabaseDetails = list(),
-      useKeyring = T
-    )
+    createDefaultAboutConfig()
   )  %>%
   addModuleConfig(
-    createDefaultCohortDiagnosticsConfig(
-      resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'cd_',
-      schema = 'main',
-      vocabularyDatabaseSchema = 'main'
-    ),
-      useKeyring = T
+    createDefaultCohortDiagnosticsConfig()
     )
   ) %>%
   addModuleConfig(
-    createDefaultCharacterizationConfig(
-      resultDatabaseDetails = list(
-        tablePrefix = 'c_',
-        cohortTablePrefix = 'cg_',
-        databaseTablePrefix = '',
-        schema = 'main',
-        databaseTable = 'DATABASE_META_DATA',
-        incidenceTablePrefix = 'ci_'
-      ),
-      useKeyring = T
-    )
+    createDefaultCharacterizationConfig()
   ) %>%
   addModuleConfig(
-    createDefaultPredictionConfig(
-      resultDatabaseDetails = list(
-        tablePrefix = 'plp_',
-        cohortTablePrefix = 'cg_',
-        databaseTablePrefix = '',
-        schema = 'main',
-        databaseTable = 'DATABASE_META_DATA'
-      ),
-      useKeyring = T
-    )
+    createDefaultPredictionConfig()
   ) %>%
   addModuleConfig(
-    createDefaultEstimationConfig(
-      resultDatabaseDetails = list(
-        tablePrefix = 'cm_',
-        cohortTablePrefix = 'cg_',
-        databaseTablePrefix = '',
-        schema = 'main',
-        databaseTable = 'DATABASE_META_DATA'
-      ),
-      useKeyring = T
-    )
+    createDefaultCohortMethodConfig()
   )
 
 # Step 2: specify the connection details to the results database 
@@ -97,7 +59,18 @@ connection <- ResultModelManager::ConnectionHandler$new(connectionDetails)
 
 # Step 4: now run the shiny app based on the config file and view the results
 #         at the specified connection
-ShinyAppBuilder::viewShiny(config = config, connection = connection)
+ShinyAppBuilder::viewShiny(
+config = config, 
+connection = connection
+)
+
+# Note - if you have non-standard table prefixes you may need 
+#   to specify them in createDefaultResultDatabaseSettings()
+ShinyAppBuilder::viewShiny(
+config = config, 
+connection = connection,  
+resultDatabaseSettings = createDefaultResultDatabaseSettings()
+)
 ```
 
 If the connection works and there is results in the database, then an interactive shiny app will open.
