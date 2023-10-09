@@ -23,19 +23,61 @@
 #' User specifies the json config and connection
 #' 
 #' @param config  The json with the app config     
-#' @param connection  A connection to the results                       
+#' @param connection  A connection to the results   
+#' @param resultDatabaseSettings A list with the result schema and table prefixes 
+#' @param connectionDetails     A DatabaseConnector::connectionDetails connection to the results database
+#' @param usePooledConnection   Use a pooled database connection or not - set to true for multi-user environments (default)
 #' @return
-#' The shiny app will open
+#' Shiny app instance
 #'
 #' @export
-createShinyApp <- function(config,connection){
+createShinyApp <- function(
+    config,
+    connection,
+    resultDatabaseSettings = createDefaultResultDatabaseSettings(),
+  connectionDetails = NULL,
+  usePooledConnection = TRUE
+      ){
+  
+  # if using connection details instead of connection
+  # configure connection from the details
+    if (missing(connection) || is.null(connection)) {
+    checkmate::assertClass(connectionDetails, "ConnectionDetails")
+
+    if (connectionDetails$dbms != "sqlite") {
+      if (length(list.files(connectionDetails$pathToDriver, pattern = connectionDetails$dbms)) == 0) {
+        DatabaseConnector::downloadJdbcDrivers(
+          dbms = connectionDetails$dbms,
+          pathToDriver = connectionDetails$pathToDriver)
+      }
+    }
+
+    if (usePooledConnection) {
+      connection <- ResultModelManager::PooledConnectionHandler$new(
+        connectionDetails = connectionDetails
+      )
+    } else {
+      connection <- ResultModelManager::ConnectionHandler$new(
+        connectionDetails = connectionDetails
+      )
+    }
+    on.exit(connection$finalize())
+  }
   
   if(missing(config)){
     ParallelLogger::logInfo('Using default config')
-    config <- ParallelLogger::loadSettingsFromJson(system.file('shiny', 'config.json', package = 'shinyModuleViewer'))
+    config <- ParallelLogger::loadSettingsFromJson(system.file('shiny', 'config.json', package = 'shinyAppBuilder'))
   }
   
-  app <- shiny::shinyApp(ui(config=config), server(config = config, connection = connection))
+  app <- shiny::shinyApp(
+    ui = ui(config = config), 
+    server = server(
+      config = config, 
+      connection = connection,
+      resultDatabaseSettings = resultDatabaseSettings
+      )
+    )
+
   return(app)
 }
 
@@ -47,17 +89,25 @@ createShinyApp <- function(config,connection){
 #' @details
 #' User specifies the json config and connection
 #' 
-#' @param config  The json with the app config     
-#' @param connection  A connection to the results                       
+#' @inheritParams createShinyApp                 
 #' @return
 #' The shiny app will open
 #'
 #' @export
-viewShiny <- function(config,connection){
+viewShiny <- function(
+    config,
+    connection, 
+    resultDatabaseSettings  = createDefaultResultDatabaseSettings(),
+    connectionDetails = NULL,
+    usePooledConnection = TRUE
+    ){
   
   app <- createShinyApp(
     config = config,
-    connection = connection
+    connection = connection,
+    resultDatabaseSettings = resultDatabaseSettings,
+    connectionDetails = connectionDetails,
+    usePooledConnection = usePooledConnection
     )
   
   shiny::runApp(app)

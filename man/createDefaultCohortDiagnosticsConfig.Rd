@@ -4,16 +4,7 @@
 \alias{createDefaultCohortDiagnosticsConfig}
 \title{createDefaultCohortDiagnosticsConfig}
 \usage{
-createDefaultCohortDiagnosticsConfig(
-  resultDatabaseDetails = list(dbms = "sqlite", tablePrefix = "cd_", schema = "main",
-    vocabularyDatabaseSchema = "main"),
-  useKeyring = T
-)
-}
-\arguments{
-\item{resultDatabaseDetails}{A list containing the result database schema (schema), the tablePrefix for the results and other optional settings}
-
-\item{useKeyring}{whether to save the resultDatabaseDetails to a keyring or system environmental variable}
+createDefaultCohortDiagnosticsConfig()
 }
 \value{
 An R list with the module config settings

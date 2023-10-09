@@ -4,12 +4,24 @@
 \alias{viewShiny}
 \title{viewShiny}
 \usage{
-viewShiny(config, connection)
+viewShiny(
+  config,
+  connection,
+  resultDatabaseSettings = createDefaultResultDatabaseSettings(),
+  connectionDetails = NULL,
+  usePooledConnection = TRUE
+)
 }
 \arguments{
 \item{config}{The json with the app config}
 
 \item{connection}{A connection to the results}
+
+\item{resultDatabaseSettings}{A list with the result schema and table prefixes}
+
+\item{connectionDetails}{A DatabaseConnector::connectionDetails connection to the results database}
+
+\item{usePooledConnection}{Use a pooled database connection or not - set to true for multi-user environments (default)}
 }
 \value{
 The shiny app will open

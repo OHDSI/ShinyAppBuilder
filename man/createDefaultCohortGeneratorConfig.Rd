@@ -4,17 +4,7 @@
 \alias{createDefaultCohortGeneratorConfig}
 \title{createDefaultCohortGeneratorConfig}
 \usage{
-createDefaultCohortGeneratorConfig(
-  resultDatabaseDetails = list(dbms = "sqlite", tablePrefix = "cg_", cohortTablePrefix =
-    "cg_", databaseTablePrefix = "", schema = "main", databaseTable =
-    "DATABASE_META_DATA", incidenceTablePrefix = "i_"),
-  useKeyring = T
-)
-}
-\arguments{
-\item{resultDatabaseDetails}{A list containing the result database schema (schema), the tablePrefix for the results and other optional settings}
-
-\item{useKeyring}{whether to save the resultDatabaseDetails to a keyring or system environmental variable}
+createDefaultCohortGeneratorConfig()
 }
 \value{
 An R list with the module config settings

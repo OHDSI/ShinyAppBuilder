@@ -14,151 +14,125 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-server <- function(config, connection){
-  return(
-  shiny::shinyServer(function(input, output, session) {
-    
+# HELPER FUNCTIONS
+addInfo <- function(item, infoId) {
+  infoTag <- shiny::tags$small(
+    class = "badge pull-right action-button",
+    style = "padding: 1px 6px 2px 6px; background-color: steelblue;",
+    type = "button",
+    id = infoId,
+    "i"
+  )
+  item$children[[1]]$children <- append(item$children[[1]]$children, list(infoTag))
+  return(item)
+}
+
+showInfoBox <- function(title, htmlFileName) {
+  shiny::showModal(shiny::modalDialog(
+    title = title,
+    easyClose = TRUE,
+    footer = NULL,
+    size = "l",
+    shiny::HTML(readChar(htmlFileName, file.info(htmlFileName)$size))
+  ))
+}
+
+
+server <- function(config, connection, resultDatabaseSettings) {
+
+  moduleServer <- shiny::shinyServer(function(input, output, session) {
+
     # pointless code to use OhdsiShinyModules to prevent warning
     useless <- OhdsiShinyModules::getLogoImage()
 
-  #============= 
-  # sidebar menu 
-  #============= 
-  output$sidebarMenu <- shinydashboard::renderMenu(
-    do.call(
-      shinydashboard::sidebarMenu, 
-      c(
-        lapply(config$shinyModules, function(module){
-          addInfo(
-            item = shinydashboard::menuItem(
-              text = module$tabText, 
-              tabName = module$tabName, 
-              icon = shiny::icon(module$icon)
-            ), 
-            infoId = paste0(module$tabName,"Info")
-          )
-        }
-        ), 
-        id = "menu"
+    #=============
+    # sidebar menu
+    #=============
+    output$sidebarMenu <- shinydashboard::renderMenu(
+      do.call(
+        shinydashboard::sidebarMenu,
+        c(
+          lapply(config$shinyModules, function(module) {
+            addInfo(
+              item = shinydashboard::menuItem(
+                text = module$tabText,
+                tabName = module$tabName,
+                icon = shiny::icon(module$icon)
+              ),
+              infoId = paste0(module$tabName, "Info")
+            )
+          }
+          ),
+          id = "menu"
+        )
       )
     )
-  )
-  
-  
-  lapply(config$shinyModules, function(module){
-    shiny::observeEvent(eval(parse(text = paste0('input$', module$tabName, 'Info'))), {
-      showInfoBox(module$tabName, eval(parse(text = paste0(module$shinyModulePackage, "::",module$infoBoxFile))))
-    })
-  }
-  )
-  
-  # MODULE SERVERS HERE
-  runServer <- shiny::reactiveValues() 
-  for(module in  config$shinyModules){
-    runServer[[module$tabName]] <- 0
-  }
-  
-  shiny::observeEvent(input$menu,{ 
-    
-    runServer[[input$menu]] <- runServer[[input$menu]] +1 
-    
-    #lapply(config$shinyModules, function(module){
-      
-    for(module in config$shinyModules){
-      if(input$menu == module$tabName & runServer[[module$tabName]]==1){
-        
-        if(is.null(module$databaseConnectionKeyService)){
-          argsList <- list(
-            id = module$id
-          )
-        } else{
-          
-          
-          if(module$keyring){
-            # use keyring
+
+
+    lapply(config$shinyModules, function(module) {
+      if (!is.null(module$shinyModulePackage)) {
+        moduleInfoBox <- parse(text = paste0(module$shinyModulePackage, "::", module$infoBoxFile))
+      } else {
+        moduleInfoBox <- module$infoBoxFile
+      }
+
+      shiny::observeEvent(eval(parse(text = paste0('input$', module$tabName, 'Info'))), {
+        showInfoBox(module$tabName, eval(moduleInfoBox))
+      })
+    }
+    )
+
+    # MODULE SERVERS HERE
+    runServer <- shiny::reactiveValues()
+    for (module in  config$shinyModules) {
+      runServer[[module$tabName]] <- 0
+    }
+
+    shiny::observeEvent(input$menu, {
+
+      runServer[[input$menu]] <- runServer[[input$menu]] + 1
+
+      #lapply(config$shinyModules, function(module){
+
+      for (module in config$shinyModules) {
+        if (input$menu == module$tabName & runServer[[module$tabName]] == 1) {
           argsList <- list(
             id = module$id,
-            resultDatabaseSettings = jsonlite::fromJSON(
-              keyring::key_get(
-                module$databaseConnectionKeyService, 
-                module$databaseConnectionKeyUsername
-              )
-            )
+            resultDatabaseSettings = resultDatabaseSettings,
+            connectionHandler = connection
           )
-          } else{
-            # use environmental variables
-            argsList <- list(
-              id = module$id,
-              resultDatabaseSettings = jsonlite::fromJSON(
-                    Sys.getenv(
-                      paste0(
-                        module$databaseConnectionKeyService, 
-                        '_', 
-                        module$databaseConnectionKeyUsername
-                        )
-                      )
-                    )
+          # run the server
+
+          tryCatch({
+            if (!is.null(module$shinyModulePackage)) {
+              serverFunc <- parse(text = paste0(module$shinyModulePackage, "::", module$serverFunction))
+            } else {
+              serverFunc <- module$serverFunction
+            }
+            shiny::withProgress({
+              do.call(
+                what = eval(serverFunc),
+                args = argsList
               )
-            
-            
-          }
-          # add the connection 
-          argsList$connectionHandler <- connection
+            }, message = paste("Loading module", module$moduleId))
+
+          }, error = function(err) {
+            ParallelLogger::logError("Failed to load module ", module$tabName)
+            shiny::showNotification(
+              paste0("Error loading module: ", err),
+              type = "error"
+            )
+          })
         }
-        # run the server
 
-        tryCatch({
-
-          shiny::withProgress({
-            do.call(
-              what = eval(parse(text = paste0(module$shinyModulePackage, "::",module$serverFunction))),
-              args = argsList
-            )
-          }, message = paste("Loading module", module$moduleId))
-
-        }, error = function (err) {
-          ParallelLogger::logError("Failed to load module ", module$tabName)
-          shiny::showNotification(
-            paste0("Error loading module: ", err),
-            type = "error"
-          )
-        })
       }
-      
-    }
-    
-    #)
+    })
+
   })
-  
 
-  # HELPER FUNCTIONS
-  
-  addInfo <- function(item, infoId) {
-    infoTag <- shiny::tags$small(
-      class = "badge pull-right action-button",
-      style = "padding: 1px 6px 2px 6px; background-color: steelblue;",
-      type = "button", 
-      id = infoId,
-      "i"
-    )
-    item$children[[1]]$children <- append(item$children[[1]]$children, list(infoTag))
-    return(item)
-  }
-  
-  showInfoBox <- function(title, htmlFileName) { 
-    shiny::showModal(shiny::modalDialog( 
-      title = title, 
-      easyClose = TRUE, 
-      footer = NULL, 
-      size = "l", 
-      shiny::HTML(readChar(htmlFileName, file.info(htmlFileName)$size) ) 
-    )) 
-  }
-  
-})
+  return(moduleServer)
+}
 
-)}
-  
   
   
   

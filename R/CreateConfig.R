@@ -27,12 +27,8 @@
 #' @param shinyModulePackage  The R package to find the server and UI functions
 #' @param moduleUiFunction  The name of the UI function in the R package shinyModulePackage
 #' @param moduleServerFunction  The name of the server function in the R package shinyModulePackage
-#' @param moduleDatabaseConnectionKeyService  The keyring service or the system environment variable with the result database details
-#' @param moduleDatabaseConnectionKeyUsername The keyring username or the system environment variable with the result database details
 #' @param moduleInfoBoxFile  The function in the R package shinyModulePackage that contains info text
 #' @param moduleIcon The icon to use for the side menu button
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
 #'                             
 #' @return
 #' An R list with the module config settings
@@ -44,12 +40,8 @@ createModuleConfig <- function(
  shinyModulePackage = 'OhdsiShinyModules',
  moduleUiFunction = "aboutViewer",
  moduleServerFunction = "aboutServer",
- moduleDatabaseConnectionKeyService = 'resultDatabaseDetails',
- moduleDatabaseConnectionKeyUsername = NULL,
  moduleInfoBoxFile =  "aboutHelperFile()",
- moduleIcon = "info",
- resultDatabaseDetails,
- useKeyring = TRUE
+ moduleIcon = "info"
 ){
 
   result <- list(
@@ -59,34 +51,11 @@ createModuleConfig <- function(
     shinyModulePackage = shinyModulePackage,
     uiFunction = moduleUiFunction,
     serverFunction = moduleServerFunction,
-    databaseConnectionKeyService = moduleDatabaseConnectionKeyService,
-    databaseConnectionKeyUsername = moduleDatabaseConnectionKeyUsername,
     infoBoxFile = moduleInfoBoxFile,
-    icon = moduleIcon,
-    keyring = useKeyring
+    icon = moduleIcon
   )
-  
-  if(!is.null(moduleDatabaseConnectionKeyService)){
-    if(useKeyring){
-      # setup key
-      keyring::key_set_with_value(
-        service = moduleDatabaseConnectionKeyService, 
-        username = moduleDatabaseConnectionKeyUsername, 
-        password = as.character(
-          jsonlite::toJSON(
-            resultDatabaseDetails
-          ))
-      )
-    } else{
-      
-      var.name <- paste0(moduleDatabaseConnectionKeyService, '_', moduleDatabaseConnectionKeyUsername)
-      var.value <- jsonlite::toJSON(
-        resultDatabaseDetails
-      )
-      do.call(Sys.setenv, as.list(stats::setNames(var.value, var.name)))
-      
-    }
-  }
+
+  class(result) <- "shinyModuleConfig"
   
   return(result)
 }
@@ -99,16 +68,12 @@ createModuleConfig <- function(
 #' @details
 #' User specifies the settings to create a default config for an about module
 #' 
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
 #'                             
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
 createDefaultAboutConfig <- function(
-  resultDatabaseDetails,
-  useKeyring = T
 ){
   result <- createModuleConfig(
     moduleId = 'about',
@@ -116,14 +81,11 @@ createDefaultAboutConfig <- function(
     shinyModulePackage = 'OhdsiShinyModules',
     moduleUiFunction = "aboutViewer",
     moduleServerFunction = "aboutServer",
-    moduleDatabaseConnectionKeyService = NULL,
-    moduleDatabaseConnectionKeyUsername = NULL,
     moduleInfoBoxFile =  "aboutHelperFile()",
-    moduleIcon = "info",
-    resultDatabaseDetails = resultDatabaseDetails,
-    useKeyring = useKeyring
+    moduleIcon = "info"
   )
-  
+
+  class(result) <- c(class(result), "aboutModuleConfig")
   return(result)
 }
 
@@ -135,83 +97,52 @@ createDefaultAboutConfig <- function(
 #' @details
 #' User specifies the settings to create a default config for a prediction module
 #' 
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
 #'                             
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
 createDefaultPredictionConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'plp_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA',
-      incidenceTablePrefix = 'i_'
-    ),
-    useKeyring = T
 ){
   
   result <- createModuleConfig(
     moduleId = 'prediction',
     tabName = "Prediction",
     shinyModulePackage = 'OhdsiShinyModules',
-    moduleUiFunction = "predictionViewer",
-    moduleServerFunction = "predictionServer",
-    moduleDatabaseConnectionKeyUsername = "prediction",
-    moduleInfoBoxFile =  "predictionHelperFile()",
-    moduleIcon = "chart-line",
-    resultDatabaseDetails = resultDatabaseDetails,
-    useKeyring = useKeyring
+    moduleUiFunction = "patientLevelPredictionViewer",
+    moduleServerFunction = "patientLevelPredictionServer",
+    moduleInfoBoxFile =  "patientLevelPredictionHelperFile()",
+    moduleIcon = "chart-line"
   )
-  
+  class(result) <- c(class(result), "predictionModuleConfig")
   return(result)
 }
 
-#' createDefaultEstimationConfig
+#' createDefaultCohortMethodConfig
 #'
 #' @description
-#' Create an R list with the estimation config specification
+#' Create an R list with the cohort method config specification
 #'
 #' @details
-#' User specifies the settings to create a default config for an estimation module
-#' 
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
+#' User specifies the settings to create a default config for an cohort method module
 #'                             
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
-createDefaultEstimationConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'cm_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA',
-      incidenceTablePrefix = 'i_'
-    ),
-    useKeyring = T
+createDefaultCohortMethodConfig <- function(
 ){
   
   result <- createModuleConfig(
-    moduleId = 'estimation',
-    tabName = "Estimation",
+    moduleId = 'cohortmethod',
+    tabName = "CohortMethod",
     shinyModulePackage = 'OhdsiShinyModules',
-    moduleUiFunction = "estimationViewer",
-    moduleServerFunction = "estimationServer",
-    moduleDatabaseConnectionKeyUsername = "estimation",
-    moduleInfoBoxFile =  "estimationHelperFile()",
-    moduleIcon = "chart-column",
-    resultDatabaseDetails = resultDatabaseDetails,
-    useKeyring = useKeyring
+    moduleUiFunction = "cohortMethodViewer",
+    moduleServerFunction = "cohortMethodServer",
+    moduleInfoBoxFile =  "cohortMethodHelperFile()",
+    moduleIcon = "chart-column"
   )
-  
+  class(result) <- c(class(result), "estimationModuleConfig")
   return(result)
 }
 
@@ -223,39 +154,24 @@ createDefaultEstimationConfig <- function(
 #' @details
 #' User specifies the settings to create a default config for a characterization module
 #' 
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
-#'                             
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
 createDefaultCharacterizationConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'c_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA',
-      incidenceTablePrefix = 'i_'
-    ),
-    useKeyring = T
 ){
   
   result <- createModuleConfig(
     moduleId = 'characterization',
     tabName = "Characterization",
     shinyModulePackage = 'OhdsiShinyModules',
-    moduleUiFunction = "descriptionViewer",
-    moduleServerFunction = "descriptionServer",
-    moduleDatabaseConnectionKeyUsername = "description",
-    moduleInfoBoxFile =  "descriptionHelperFile()",
-    moduleIcon = "table",
-    resultDatabaseDetails = resultDatabaseDetails,
-    useKeyring = useKeyring
+    moduleUiFunction = "characterizationViewer",
+    moduleServerFunction = "characterizationServer",
+    moduleInfoBoxFile =  "characterizationHelperFile()",
+    moduleIcon = "table"
   )
-  
+
+  class(result) <- c(class(result), "characterizationModuleConfig")
   return(result)
 }
 
@@ -268,39 +184,24 @@ createDefaultCharacterizationConfig <- function(
 #' @details
 #' User specifies the settings to create a default config for a cohort generator module
 #' 
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
-#'                             
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
 createDefaultCohortGeneratorConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'cg_',
-      cohortTablePrefix = 'cg_',
-      databaseTablePrefix = '',
-      schema = 'main',
-      databaseTable = 'DATABASE_META_DATA',
-      incidenceTablePrefix = 'i_'
-    ),
-    useKeyring = T
 ){
   
   result <- createModuleConfig(
     moduleId = 'cohortGenerator',
-    tabName = "CohortGenerator",
+    tabName = "Cohorts",
     shinyModulePackage = 'OhdsiShinyModules',
     moduleUiFunction = "cohortGeneratorViewer",
     moduleServerFunction = "cohortGeneratorServer",
-    moduleDatabaseConnectionKeyUsername = "cohortGenerator",
     moduleInfoBoxFile =  "cohortGeneratorHelperFile()",
-    moduleIcon = "user-gear",
-    resultDatabaseDetails = resultDatabaseDetails,
-    useKeyring = useKeyring
+    moduleIcon = "user-gear"
   )
-  
+
+  class(result) <- c(class(result), "cohortGeneratorModuleConfig")
   return(result)
 }
 
@@ -312,21 +213,11 @@ createDefaultCohortGeneratorConfig <- function(
 #' @details
 #' User specifies the settings to create a default config for a characterization module
 #'
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
-#'
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
 createDefaultCohortDiagnosticsConfig <- function(
-    resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'cd_',
-      schema = 'main',
-      vocabularyDatabaseSchema = 'main'
-    ),
-    useKeyring = T
 ){
 
   result <- createModuleConfig(
@@ -334,14 +225,11 @@ createDefaultCohortDiagnosticsConfig <- function(
     tabName = "CohortDiagnostics",
     shinyModulePackage = 'OhdsiShinyModules',
     moduleUiFunction = "cohortDiagnosticsView",
-    moduleServerFunction = "cohortDiagnosticsSever",
-    moduleDatabaseConnectionKeyUsername = "cohortDiagnostics",
+    moduleServerFunction = "cohortDiagnosticsServer",
     moduleInfoBoxFile =  "cohortDiagnosticsHelperFile()",
-    moduleIcon = "users",
-    resultDatabaseDetails = resultDatabaseDetails,
-    useKeyring = useKeyring
+    moduleIcon = "users"
   )
-
+  class(result) <- c(class(result), "cohortDiagnosticsModuleConfig")
   return(result)
 }
 
@@ -353,22 +241,11 @@ createDefaultCohortDiagnosticsConfig <- function(
 #' @details
 #' User specifies the settings to create a default config for an sccs module
 #'
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
-#'
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
-createDefaultSCCSConfig <- function(
-  resultDatabaseDetails = list(
-    tablePrefix = 'sccs_',
-    cohortTablePrefix = 'cg_',
-    databaseTablePrefix = '',
-    schema = 'main',
-    databaseTable = 'DATABASE_META_DATA'
-  ),
-  useKeyring = T
+createDefaultSccsConfig <- function(
 ){
   
   result <- createModuleConfig(
@@ -378,40 +255,25 @@ createDefaultSCCSConfig <- function(
     shinyModulePackage = "OhdsiShinyModules",
     moduleUiFunction = "sccsView",
     moduleServerFunction = "sccsServer",
-    moduleDatabaseConnectionKeyUsername = 'sccs', 
-    moduleInfoBoxFile = "sccsHelperFile()",
-    resultDatabaseDetails = resultDatabaseDetails,
-    useKeyring = useKeyring
+    moduleInfoBoxFile = "sccsHelperFile()"
   )
-  
+  class(result) <- c(class(result), "cohortSCCSModuleConfig")
   return(result)
 }
 
-#' createDefaultMetaConfig
+#' createDefaultEvidenceSynthesisConfig
 #'
 #' @description
-#' Create an R list with the Meta, or EvidenceSynthesis, config specification
+#' Create an R list with the EvidenceSynthesis config specification
 #'
 #' @details
-#' User specifies the settings to create a default config for a Meta, or EvidenceSynthesis, module
-#'
-#' @param resultDatabaseDetails  A list containing the result database schema (schema), the tablePrefix for the results and other optional settings
-#' @param useKeyring whether to save the resultDatabaseDetails to a keyring or system environmental variable
+#' User specifies the settings to create a default config for an EvidenceSynthesis module
 #'
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
-createDefaultMetaConfig <- function(
-  resultDatabaseDetails = list(
-    tablePrefix = 'es_',
-    cmTablePrefix = 'cm_',
-    sccsTablePrefix = 'sccs_',
-    cgTablePrefix = 'cg_',
-    schema = 'main',
-    databaseMetaData = 'DATABASE_META_DATA'
-  ),
-  useKeyring = T
+createDefaultEvidenceSynthesisConfig <- function(
 ){
   
   result <- createModuleConfig(
@@ -421,11 +283,64 @@ createDefaultMetaConfig <- function(
     shinyModulePackage = "OhdsiShinyModules",
     moduleUiFunction = "evidenceSynthesisViewer",
     moduleServerFunction = "evidenceSynthesisServer",
-    moduleDatabaseConnectionKeyUsername = 'es', 
-    moduleInfoBoxFile = "evidenceSynthesisHelperFile()",
-    resultDatabaseDetails = resultDatabaseDetails,
-    useKeyring = useKeyring
+    moduleInfoBoxFile = "evidenceSynthesisHelperFile()"
   )
+  class(result) <- c(class(result), "cohortMetaModuleConfig")
+  return(result)
+}
+
+#' createDefaultPhevaluatorConfig
+#'
+#' @description
+#' Create an R list with the phevaluator config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for a phevaluator module
+#' 
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultPhevaluatorConfig <- function(
+){
   
+  result <- createModuleConfig(
+    moduleId = 'phevaluator',
+    tabName = "PheValuator",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "phevaluatorViewer",
+    moduleServerFunction = "phevaluatorServer",
+    moduleInfoBoxFile =  "phevaluatorHelperFile()",
+    moduleIcon = "gauge"
+  )
+  class(result) <- c(class(result), "phevaluatorModuleConfig")
+  return(result)
+}
+
+#' createDefaultDatasourcesConfig
+#'
+#' @description
+#' Create an R list with the datasources config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for a datasources module
+#' 
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultDatasourcesConfig <- function(
+){
+  
+  result <- createModuleConfig(
+    moduleId = 'datasources',
+    tabName = "DataSources",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "datasourcesViewer",
+    moduleServerFunction = "datasourcesServer",
+    moduleInfoBoxFile =  "datasourcesHelperFile()",
+    moduleIcon = "database"
+  )
+  class(result) <- c(class(result), "datasourcesModuleConfig")
   return(result)
 }
