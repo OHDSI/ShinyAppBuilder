@@ -1,3 +1,8 @@
+ShinyAppBuilder v2.0.1
+======================
+- added css formatting file 
+- set white-space: normal to dropdown lists
+
 
 ShinyAppBuilder v1.2.0
 ======================

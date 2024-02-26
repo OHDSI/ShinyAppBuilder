@@ -36,7 +36,6 @@ config <- initializeModuleConfig() %>%
   )  %>%
   addModuleConfig(
     createDefaultCohortDiagnosticsConfig()
-    )
   ) %>%
   addModuleConfig(
     createDefaultCharacterizationConfig()
