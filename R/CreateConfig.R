@@ -60,6 +60,35 @@ createModuleConfig <- function(
   return(result)
 }
 
+#' createDefaultHomeConfig
+#'
+#' @description
+#' Create an R list with the about config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for an about module
+#' 
+#'                             
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultHomeConfig <- function(
+){
+  result <- createModuleConfig(
+    moduleId = 'home',
+    tabName = "Home",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "homeViewer",
+    moduleServerFunction = "homeServer",
+    moduleInfoBoxFile =  "homeHelperFile()",
+    moduleIcon = "house"
+  )
+  
+  class(result) <- c(class(result), "homeModuleConfig")
+  return(result)
+}
+
 #' createDefaultAboutConfig
 #'
 #' @description
