@@ -14,13 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ui <- function(config){
+ui <- function(config, title = "OHDSI Analysis Viewer"){
   return(
     shinydashboard::dashboardPage(
   skin = "black",
 
   shinydashboard::dashboardHeader(
-    title = "OHDSI Analysis Viewer",
+    title = title,
     shiny::tags$li(
       shiny::div(
         shiny::img(

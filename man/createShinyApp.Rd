@@ -9,7 +9,8 @@ createShinyApp(
   connection,
   resultDatabaseSettings = createDefaultResultDatabaseSettings(),
   connectionDetails = NULL,
-  usePooledConnection = TRUE
+  usePooledConnection = TRUE,
+  title = "OHDSI Analysis Viewer"
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ createShinyApp(
 \item{connectionDetails}{A DatabaseConnector::connectionDetails connection to the results database}
 
 \item{usePooledConnection}{Use a pooled database connection or not - set to true for multi-user environments (default)}
+
+\item{title}{The title for the app.  Defaults to: OHDSI Analysis Viewer}
 }
 \value{
 Shiny app instance

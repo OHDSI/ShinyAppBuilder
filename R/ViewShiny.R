@@ -27,6 +27,7 @@
 #' @param resultDatabaseSettings A list with the result schema and table prefixes 
 #' @param connectionDetails     A DatabaseConnector::connectionDetails connection to the results database
 #' @param usePooledConnection   Use a pooled database connection or not - set to true for multi-user environments (default)
+#' @param title The title for the app.  Defaults to: OHDSI Analysis Viewer
 #' @return
 #' Shiny app instance
 #'
@@ -36,7 +37,8 @@ createShinyApp <- function(
     connection,
     resultDatabaseSettings = createDefaultResultDatabaseSettings(),
   connectionDetails = NULL,
-  usePooledConnection = TRUE
+  usePooledConnection = TRUE,
+  title = "OHDSI Analysis Viewer"
       ){
   
   # if using connection details instead of connection
@@ -70,7 +72,10 @@ createShinyApp <- function(
   }
   
   app <- shiny::shinyApp(
-    ui = ui(config = config), 
+    ui = ui(
+      config = config, 
+      title = title
+      ), 
     server = server(
       config = config, 
       connection = connection,
@@ -99,7 +104,8 @@ viewShiny <- function(
     connection, 
     resultDatabaseSettings  = createDefaultResultDatabaseSettings(),
     connectionDetails = NULL,
-    usePooledConnection = TRUE
+    usePooledConnection = TRUE,
+    title = "OHDSI Analysis Viewer"
     ){
   
   app <- createShinyApp(
@@ -107,7 +113,8 @@ viewShiny <- function(
     connection = connection,
     resultDatabaseSettings = resultDatabaseSettings,
     connectionDetails = connectionDetails,
-    usePooledConnection = usePooledConnection
+    usePooledConnection = usePooledConnection,
+    title = title
     )
   
   shiny::runApp(app)
