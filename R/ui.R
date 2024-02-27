@@ -41,6 +41,13 @@ ui <- function(config, title = "OHDSI Analysis Viewer"){
 
   # ADD EACH MODULE SHINY AS A TAB ITEM
   shinydashboard::dashboardBody(
+    shiny::includeCSS(
+      system.file(
+        "www",
+        'formatting.css', 
+        package = "ShinyAppBuilder"
+      )
+    ),
 
     do.call(
       shinydashboard::tabItems,
