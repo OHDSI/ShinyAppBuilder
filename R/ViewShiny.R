@@ -73,8 +73,9 @@ createShinyApp <- function(
   
   app <- shiny::shinyApp(
     ui = ui(
-      config = config, 
-      title = title
+      config = config
+      #, 
+      #title = title
       ), 
     server = server(
       config = config, 

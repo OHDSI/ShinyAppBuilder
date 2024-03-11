@@ -39,61 +39,261 @@ showInfoBox <- function(title, htmlFileName) {
 
 
 server <- function(config, connection, resultDatabaseSettings) {
-
+  
   moduleServer <- shiny::shinyServer(function(input, output, session) {
-
-    # pointless code to use OhdsiShinyModules to prevent warning
-    useless <- OhdsiShinyModules::getLogoImage()
-
+    
+    # ... (unchanged)
+    
     #=============
-    # sidebar menu
+    # Additional functions for dynamic sidebar
     #=============
-    output$sidebarMenu <- shinydashboard::renderMenu(
-      do.call(
-        shinydashboard::sidebarMenu,
-        c(
-          lapply(config$shinyModules, function(module) {
-            addInfo(
-              item = shinydashboard::menuItem(
-                text = module$tabText,
-                tabName = module$tabName,
-                icon = shiny::icon(module$icon)
-              ),
-              infoId = paste0(module$tabName, "Info")
-            )
-          }
-          ),
-          id = "menu"
-        )
+    
+    # Load the shinydashboardPlus package
+    #library(shinydashboardPlus)
+    
+    # ...
+    
+    # Function to render content for the first sidebar
+renderFirstSidebarContent <- function() {
+  output$firstSidebarContent <- renderUI({
+    # Replace this with the actual content/rendering logic for the first sidebar
+    # Example: renderText("This is the content of the first sidebar")
+    tags$p("This is the content of the first sidebar")
+  })
+}
+
+# Function to add new sidebar item
+addSidebarItem <- function(showAll = TRUE) {
+  output$sidebarMenu <- shinydashboard::renderMenu({
+    sidebarItems <- lapply(config$shinyModules, function(module) {
+      addInfo(
+        item = shinydashboard::menuItem(
+          text = module$tabText,
+          tabName = module$tabName,
+          icon = shiny::icon(module$icon),
+          startExpanded = showAll  # Show all sidebars expanded or not based on the parameter
+        ),
+        infoId = paste0(module$tabName, "Info")
       )
-    )
-
-
-    lapply(config$shinyModules, function(module) {
-      if (!is.null(module$shinyModulePackage)) {
-        moduleInfoBox <- parse(text = paste0(module$shinyModulePackage, "::", module$infoBoxFile))
-      } else {
-        moduleInfoBox <- module$infoBoxFile
-      }
-
-      shiny::observeEvent(eval(parse(text = paste0('input$', module$tabName, 'Info'))), {
-        showInfoBox(module$tabName, eval(moduleInfoBox))
-      })
+    })
+    
+    if (!showAll) {
+      sidebarItems <- sidebarItems[-1]  # Exclude the first sidebar if showAll is set to FALSE
     }
+    
+    shinydashboard::sidebarMenu(
+      do.call(shiny::tagList, sidebarItems),
+      id = "menu"
     )
+  })
+}
 
-    # MODULE SERVERS HERE
+# Function to hide sidebar items
+hideSidebarItems <- function() {
+  output$sidebarMenu <- shinydashboard::renderMenu({
+    lapply(config$shinyModules, function(module) {
+      if (module$id == 1) {
+        # Always show the first sidebar
+        addInfo(
+          item = shinydashboard::menuItem(
+            text = module$tabText,
+            tabName = module$tabName,
+            icon = shiny::icon(module$icon),
+            startExpanded = TRUE  # Always show the first sidebar
+          ),
+          infoId = paste0(module$tabName, "Info")
+        )
+      } else {
+        # Hide other sidebars
+        addInfo(
+          item = shinydashboard::menuItem(
+            text = module$tabText,
+            tabName = module$tabName,
+            icon = shiny::icon(module$icon),
+            startExpanded = FALSE  # Hide by default
+          ),
+          infoId = paste0(module$tabName, "Info")
+        )
+      }
+    })
+  })
+}
+# ... (existing code)
+
+# Call the function to render content for the first sidebar during initialization
+renderFirstSidebarContent()
+    
+    # ... (existing code)
+
+shiny::observeEvent(input$addSidebar, {
+  # Add new sidebar item logic
+  output$sidebarMenu <- shinydashboard::renderMenu({
+    sidebarItems <- lapply(config$shinyModules, function(module) {
+      if (module$id == 1) {
+        # Always show the first sidebar
+        addInfo(
+          item = shinydashboard::menuItem(
+            text = module$tabText,
+            tabName = module$tabName,
+            icon = shiny::icon(module$icon),
+            startExpanded = TRUE
+          ),
+          infoId = paste0(module$tabName, "Info")
+        )
+      } else {
+        # Hide other sidebars
+        addInfo(
+          item = shinydashboard::menuItem(
+            text = module$tabText,
+            tabName = module$tabName,
+            icon = shiny::icon(module$icon),
+            startExpanded = FALSE
+          ),
+          infoId = paste0(module$tabName, "Info")
+        )
+      }
+    })
+    shinydashboard::sidebarMenu(
+      do.call(shiny::tagList, sidebarItems),
+      id = "menu"
+    )
+  })
+  
+  # Show all sidebars
+  shinyjs::runjs('$(".sidebar-menu li a").tab("show");')
+  
+  # Hide sidebar items logic
+  hideSidebarItems()
+  
+  # Show the "Add Sidebar" and "Hide Sidebar" buttons
+  shinyjs::enable("addSidebar")
+  shinyjs::enable("hideSidebar")
+})
+
+#=============
+# View Summary button logic
+#=============
+shiny::observeEvent(input$viewSummary, {
+  # Hide "Add Sidebar" and "Hide Sidebar" buttons
+  shinyjs::disable("addSidebar")
+  shinyjs::disable("hideSidebar")
+  
+  # Show only the first sidebar and its content
+  output$sidebarMenu <- shinydashboard::renderMenu({
+    sidebarItems <- lapply(config$shinyModules, function(module) {
+      addInfo(
+        item = shinydashboard::menuItem(
+          text = module$tabText,
+          tabName = module$tabName,
+          icon = shiny::icon(module$icon),
+          startExpanded = ifelse(module$id == 1, TRUE, FALSE)
+        ),
+        infoId = paste0(module$tabName, "Info")
+      )
+    })
+    shinydashboard::sidebarMenu(
+      do.call(shiny::tagList, sidebarItems),
+      id = "menu"
+    )
+  })
+  
+  # Render the content for the first sidebar
+  renderFirstSidebarContent()
+  
+  # Hide the rest of the sidebars
+  hideSidebarItems()
+  
+  # Show the "Add Sidebar" and "Hide Sidebar" buttons
+  shinyjs::enable("addSidebar")
+  shinyjs::enable("hideSidebar")
+  
+  # Programmatically update the active tab to the first sidebar
+  isolate({shinydashboard::updateTabItems(session, "menu", selected = "home")})
+})
+
+# Function to render content for the first sidebar
+renderFirstSidebarContent <- function() {
+  output$firstSidebarContent <- renderUI({
+    # Replace this with the actual content/rendering logic for the first sidebar
+    # Example: tags$p("This is the content of the first sidebar")
+    tags$p("This is the content of the first sidebar")
+  })
+}
+
+# Add Sidebar button logic
+shiny::observeEvent(input$addSidebar, {
+  # Add new sidebar item logic
+  addSidebarItem(showAll = TRUE)
+})
+
+# Hide Sidebar button logic
+shiny::observeEvent(input$hideSidebar, {
+  # Hide sidebar items logic
+  hideSidebarItems()
+})
+
+# Function to hide sidebar items
+hideSidebarItems <- function() {
+  output$sidebarMenu <- shinydashboard::renderMenu({
+    lapply(config$shinyModules, function(module) {
+      if (module$id == 1) {
+        # Always show the first sidebar
+        addInfo(
+          item = shinydashboard::menuItem(
+            text = module$tabText,
+            tabName = module$tabName,
+            icon = shiny::icon(module$icon),
+            startExpanded = TRUE  # Always show the first sidebar
+          ),
+          infoId = paste0(module$tabName, "Info")
+        )
+      } else {
+        # Hide other sidebars
+        addInfo(
+          item = shinydashboard::menuItem(
+            text = module$tabText,
+            tabName = module$tabName,
+            icon = shiny::icon(module$icon),
+            startExpanded = FALSE  # Hide by default
+          ),
+          infoId = paste0(module$tabName, "Info")
+        )
+      }
+    })
+  })
+}
+
+# Function to render content for the first sidebar
+renderFirstSidebarContent <- function() {
+  module <- config$shinyModules[[1]]
+  if (!is.null(module$shinyModulePackage)) {
+    serverFunc <- parse(text = paste0(module$shinyModulePackage, "::", module$serverFunction))
+  } else {
+    serverFunc <- module$serverFunction
+  }
+  eval(serverFunc)
+}
+
+# Show the first sidebar and its content on app opening
+shinyjs::runjs('$(".sidebar-menu li a:first").tab("show");')
+shinyjs::runjs('$(".sidebar-menu li.active a").click();')  # Click on the active sidebar to display its content
+renderFirstSidebarContent()  # Render content for the first module
+
+
+
+
+
+
+
+    
     runServer <- shiny::reactiveValues()
     for (module in  config$shinyModules) {
       runServer[[module$tabName]] <- 0
     }
-
+    
     shiny::observeEvent(input$menu, {
-
       runServer[[input$menu]] <- runServer[[input$menu]] + 1
-
-      #lapply(config$shinyModules, function(module){
-
+      
       for (module in config$shinyModules) {
         if (input$menu == module$tabName & runServer[[module$tabName]] == 1) {
           argsList <- list(
@@ -101,8 +301,6 @@ server <- function(config, connection, resultDatabaseSettings) {
             resultDatabaseSettings = resultDatabaseSettings,
             connectionHandler = connection
           )
-          # run the server
-
           tryCatch({
             if (!is.null(module$shinyModulePackage)) {
               serverFunc <- parse(text = paste0(module$shinyModulePackage, "::", module$serverFunction))
@@ -115,7 +313,7 @@ server <- function(config, connection, resultDatabaseSettings) {
                 args = argsList
               )
             }, message = paste("Loading module", module$moduleId))
-
+            
           }, error = function(err) {
             ParallelLogger::logError("Failed to load module ", module$tabName)
             shiny::showNotification(
@@ -124,15 +322,10 @@ server <- function(config, connection, resultDatabaseSettings) {
             )
           })
         }
-
       }
     })
-
+    
   })
-
+  
   return(moduleServer)
 }
-
-  
-  
-  
