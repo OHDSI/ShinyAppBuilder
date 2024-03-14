@@ -99,7 +99,8 @@ server <- function(config, connection, resultDatabaseSettings) {
           argsList <- list(
             id = module$id,
             resultDatabaseSettings = resultDatabaseSettings,
-            connectionHandler = connection
+            connectionHandler = connection,
+            config = config
           )
           # run the server
 
