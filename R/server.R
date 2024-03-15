@@ -95,7 +95,7 @@ server <- function(config, connection, resultDatabaseSettings) {
       #lapply(config$shinyModules, function(module){
 
       for (module in config$shinyModules) {
-        if (input$menu == module$tabName & runServer[[module$tabName]] == 1 & module$tabName == "about") {
+        if (input$menu == module$tabName & runServer[[module$tabName]] == 1 & module$tabName == "About") {
           argsList <- list(
             id = module$id,
             resultDatabaseSettings = resultDatabaseSettings,
