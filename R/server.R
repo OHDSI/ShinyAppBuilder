@@ -95,7 +95,7 @@ server <- function(config, connection, resultDatabaseSettings) {
       #lapply(config$shinyModules, function(module){
 
       for (module in config$shinyModules) {
-        if (input$menu == module$tabName & runServer[[module$tabName]] == 1) {
+        if (input$menu == module$tabName & runServer[[module$tabName]] == 1 & module$tabName == "about") {
           argsList <- list(
             id = module$id,
             resultDatabaseSettings = resultDatabaseSettings,
@@ -117,6 +117,36 @@ server <- function(config, connection, resultDatabaseSettings) {
               )
             }, message = paste("Loading module", module$moduleId))
 
+          }, error = function(err) {
+            ParallelLogger::logError("Failed to load module ", module$tabName)
+            shiny::showNotification(
+              paste0("Error loading module: ", err),
+              type = "error"
+            )
+          })
+        }
+        
+        if (input$menu == module$tabName & runServer[[module$tabName]] == 1 & module$tabName != "about") {
+          argsList <- list(
+            id = module$id,
+            resultDatabaseSettings = resultDatabaseSettings,
+            connectionHandler = connection
+          )
+          # run the server
+          
+          tryCatch({
+            if (!is.null(module$shinyModulePackage)) {
+              serverFunc <- parse(text = paste0(module$shinyModulePackage, "::", module$serverFunction))
+            } else {
+              serverFunc <- module$serverFunction
+            }
+            shiny::withProgress({
+              do.call(
+                what = eval(serverFunc),
+                args = argsList
+              )
+            }, message = paste("Loading module", module$moduleId))
+            
           }, error = function(err) {
             ParallelLogger::logError("Failed to load module ", module$tabName)
             shiny::showNotification(
