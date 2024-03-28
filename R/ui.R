@@ -44,7 +44,7 @@ ui <- function(config, title = "OHDSI Analysis Viewer"){
     shiny::includeCSS(
       system.file(
         "www",
-        'formatting.css', 
+        'default-theme.css', 
         package = "ShinyAppBuilder"
       )
     ),
