@@ -14,7 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ui <- function(config, title = "OHDSI Analysis Viewer"){
+ui <- function(config,
+               title = "OHDSI Analysis Viewer",
+               studyDescription = "Further details about the analyses used in this study can be found below."){
   return(
     shinydashboard::dashboardPage(
   skin = "black",
@@ -48,6 +50,12 @@ ui <- function(config, title = "OHDSI Analysis Viewer"){
         package = "ShinyAppBuilder"
       )
     ),
+    
+    shinydashboard::box(
+      width = '100%',
+      title = shiny::span( shiny::icon("lightbulb"),'Study Description'),
+        shiny::HTML(studyDescription)
+      ),
 
     do.call(
       shinydashboard::tabItems,
