@@ -17,6 +17,7 @@
 ui <- function(
     config, 
     title = "OHDSI Analysis Viewer",
+    studyDescription = "Further details about the analyses used in this study can be found below.",
     link = 'http://ohdsi.org'
     ){
   return(
@@ -60,10 +61,16 @@ ui <- function(
     shiny::includeCSS(
       system.file(
         "www",
-        'formatting.css', 
+        'default-theme.css', 
         package = "ShinyAppBuilder"
       )
     ),
+    
+    shinydashboard::box(
+      width = '100%',
+      title = shiny::span( shiny::icon("lightbulb"),'Study Description'),
+        shiny::HTML(studyDescription)
+      ),
 
     do.call(
       shinydashboard::tabItems,

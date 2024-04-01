@@ -27,8 +27,10 @@
 #' @param resultDatabaseSettings A list with the result schema and table prefixes 
 #' @param connectionDetails     A DatabaseConnector::connectionDetails connection to the results database
 #' @param usePooledConnection   Use a pooled database connection or not - set to true for multi-user environments (default)
+#' @param studyDescription A human-readable character string describing the study/analysis
 #' @param title The title for the app.  Defaults to: OHDSI Analysis Viewer
 #' @param protocolLink A link to a site containing the study protocol
+#'
 #' @return
 #' Shiny app instance
 #'
@@ -40,8 +42,10 @@ createShinyApp <- function(
     connectionDetails = NULL,
     usePooledConnection = TRUE,
     title = "OHDSI Analysis Viewer",
+    studyDescription = "No description provided. Further details about the analyses used in this study can be found below.",
+    title = "OHDSI Analysis Viewer",
     protocolLink = 'http://ohdsi.org'
-){
+      ){
   
   # if using connection details instead of connection
   # configure connection from the details
@@ -77,14 +81,15 @@ createShinyApp <- function(
     ui = ui(
       config = config, 
       title = title,
-      link = protocolLink
-      ), 
+      link = protocolLink,
+      studyDescription = studyDescription
+    ),
     server = server(
       config = config, 
       connection = connection,
       resultDatabaseSettings = resultDatabaseSettings
-      )
     )
+  )
 
   return(app)
 }
@@ -108,6 +113,7 @@ viewShiny <- function(
     resultDatabaseSettings  = createDefaultResultDatabaseSettings(),
     connectionDetails = NULL,
     usePooledConnection = TRUE,
+    studyDescription = NULL,
     title = "OHDSI Analysis Viewer",
     protocolLink = 'http://ohdsi.org'
     ){
@@ -118,6 +124,7 @@ viewShiny <- function(
     resultDatabaseSettings = resultDatabaseSettings,
     connectionDetails = connectionDetails,
     usePooledConnection = usePooledConnection,
+    studyDescription = studyDescription,
     title = title,
     protocolLink = protocolLink
     )
