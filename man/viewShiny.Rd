@@ -10,7 +10,8 @@ viewShiny(
   resultDatabaseSettings = createDefaultResultDatabaseSettings(),
   connectionDetails = NULL,
   usePooledConnection = TRUE,
-  title = "OHDSI Analysis Viewer"
+  title = "OHDSI Analysis Viewer",
+  studyDescription = NULL
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ viewShiny(
 \item{usePooledConnection}{Use a pooled database connection or not - set to true for multi-user environments (default)}
 
 \item{title}{The title for the app.  Defaults to: OHDSI Analysis Viewer}
+
+\item{studyDescription}{A human-readable character string describing the study/analysis}
 }
 \value{
 The shiny app will open

@@ -111,7 +111,7 @@ createDefaultAboutConfig <- function(
     moduleUiFunction = "aboutViewer",
     moduleServerFunction = "aboutServer",
     moduleInfoBoxFile =  "aboutHelperFile()",
-    moduleIcon = "info"
+    moduleIcon = "info-circle"
   )
 
   class(result) <- c(class(result), "aboutModuleConfig")
