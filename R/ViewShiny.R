@@ -28,6 +28,7 @@
 #' @param connectionDetails     A DatabaseConnector::connectionDetails connection to the results database
 #' @param usePooledConnection   Use a pooled database connection or not - set to true for multi-user environments (default)
 #' @param title The title for the app.  Defaults to: OHDSI Analysis Viewer
+#' @param protocolLink A link to a site containing the study protocol
 #' @return
 #' Shiny app instance
 #'
@@ -36,10 +37,11 @@ createShinyApp <- function(
     config,
     connection,
     resultDatabaseSettings = createDefaultResultDatabaseSettings(),
-  connectionDetails = NULL,
-  usePooledConnection = TRUE,
-  title = "OHDSI Analysis Viewer"
-      ){
+    connectionDetails = NULL,
+    usePooledConnection = TRUE,
+    title = "OHDSI Analysis Viewer",
+    protocolLink = 'http://ohdsi.org'
+){
   
   # if using connection details instead of connection
   # configure connection from the details
@@ -74,7 +76,8 @@ createShinyApp <- function(
   app <- shiny::shinyApp(
     ui = ui(
       config = config, 
-      title = title
+      title = title,
+      link = protocolLink
       ), 
     server = server(
       config = config, 
@@ -105,7 +108,8 @@ viewShiny <- function(
     resultDatabaseSettings  = createDefaultResultDatabaseSettings(),
     connectionDetails = NULL,
     usePooledConnection = TRUE,
-    title = "OHDSI Analysis Viewer"
+    title = "OHDSI Analysis Viewer",
+    protocolLink = 'http://ohdsi.org'
     ){
   
   app <- createShinyApp(
@@ -114,7 +118,8 @@ viewShiny <- function(
     resultDatabaseSettings = resultDatabaseSettings,
     connectionDetails = connectionDetails,
     usePooledConnection = usePooledConnection,
-    title = title
+    title = title,
+    protocolLink = protocolLink
     )
   
   shiny::runApp(app)

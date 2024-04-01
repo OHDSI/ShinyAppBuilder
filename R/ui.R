@@ -14,13 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ui <- function(config, title = "OHDSI Analysis Viewer"){
+ui <- function(
+    config, 
+    title = "OHDSI Analysis Viewer",
+    link = 'http://ohdsi.org'
+    ){
   return(
     shinydashboard::dashboardPage(
   skin = "black",
 
   shinydashboard::dashboardHeader(
     title = title,
+    titleWidth = 450,
+    
     shiny::tags$li(
       shiny::div(
         shiny::img(
@@ -32,6 +38,16 @@ ui <- function(config, title = "OHDSI Analysis Viewer"){
         style = "padding-top:0px; padding-bottom:0px;"
       ),
       class = "dropdown"
+    ),
+    
+    shinydashboard::dropdownMenu(
+      type = "messages",
+      shinydashboard::messageItem(
+        from = "View Protocol", 
+        message = "Click to view study design", 
+        icon = shiny::icon("book"), 
+        href = link 
+      )
     )
   ),
 

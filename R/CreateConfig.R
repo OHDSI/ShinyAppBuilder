@@ -373,3 +373,32 @@ createDefaultDatasourcesConfig <- function(
   class(result) <- c(class(result), "datasourcesModuleConfig")
   return(result)
 }
+
+#' createDefaultReportConfig
+#'
+#' @description
+#' Create an R list with the report config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for a report module
+#' 
+#'                             
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultReportConfig <- function(
+){
+  result <- createModuleConfig(
+    moduleId = 'report',
+    tabName = "Report",
+    shinyModulePackage = 'OhdsiShinyModules',
+    moduleUiFunction = "reportViewer",
+    moduleServerFunction = "reportServer",
+    moduleInfoBoxFile =  "reportHelperFile()",
+    moduleIcon = "book"
+  )
+  
+  class(result) <- c(class(result), "reportModuleConfig")
+  return(result)
+}
