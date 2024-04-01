@@ -41,7 +41,6 @@ createShinyApp <- function(
     resultDatabaseSettings = createDefaultResultDatabaseSettings(),
     connectionDetails = NULL,
     usePooledConnection = TRUE,
-    title = "OHDSI Analysis Viewer",
     studyDescription = "No description provided. Further details about the analyses used in this study can be found below.",
     title = "OHDSI Analysis Viewer",
     protocolLink = 'http://ohdsi.org'
