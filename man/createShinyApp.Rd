@@ -12,7 +12,8 @@ createShinyApp(
   usePooledConnection = TRUE,
   studyDescription =
     "No description provided. Further details about the analyses used in this study can be found below.",
-  title = "OHDSI Analysis Viewer"
+  title = "OHDSI Analysis Viewer",
+  protocolLink = "http://ohdsi.org"
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ createShinyApp(
 \item{studyDescription}{A human-readable character string describing the study/analysis}
 
 \item{title}{The title for the app.  Defaults to: OHDSI Analysis Viewer}
+
+\item{protocolLink}{A link to a site containing the study protocol}
 }
 \value{
 Shiny app instance
