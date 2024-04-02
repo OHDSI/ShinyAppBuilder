@@ -1,7 +1,7 @@
 Package: ShinyAppBuilder
 Type: Package
 Title: Viewing OHDSI Results Via Shiny Modules
-Version: 2.0.1
+Version: 2.0.1.9000
 Date: 2024-02-1
 Authors@R: c(
   person("Jenna", "Reps", email = "jreps@its.jnj.com", role = c("aut", "cre")),
