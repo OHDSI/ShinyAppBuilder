@@ -32,11 +32,6 @@ div {
   font-size: 30px;
 }
 
-  li img.study-logo {
-    background-image: url("https://www.ohdsi.org/wp-content/uploads/2015/02/h243-ohdsi-logo-with-text.png");
-    padding-top:0px; 
-    padding-bottom:0px;
-    position:relative;
-    top:0px;
-    left:0px;
+  .study-logo {
+    background-image: url('path/to/your/image.jpg');
 }

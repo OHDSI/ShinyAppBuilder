@@ -31,7 +31,8 @@ ui <- function(
     shiny::tags$li(
       shiny::div(
         shiny::img(
-          src = "https://www.ohdsi.org/wp-content/uploads/2015/02/h243-ohdsi-logo-with-text.png",
+          #src = "https://www.ohdsi.org/wp-content/uploads/2015/02/h243-ohdsi-logo-with-text.png",
+          class = "study-logo",
           title = "OHDSI",
           height = "50px",
           width = "200px"
