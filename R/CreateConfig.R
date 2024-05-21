@@ -147,6 +147,34 @@ createDefaultPredictionConfig <- function(
   return(result)
 }
 
+#' createDefaultEstimationConfig
+#'
+#' @description
+#' Create an R list with the estimation config specification
+#'
+#' @details
+#' User specifies the settings to create a default config for an estimation module
+#'                             
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultEstimationConfig <- function(
+){
+  
+  result <- createModuleConfig(
+    moduleId = 'estimation', 
+    tabName = 'Estimation', 
+    shinyModulePackage = 'OhdsiShinyModules', 
+    moduleUiFunction = 'estimationViewer', 
+    moduleServerFunction = 'estimationServer', 
+    moduleInfoBoxFile = 'esimationHelperFile()', 
+    moduleIcon = 'list'
+  )
+  class(result) <- c(class(result), "estimationModuleConfig")
+  return(result)
+}
+
 #' createDefaultCohortMethodConfig
 #'
 #' @description
