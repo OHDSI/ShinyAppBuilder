@@ -17,11 +17,9 @@
 # HELPER FUNCTIONS
 addInfo <- function(item, infoId) {
   infoTag <- shiny::tags$small(
-    class = "badge pull-right action-button",
-    style = "padding: 1px 6px 2px 6px; background-color: steelblue;",
+    class = "fa fa-info-circle pull-right action-button",
     type = "button",
-    id = infoId,
-    "i"
+    id = infoId
   )
   item$children[[1]]$children <- append(item$children[[1]]$children, list(infoTag))
   return(item)
@@ -37,14 +35,15 @@ showInfoBox <- function(title, htmlFileName) {
   ))
 }
 
-
 server <- function(config, connection, resultDatabaseSettings) {
 
   moduleServer <- shiny::shinyServer(function(input, output, session) {
-
+    
+    addResourcePath('www',system.file('www',package='ShinyAppBuilder'))
+    
     # pointless code to use OhdsiShinyModules to prevent warning
     useless <- OhdsiShinyModules::getLogoImage()
-
+    
     #=============
     # sidebar menu
     #=============
