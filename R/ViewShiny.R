@@ -68,7 +68,6 @@ createShinyApp <- function(
         connectionDetails = connectionDetails
       )
     }
-    on.exit(connection$finalize())
   }
   
   if(missing(config)){
@@ -78,7 +77,7 @@ createShinyApp <- function(
   
   app <- shiny::shinyApp(
     ui = ui(
-      config = config, 
+      config = config,
       title = title,
       link = protocolLink,
       studyDescription = studyDescription
@@ -87,7 +86,10 @@ createShinyApp <- function(
       config = config, 
       connection = connection,
       resultDatabaseSettings = resultDatabaseSettings
-    )
+      ),
+    onStart = function() {
+     shiny::onStop(connection$finalize)
+    }
   )
 
   return(app)
