@@ -147,29 +147,29 @@ createDefaultPredictionConfig <- function(
   return(result)
 }
 
-#' createDefaultCohortMethodConfig
+#' createDefaultEstimationConfig
 #'
 #' @description
-#' Create an R list with the cohort method config specification
+#' Create an R list with the estimation config specification
 #'
 #' @details
-#' User specifies the settings to create a default config for an cohort method module
+#' User specifies the settings to create a default config for an estimation module
 #'                             
 #' @return
 #' An R list with the module config settings
 #'
 #' @export
-createDefaultCohortMethodConfig <- function(
+createDefaultEstimationConfig <- function(
 ){
   
   result <- createModuleConfig(
-    moduleId = 'cohortmethod',
-    tabName = "CohortMethod",
-    shinyModulePackage = 'OhdsiShinyModules',
-    moduleUiFunction = "cohortMethodViewer",
-    moduleServerFunction = "cohortMethodServer",
-    moduleInfoBoxFile =  "cohortMethodHelperFile()",
-    moduleIcon = "chart-column"
+    moduleId = 'estimation', 
+    tabName = 'Estimation', 
+    shinyModulePackage = 'OhdsiShinyModules', 
+    moduleUiFunction = 'estimationViewer', 
+    moduleServerFunction = 'estimationServer', 
+    moduleInfoBoxFile = 'esimationHelperFile()', 
+    moduleIcon = 'list'
   )
   class(result) <- c(class(result), "estimationModuleConfig")
   return(result)
@@ -262,61 +262,6 @@ createDefaultCohortDiagnosticsConfig <- function(
   return(result)
 }
 
-#' createDefaultSCCSConfig
-#'
-#' @description
-#' Create an R list with the SCCS config specification
-#'
-#' @details
-#' User specifies the settings to create a default config for an sccs module
-#'
-#' @return
-#' An R list with the module config settings
-#'
-#' @export
-createDefaultSccsConfig <- function(
-){
-  
-  result <- createModuleConfig(
-    moduleIcon = "people-arrows",
-    moduleId = 'sscs', 
-    tabName = 'SCCS',
-    shinyModulePackage = "OhdsiShinyModules",
-    moduleUiFunction = "sccsView",
-    moduleServerFunction = "sccsServer",
-    moduleInfoBoxFile = "sccsHelperFile()"
-  )
-  class(result) <- c(class(result), "cohortSCCSModuleConfig")
-  return(result)
-}
-
-#' createDefaultEvidenceSynthesisConfig
-#'
-#' @description
-#' Create an R list with the EvidenceSynthesis config specification
-#'
-#' @details
-#' User specifies the settings to create a default config for an EvidenceSynthesis module
-#'
-#' @return
-#' An R list with the module config settings
-#'
-#' @export
-createDefaultEvidenceSynthesisConfig <- function(
-){
-  
-  result <- createModuleConfig(
-    moduleIcon = "sliders",
-    moduleId = 'EvidenceSynthesis', #namespace ns() 
-    tabName = 'Meta',
-    shinyModulePackage = "OhdsiShinyModules",
-    moduleUiFunction = "evidenceSynthesisViewer",
-    moduleServerFunction = "evidenceSynthesisServer",
-    moduleInfoBoxFile = "evidenceSynthesisHelperFile()"
-  )
-  class(result) <- c(class(result), "cohortMetaModuleConfig")
-  return(result)
-}
 
 #' createDefaultPhevaluatorConfig
 #'
