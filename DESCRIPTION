@@ -37,7 +37,6 @@ Suggests:
   remotes
 Remotes:
   ohdsi/Eunomia,
-  ohdsi/OhdsiShinyModules,
-  ohdsi/ResultModelManager
+  ohdsi/OhdsiShinyModules
 RoxygenNote: 7.3.1
 Encoding: UTF-8
