@@ -1,8 +1,8 @@
 Package: ShinyAppBuilder
 Type: Package
 Title: Viewing OHDSI Results Via Shiny Modules
-Version: 2.0.1
-Date: 2024-02-1
+Version: 3.0.0
+Date: 2024-08-21
 Authors@R: c(
   person("Jenna", "Reps", email = "jreps@its.jnj.com", role = c("aut", "cre")),
   person("Nathan", "Hall", role = c("aut")),
@@ -21,7 +21,7 @@ Imports:
   checkmate,
   DatabaseConnector,
   dplyr,
-  OhdsiShinyModules (>= 1.2.0),
+  OhdsiShinyModules (>= 3.0.0),
   ParallelLogger (>= 2.0.0),
   ResultModelManager (>= 0.4.0),
   rlang,
@@ -39,5 +39,5 @@ Remotes:
   ohdsi/Eunomia,
   ohdsi/OhdsiShinyModules,
   ohdsi/ResultModelManager
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Encoding: UTF-8

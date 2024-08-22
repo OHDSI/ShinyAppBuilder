@@ -27,6 +27,10 @@
 #' @param resultDatabaseSettings A list with the result schema and table prefixes 
 #' @param connectionDetails     A DatabaseConnector::connectionDetails connection to the results database
 #' @param usePooledConnection   Use a pooled database connection or not - set to true for multi-user environments (default)
+#' @param studyDescription A human-readable character string describing the study/analysis
+#' @param title The title for the app.  Defaults to: OHDSI Analysis Viewer
+#' @param protocolLink A link to a site containing the study protocol
+#'
 #' @return
 #' Shiny app instance
 #'
@@ -35,8 +39,11 @@ createShinyApp <- function(
     config,
     connection,
     resultDatabaseSettings = createDefaultResultDatabaseSettings(),
-  connectionDetails = NULL,
-  usePooledConnection = TRUE
+    connectionDetails = NULL,
+    usePooledConnection = TRUE,
+    studyDescription = "No description provided. Further details about the analyses used in this study can be found below.",
+    title = "OHDSI Analysis Viewer",
+    protocolLink = 'http://ohdsi.org'
       ){
   
   # if using connection details instead of connection
@@ -61,7 +68,6 @@ createShinyApp <- function(
         connectionDetails = connectionDetails
       )
     }
-    on.exit(connection$finalize())
   }
   
   if(missing(config)){
@@ -70,13 +76,21 @@ createShinyApp <- function(
   }
   
   app <- shiny::shinyApp(
-    ui = ui(config = config), 
+    ui = ui(
+      config = config,
+      title = title,
+      link = protocolLink,
+      studyDescription = studyDescription
+    ),
     server = server(
       config = config, 
       connection = connection,
       resultDatabaseSettings = resultDatabaseSettings
-      )
-    )
+      ),
+    onStart = function() {
+     shiny::onStop(connection$finalize)
+    }
+  )
 
   return(app)
 }
@@ -99,7 +113,10 @@ viewShiny <- function(
     connection, 
     resultDatabaseSettings  = createDefaultResultDatabaseSettings(),
     connectionDetails = NULL,
-    usePooledConnection = TRUE
+    usePooledConnection = TRUE,
+    studyDescription = NULL,
+    title = "OHDSI Analysis Viewer",
+    protocolLink = 'http://ohdsi.org'
     ){
   
   app <- createShinyApp(
@@ -107,7 +124,10 @@ viewShiny <- function(
     connection = connection,
     resultDatabaseSettings = resultDatabaseSettings,
     connectionDetails = connectionDetails,
-    usePooledConnection = usePooledConnection
+    usePooledConnection = usePooledConnection,
+    studyDescription = studyDescription,
+    title = title,
+    protocolLink = protocolLink
     )
   
   shiny::runApp(app)

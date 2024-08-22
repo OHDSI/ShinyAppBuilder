@@ -2,8 +2,28 @@
 % Please edit documentation in R/ShinyAppBuilder.R
 \docType{package}
 \name{ShinyAppBuilder}
+\alias{ShinyAppBuilder-package}
 \alias{ShinyAppBuilder}
 \title{ShinyAppBuilder}
 \description{
 A package for creating viewers for the OHDSI shiny apps
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://ohdsi.github.io/ShinyAppBuilder}
+  \item \url{https://github.com/OHDSI/ShinyAppBuilder}
+  \item Report bugs at \url{https://github.com/OHDSI/ShinyAppBuilder/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Jenna Reps \email{jreps@its.jnj.com}
+
+Authors:
+\itemize{
+  \item Josh Ide
+  \item Jamie Gibert
+}
+
 }

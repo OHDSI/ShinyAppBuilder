@@ -1,3 +1,7 @@
+ShinyAppBuilder v3.0.0
+======================
+- CM/SCCS/ES are now combined into Estimation 
+
 ShinyAppBuilder v2.0.1
 ======================
 - added css formatting file 
