@@ -14,13 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ui <- function(config,
-               title = "OHDSI Analysis Viewer",
-               studyDescription = "Further details about the analyses used in this study can be found below.",
-               link = 'http://ohdsi.org',
-               themePackage = "ShinyAppBuilder") {
+ui <- function(
+    config,
+    title = "OHDSI Analysis Viewer",
+    studyDescription = "Further details about the analyses used in this study can be found below.",
+    link = 'http://ohdsi.org',
+    themePackage = "ShinyAppBuilder"
+) {
   
-  shiny::addResourcePath("www/images", system.file("www/images",package = themePackage))
+  shiny::addResourcePath(
+    prefix = "www/images", 
+    directoryPath = system.file("www/images",package = themePackage)
+  )
   
   return(
     shinydashboard::dashboardPage(
@@ -29,7 +34,13 @@ ui <- function(config,
         title = title,
         titleWidth = 300,
         shiny::tags$li(
-          shiny::div(shiny::img(title = "logo", class = "navbar-logo", ), style = "padding-top:0px; padding-bottom:0px;"),
+          shiny::div(
+            shiny::img(
+              title = "logo", 
+              class = "navbar-logo"
+            ), 
+            style = "padding-top:0px; padding-bottom:0px;"
+          ),
           class = "dropdown"
         ),
         shinydashboard::dropdownMenu(
@@ -43,17 +54,26 @@ ui <- function(config,
         )
       ),
       
-      shinydashboard::dashboardSidebar(shinydashboard::sidebarMenuOutput("sidebarMenu")),
+      shinydashboard::dashboardSidebar(
+        shinydashboard::sidebarMenuOutput("sidebarMenu")
+      ),
       # end sidebar
       
       # ADD EACH MODULE SHINY AS A TAB ITEM
       shinydashboard::dashboardBody(
         shiny::includeCSS(
-          system.file("www", 'theme.css', package = themePackage)
+          system.file(
+            "www", 
+            'theme.css', 
+            package = themePackage
+          )
         ),
         shinydashboard::box(
           width = '100%',
-          title = shiny::span(shiny::icon("lightbulb"), 'Study Description'),
+          title = shiny::span(
+            shiny::icon("lightbulb"), 
+            'Study Description'
+          ),
           shiny::HTML(studyDescription)
         ),
         
@@ -61,7 +81,9 @@ ui <- function(config,
           shinydashboard::tabItems,
           lapply(config$shinyModules, function(module) {
             if (!is.null(module$shinyModulePackage)) {
-              uiFunction <- parse(text = paste0(module$shinyModulePackage, "::" , module$uiFunction))
+              uiFunction <- parse(
+                text = paste0(module$shinyModulePackage, "::" , module$uiFunction)
+              )
             } else {
               uiFunction <- module$uiFunction
             }
