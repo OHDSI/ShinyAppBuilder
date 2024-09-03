@@ -88,18 +88,23 @@ ui <- function(
               uiFunction <- module$uiFunction
             }
             
-            shinydashboard::tabItem(tabName = module$tabName, eval(uiFunction)(id = module$id))
+            shinydashboard::tabItem(
+              tabName = module$tabName, 
+              eval(uiFunction)(id = module$id)
+              )
           })
         ),
         
-        shiny::tags$footer(shiny::h6(
-          paste0(
-            "Generated with OhdsiShinyModules v",
-            utils::packageVersion('OhdsiShinyModules'),
-            ' and ShinyAppBuilder v',
-            utils::packageVersion('ShinyAppBuilder')
+        shiny::tags$footer(
+          shiny::h6(
+            paste0(
+              "Generated with OhdsiShinyModules v",
+              utils::packageVersion('OhdsiShinyModules'),
+              ' and ShinyAppBuilder v',
+              utils::packageVersion('ShinyAppBuilder')
+            )
           )
-        ))
+        )
         
       )
       

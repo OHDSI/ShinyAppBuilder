@@ -39,8 +39,6 @@ server <- function(config, connection, resultDatabaseSettings) {
 
   moduleServer <- shiny::shinyServer(function(input, output, session) {
     
-    addResourcePath('www',system.file('www',package='ShinyAppBuilder'))
-    
     # pointless code to use OhdsiShinyModules to prevent warning
     useless <- OhdsiShinyModules::getLogoImage()
     
