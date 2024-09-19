@@ -168,7 +168,7 @@ createDefaultEstimationConfig <- function(
     shinyModulePackage = 'OhdsiShinyModules', 
     moduleUiFunction = 'estimationViewer', 
     moduleServerFunction = 'estimationServer', 
-    moduleInfoBoxFile = 'esimationHelperFile()', 
+    moduleInfoBoxFile = 'estimationHelperFile()', 
     moduleIcon = 'list'
   )
   class(result) <- c(class(result), "estimationModuleConfig")
