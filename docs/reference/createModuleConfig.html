@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ShinyAppBuilder</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.0</span>
       </span>
     </div>
 
@@ -78,12 +78,8 @@
 <span>  shinyModulePackage <span class="op">=</span> <span class="st">"OhdsiShinyModules"</span>,</span>
 <span>  moduleUiFunction <span class="op">=</span> <span class="st">"aboutViewer"</span>,</span>
 <span>  moduleServerFunction <span class="op">=</span> <span class="st">"aboutServer"</span>,</span>
-<span>  moduleDatabaseConnectionKeyService <span class="op">=</span> <span class="st">"resultDatabaseDetails"</span>,</span>
-<span>  moduleDatabaseConnectionKeyUsername <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  moduleInfoBoxFile <span class="op">=</span> <span class="st">"aboutHelperFile()"</span>,</span>
-<span>  moduleIcon <span class="op">=</span> <span class="st">"info"</span>,</span>
-<span>  <span class="va">resultDatabaseDetails</span>,</span>
-<span>  useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  moduleIcon <span class="op">=</span> <span class="st">"info"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -109,28 +105,12 @@
 <dd><p>The name of the server function in the R package shinyModulePackage</p></dd>
 
 
-<dt>moduleDatabaseConnectionKeyService</dt>
-<dd><p>The keyring service or the system environment variable with the result database details</p></dd>
-
-
-<dt>moduleDatabaseConnectionKeyUsername</dt>
-<dd><p>The keyring username or the system environment variable with the result database details</p></dd>
-
-
 <dt>moduleInfoBoxFile</dt>
 <dd><p>The function in the R package shinyModulePackage that contains info text</p></dd>
 
 
 <dt>moduleIcon</dt>
 <dd><p>The icon to use for the side menu button</p></dd>
-
-
-<dt>resultDatabaseDetails</dt>
-<dd><p>A list containing the result database schema (schema), the tablePrefix for the results and other optional settings</p></dd>
-
-
-<dt>useKeyring</dt>
-<dd><p>whether to save the resultDatabaseDetails to a keyring or system environmental variable</p></dd>
 
 </dl></div>
     <div id="value">
@@ -152,7 +132,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jenna Reps, Josh Ide, Jamie Gibert.</p>
+  <p></p><p>Developed by Jenna Reps, Nathan Hall, Josh Ide, Jamie Gibert.</p>
 </div>
 
 <div class="pkgdown">

@@ -49,17 +49,24 @@ reference:
       - createDefaultAboutConfig
       - createDefaultPredictionConfig
       - createDefaultEstimationConfig
-      - createDefaultSCCSConfig
       - createDefaultCharacterizationConfig
       - createDefaultCohortGeneratorConfig
       - createDefaultCohortDiagnosticsConfig
-      - createDefaultMetaConfig
+      - createDefaultDatasourcesConfig
+      - createDefaultHomeConfig
+      - createDefaultPhevaluatorConfig
+      - createDefaultReportConfig
   - title: "Create or view shiny app"
     desc: >
       These functions create a shiny app or create and open the shiny app.
     contents:
       - createShinyApp
       - viewShiny
+  - title: "Create default result database settings"
+    desc: >
+      These functions create default settings for prefixes and table names.
+    contents:
+      - createDefaultResultDatabaseSettings
   - title: "ShinyAppBuilder"
     desc: >
       A package for building shiny apps from OHDSI shiny modules.

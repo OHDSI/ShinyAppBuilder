@@ -1,4 +1,4 @@
-ShinyAppBuilder v3.0.0.9999
+ShinyAppBuilder v3.1.0
 ======================
 - Adding themes to the package (thanks Frank DeFalco and Nathan Hall)
 

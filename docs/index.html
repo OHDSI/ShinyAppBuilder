@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ShinyAppBuilder</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.0</span>
       </span>
     </div>
 
@@ -102,93 +102,67 @@
 <h1 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h1>
 <p>To create a shiny viewer to explore CohortDiagnostic results, Characterization results, PatientLevelPrediction results and CohortMethod results:</p>
-<pre class="{r}"><code># install dependencies
-remotes::install_github('ohdsi/ResultModelManager')
-remotes::install_github('ohdsi/ShinyAppBuilder')
-
-library(dplyr)
-library(ShinyAppBuilder)
-
-# STEP 1: create a config by first creating an empty config initializeModuleConfig()
-#         and then adding a shiny module using addModuleConfig()
-
-# Note: the common OHDSI analyses have default config settings (e.g., createDefaultAboutConfig() )
-
-library(ShinyAppBuilder)
-config &lt;- initializeModuleConfig() %&gt;%
-  addModuleConfig(
-    createDefaultAboutConfig(
-      resultDatabaseDetails = list(),
-      useKeyring = T
-    )
-  )  %&gt;%
-  addModuleConfig(
-    createDefaultCohortDiagnosticsConfig(
-      resultDatabaseDetails = list(
-      dbms = 'sqlite',
-      tablePrefix = 'cd_',
-      schema = 'main',
-      vocabularyDatabaseSchema = 'main'
-    ),
-      useKeyring = T
-    )
-  ) %&gt;%
-  addModuleConfig(
-    createDefaultCharacterizationConfig(
-      resultDatabaseDetails = list(
-        tablePrefix = 'c_',
-        cohortTablePrefix = 'cg_',
-        databaseTablePrefix = '',
-        schema = 'main',
-        databaseTable = 'DATABASE_META_DATA',
-        incidenceTablePrefix = 'ci_'
-      ),
-      useKeyring = T
-    )
-  ) %&gt;%
-  addModuleConfig(
-    createDefaultPredictionConfig(
-      resultDatabaseDetails = list(
-        tablePrefix = 'plp_',
-        cohortTablePrefix = 'cg_',
-        databaseTablePrefix = '',
-        schema = 'main',
-        databaseTable = 'DATABASE_META_DATA'
-      ),
-      useKeyring = T
-    )
-  ) %&gt;%
-  addModuleConfig(
-    createDefaultEstimationConfig(
-      resultDatabaseDetails = list(
-        tablePrefix = 'cm_',
-        cohortTablePrefix = 'cg_',
-        databaseTablePrefix = '',
-        schema = 'main',
-        databaseTable = 'DATABASE_META_DATA'
-      ),
-      useKeyring = T
-    )
-  )
-
-# Step 2: specify the connection details to the results database 
-          using DatabaseConnector::createConnectionDetails 
-connectionDetails &lt;- DatabaseConnector::createConnectionDetails(
- # add details to the result database
-)
-
-# Step 3: create a connection handler using the ResultModelManager package
-connection &lt;- ResultModelManager::ConnectionHandler$new(connectionDetails)
-
-# Step 4: now run the shiny app based on the config file and view the results
-#         at the specified connection
-ShinyAppBuilder::viewShiny(config = config, connection = connection)</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># install dependencies</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'ohdsi/ResultModelManager'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'ohdsi/ShinyAppBuilder'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(ShinyAppBuilder)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co"># STEP 1: create a config by first creating an empty config initializeModuleConfig()</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#         and then adding a shiny module using addModuleConfig()</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co"># Note: the common OHDSI analyses have default config settings (e.g., createDefaultAboutConfig() )</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="fu">library</span>(ShinyAppBuilder)</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">initializeModuleConfig</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="fu">addModuleConfig</span>(</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>    <span class="fu">createDefaultAboutConfig</span>()</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  <span class="fu">addModuleConfig</span>(</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>    <span class="fu">createDefaultCohortDiagnosticsConfig</span>()</span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>  <span class="fu">addModuleConfig</span>(</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>    <span class="fu">createDefaultCharacterizationConfig</span>()</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>  <span class="fu">addModuleConfig</span>(</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>    <span class="fu">createDefaultPredictionConfig</span>()</span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>  <span class="fu">addModuleConfig</span>(</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>    <span class="fu">createDefaultCohortMethodConfig</span>()</span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>  )</span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co"># Step 2: specify the connection details to the results database </span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>          using DatabaseConnector<span class="sc">::</span>createConnectionDetails </span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a>connectionDetails <span class="ot">&lt;-</span> DatabaseConnector<span class="sc">::</span><span class="fu">createConnectionDetails</span>(</span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a> <span class="co"># add details to the result database</span></span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>)</span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a><span class="co"># Step 3: create a connection handler using the ResultModelManager package</span></span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a>connection <span class="ot">&lt;-</span> ResultModelManager<span class="sc">::</span>ConnectionHandler<span class="sc">$</span><span class="fu">new</span>(connectionDetails)</span>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a><span class="co"># Step 4: now run the shiny app based on the config file and view the results</span></span>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a><span class="co">#         at the specified connection</span></span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a>ShinyAppBuilder<span class="sc">::</span><span class="fu">viewShiny</span>(</span>
+<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a><span class="at">config =</span> config, </span>
+<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a><span class="at">connection =</span> connection</span>
+<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a>)</span>
+<span id="cb1-47"><a href="#cb1-47" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" tabindex="-1"></a><span class="co"># Note - if you have non-standard table prefixes you may need </span></span>
+<span id="cb1-49"><a href="#cb1-49" tabindex="-1"></a><span class="co">#   to specify them in createDefaultResultDatabaseSettings()</span></span>
+<span id="cb1-50"><a href="#cb1-50" tabindex="-1"></a>ShinyAppBuilder<span class="sc">::</span><span class="fu">viewShiny</span>(</span>
+<span id="cb1-51"><a href="#cb1-51" tabindex="-1"></a><span class="at">config =</span> config, </span>
+<span id="cb1-52"><a href="#cb1-52" tabindex="-1"></a><span class="at">connection =</span> connection,  </span>
+<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a><span class="at">resultDatabaseSettings =</span> <span class="fu">createDefaultResultDatabaseSettings</span>()</span>
+<span id="cb1-54"><a href="#cb1-54" tabindex="-1"></a>)</span></code></pre></div>
 <p>If the connection works and there is results in the database, then an interactive shiny app will open.</p>
 <div class="section level2">
 <h2 id="running-a-on-a-shiny-server">Running a on a shiny server<a class="anchor" aria-label="anchor" href="#running-a-on-a-shiny-server"></a>
 </h2>
 <p>If running the shiny app on a server, you create the config as in Example 1, but instead of <code><a href="reference/viewShiny.html">ShinyAppBuilder::viewShiny</a></code> use:</p>
-<pre class="{r}"><code><span><span class="fu">ShinyAppBuilder</span><span class="fu">::</span><span class="fu"><a href="reference/createShinyApp.html">createShinyApp</a></span><span class="op">(</span>config <span class="op">=</span> <span class="va">config</span>, connection <span class="op">=</span> <span class="va">connection</span><span class="op">)</span></span></code></pre>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ShinyAppBuilder</span><span class="fu">::</span><span class="fu"><a href="reference/createShinyApp.html">createShinyApp</a></span><span class="op">(</span>config <span class="op">=</span> <span class="va">config</span>, connection <span class="op">=</span> <span class="va">connection</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
@@ -289,6 +263,7 @@ ShinyAppBuilder::viewShiny(config = config, connection = connection)</code></pre
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Jenna Reps <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Nathan Hall <br><small class="roles"> Author </small>  </li>
 <li>Josh Ide <br><small class="roles"> Author </small>  </li>
 <li>Jamie Gibert <br><small class="roles"> Author </small>  </li>
 </ul>
@@ -302,7 +277,7 @@ ShinyAppBuilder::viewShiny(config = config, connection = connection)</code></pre
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Jenna Reps, Josh Ide, Jamie Gibert.</p>
+<p>Developed by Jenna Reps, Nathan Hall, Josh Ide, Jamie Gibert.</p>
 </div>
 
 <div class="pkgdown">
