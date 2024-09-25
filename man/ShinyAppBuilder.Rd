@@ -22,6 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Nathan Hall
   \item Josh Ide
   \item Jamie Gibert
 }

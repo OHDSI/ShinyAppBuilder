@@ -18,8 +18,7 @@
 #' 
 #' @description A package for creating viewers for the OHDSI shiny apps
 #'
-#' @docType package
 #' @name ShinyAppBuilder
 #' @importFrom dplyr %>%
 #' @importFrom rlang .data
-NULL
+"_PACKAGE"

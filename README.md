@@ -1,22 +1,19 @@
-ShinyAppBuilder
-===============
+# ShinyAppBuilder
 
-[![Build Status](https://github.com/OHDSI/ShinyAppBuilder/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/ShinyAppBuilder/actions?query=workflow%3AR-CMD-check)
-[![codecov.io](https://codecov.io/github/OHDSI/ShinyAppBuilder/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/ShinyAppBuilder?branch=main)
+[![Build Status](https://github.com/OHDSI/ShinyAppBuilder/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/ShinyAppBuilder/actions?query=workflow%3AR-CMD-check) [![codecov.io](https://codecov.io/github/OHDSI/ShinyAppBuilder/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/ShinyAppBuilder?branch=main)
 
 ShinyAppBuilder is part of [HADES](https://ohdsi.github.io/Hades/).
 
-Introduction
-============
+# Introduction
 
 Create shiny apps using modules from OhdsiShinyModules or custom modules
 
-Examples
-========
+# Examples
 
 To create a shiny viewer to explore CohortDiagnostic results, Characterization results, PatientLevelPrediction results and CohortMethod results:
 
-```{r}
+``` r
+
 # install dependencies
 remotes::install_github('ohdsi/ResultModelManager')
 remotes::install_github('ohdsi/ShinyAppBuilder')
@@ -74,79 +71,61 @@ resultDatabaseSettings = createDefaultResultDatabaseSettings()
 
 If the connection works and there is results in the database, then an interactive shiny app will open.
 
-
 ## Running a on a shiny server
 
 If running the shiny app on a server, you create the config as in Example 1, but instead of `ShinyAppBuilder::viewShiny` use:
 
-```{r}
+``` r
 ShinyAppBuilder::createShinyApp(config = config, connection = connection)
 ```
 
-Technology
-==========
+# Technology
 
 ShinyAppBuilder is an R package.
 
-
-System Requirements
-===================
+# System Requirements
 
 Running the package requires R.
 
+# Installation
 
-Installation
-============
+1.  See the instructions [here](https://ohdsi.github.io/Hades/rSetup.html) for configuring your R environment, including Java.
 
-1. See the instructions [here](https://ohdsi.github.io/Hades/rSetup.html) for configuring your R environment, including Java.
+2.  In R, use the following commands to download and install ShinyAppBuilder:
 
-2. In R, use the following commands to download and install ShinyAppBuilder:
+``` r
+install.packages("remotes")
+remotes::install_github("ohdsi/ShinyAppBuilder")
+```
 
-  ```r
-  install.packages("remotes")
-  remotes::install_github("ohdsi/ShinyAppBuilder")
-  ```
-  
-User Documentation
-==================
+# User Documentation
+
 Documentation can be found on the [package website](https://ohdsi.github.io/ShinyAppBuilder/).
 
 PDF versions of the documentation are also available:
 
-* Vignette: [Using Shiny App Builder](https://raw.githubusercontent.com/OHDSI/ShinyAppBuilder/main/inst/doc/shinyAppModules.pdf)
-* Package manual: [ShinyAppBuilder.pdf](https://raw.githubusercontent.com/OHDSI/ShinyAppBuilder/main/extras/ShinyAppBuilder.pdf)
+-   Vignette: [Using Shiny App Builder](https://raw.githubusercontent.com/OHDSI/ShinyAppBuilder/main/inst/doc/shinyAppModules.pdf)
+-   Package manual: [ShinyAppBuilder.pdf](https://raw.githubusercontent.com/OHDSI/ShinyAppBuilder/main/extras/ShinyAppBuilder.pdf)
 
+# Support
 
-Support
-=======
+-   Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>
+-   We use the <a href="https://github.com/OHDSI/ShinyAppBuilder/issues">GitHub issue tracker</a> for all bugs/issues/enhancements
 
-* Developer questions/comments/feedback: <a href="http://forums.ohdsi.org/c/developers">OHDSI Forum</a>
-* We use the <a href="https://github.com/OHDSI/ShinyAppBuilder/issues">GitHub issue tracker</a> for all bugs/issues/enhancements
-
-
-Contributing
-============
+# Contributing
 
 Read [here](https://ohdsi.github.io/Hades/contribute.html) how you can contribute to this package.
 
+# License
 
-License
-=======
+ShinyAppBuilder is licensed under Apache License 2.0.
 
-ShinyAppBuilder is licensed under Apache License 2.0. 
-
-
-Development
-===========
+# Development
 
 ShinyAppBuilder is being developed in R Studio.
-
 
 ### Development status
 
 Under development
 
-
-Acknowledgements
-================
-
+# Acknowledgements

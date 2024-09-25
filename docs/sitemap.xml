@@ -37,13 +37,28 @@
     <loc>/reference/createDefaultCohortGeneratorConfig.html</loc>
   </url>
   <url>
+    <loc>/reference/createDefaultDatasourcesConfig.html</loc>
+  </url>
+  <url>
     <loc>/reference/createDefaultEstimationConfig.html</loc>
+  </url>
+  <url>
+    <loc>/reference/createDefaultHomeConfig.html</loc>
   </url>
   <url>
     <loc>/reference/createDefaultMetaConfig.html</loc>
   </url>
   <url>
+    <loc>/reference/createDefaultPhevaluatorConfig.html</loc>
+  </url>
+  <url>
     <loc>/reference/createDefaultPredictionConfig.html</loc>
+  </url>
+  <url>
+    <loc>/reference/createDefaultReportConfig.html</loc>
+  </url>
+  <url>
+    <loc>/reference/createDefaultResultDatabaseSettings.html</loc>
   </url>
   <url>
     <loc>/reference/createDefaultSCCSConfig.html</loc>

@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ShinyAppBuilder</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.0</span>
       </span>
     </div>
 
@@ -89,9 +89,9 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using Shiny App Builder</h1>
                         <h4 data-toc-skip class="author">Jenna Reps,
-Jamie Gilbert, Josh Ide</h4>
+Jamie Gilbert, Josh Ide, Nate Hall</h4>
             
-            <h4 data-toc-skip class="date">2023-03-31</h4>
+            <h4 data-toc-skip class="date">2024-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/ShinyAppBuilder/blob/HEAD/vignettes/shinyAppModules.Rmd" class="external-link"><code>vignettes/shinyAppModules.Rmd</code></a></small>
       <div class="hidden name"><code>shinyAppModules.Rmd</code></div>
@@ -105,17 +105,18 @@ Jamie Gilbert, Josh Ide</h4>
 </h2>
 <p>The shiny app builder provides a way to combine different shiny
 modules into a single app. For example, if you have a characterization
-study, an estimation study and a prediction study that are related as
+study, an cohort method study and a prediction study that are related as
 they all use the same cohorts, then you may want to view the results in
 a single shiny app. This can be done by using
-<code>ShinyAppBuilder</code> to combine the characterization, estimation
-and prediction shiny modules in <code>OhdsiShinyModule</code>. The main
-source of shiny modules is the <code>OhdsiShinyModule</code> R package,
-however, it is possible to add modules from other R packages.</p>
+<code>ShinyAppBuilder</code> to combine the characterization, cohort
+method and prediction shiny modules in <code>OhdsiShinyModule</code>.
+The main source of shiny modules is the <code>OhdsiShinyModule</code> R
+package, however, it is possible to add modules from other R
+packages.</p>
 <p>In this vignette we provide examples on how to use the
 <code>ShinyAppBuilder</code> to create flexible shiny apps for exploring
 OHDSI results.</p>
-<p>The <code>ShinyAppBuilder</code> requires that all results to be
+<p>The <code>ShinyAppBuilder</code> requires that all results be
 explored by the shiny app are saved into a single database (i.e., all
 results for the different shiny modules in an app are saved into the
 same database), as a single database connection is shared across shiny
@@ -144,7 +145,7 @@ to include into the single shiny app. A config can be created using
 <table class="table">
 <colgroup>
 <col width="20%">
-<col width="79%">
+<col width="80%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Inputs</th>
@@ -172,16 +173,6 @@ to include into the single shiny app. A config can be created using
 <td align="left">The name of the module’s server function</td>
 </tr>
 <tr class="even">
-<td align="left">moduleDatabaseConnectionKeyService</td>
-<td align="left">A name for the keyring service/environment variable to
-store the result database details</td>
-</tr>
-<tr class="odd">
-<td align="left">moduleDatabaseConnectionKeyUsername</td>
-<td align="left">A name for the keyring username/environment variable to
-store the result database details</td>
-</tr>
-<tr class="even">
 <td align="left">moduleInfoBoxFile</td>
 <td align="left">The function in the shinyModulePackage package that
 contains the helper information</td>
@@ -189,16 +180,6 @@ contains the helper information</td>
 <tr class="odd">
 <td align="left">moduleIcon</td>
 <td align="left">An icon to use in the menu for this module</td>
-</tr>
-<tr class="even">
-<td align="left">resultDatabaseDetails</td>
-<td align="left">A list containing the results details: dbms,
-tablePrefix, cohortTablePrefix, databaseTablePrefix, schema,
-databaseTable, incidenceTablePrefix</td>
-</tr>
-<tr class="odd">
-<td align="left">useKeyring</td>
-<td align="left">Whether to use keyring of environmental variables</td>
 </tr>
 </tbody>
 </table>
@@ -218,11 +199,7 @@ results from the database).</p>
 <p>For the about module we will use the about shiny modules in
 <code>OhdsiShinyModule</code>. The UI is named <code>aboutViewer</code>,
 the server is named <code>aboutServer</code> and the about helper
-function is called <code>aboutHelperFile()</code>. The about module does
-not have any results, so
-<code>moduleDatabaseConnectionKeyService</code>,
-<code>moduleDatabaseConnectionKeyUsername</code> and
-<code>resultDatabaseDetails</code> are NULL. As the about module
+function is called <code>aboutHelperFile()</code>. As the about module
 provides information about the shiny app, the ‘info’ icon seems
 appropriate. The inputs into <code>createModuleConfig</code> for an
 about module are:</p>
@@ -233,12 +210,8 @@ about module are:</p>
 <span>      shinyModulePackage <span class="op">=</span> <span class="st">"OhdsiShinyModule"</span>,</span>
 <span>      moduleUiFunction <span class="op">=</span> <span class="st">'aboutViewer'</span>,</span>
 <span>      moduleServerFunction <span class="op">=</span> <span class="st">'aboutServer'</span>,</span>
-<span>      moduleDatabaseConnectionKeyService <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>      moduleDatabaseConnectionKeyUsername <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>      moduleInfoBoxFile <span class="op">=</span>  <span class="st">"aboutHelperFile()"</span>,</span>
-<span>      moduleIcon <span class="op">=</span> <span class="st">'info'</span>,</span>
-<span>      resultDatabaseDetails <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>      useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>      moduleIcon <span class="op">=</span> <span class="st">'info'</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
 <p>For simplicity, the <code>ShinyAppBuilder</code> contains a function
 called <code>createDefaultAboutConfig</code> with these default about
@@ -246,10 +219,7 @@ settings into <code>createModuleConfig</code>, this is quicker to use
 than <code>createModuleConfig</code> if you are using a standard about
 module. Alternatively, you could just run:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">aboutModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultAboutConfig.html">createDefaultAboutConfig</a></span><span class="op">(</span></span>
-<span>      resultDatabaseDetails <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>      useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>    <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">aboutModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultAboutConfig.html">createDefaultAboutConfig</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="creating-the-prediction-module-config">Creating the prediction module config<a class="anchor" aria-label="anchor" href="#creating-the-prediction-module-config"></a>
@@ -261,65 +231,22 @@ functions: <code>aboutPrediction</code> for the module UI,
 suitable icon is <code>chart-line</code>. For the prediction module,
 results in the database format created by the
 <code>PatientLevelPrediction</code> package must be in a database that
-will be connected to when viewing the shiny app. The
-<code>resultDatabaseDetails</code> input is a list that must specify the
-details about the result tables:</p>
-<ul>
-<li>dbms (the database management system with the results e.g.,
-‘sqlite’)</li>
-<li>tablePrefix (a string that is prefixed to the prediction result
-tables e.g., ‘plp_’)</li>
-<li>cohortTablePrefix (a string that is prefixed to the cohort table
-result e.g., ‘cg_’)</li>
-<li>databaseTablePrefix (a string that is prefixed to the database table
-result e.g., ’’)</li>
-<li>schema (the schema with the result tables e.g., ‘main’)</li>
-<li>databaseTable (the name of the database table e.g.,
-‘DATABASE_META_DATA’)</li>
-</ul>
+will be connected to when viewing the shiny app.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resultDatabaseDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      dbms <span class="op">=</span> <span class="st">'sqlite'</span>,</span>
-<span>      tablePrefix <span class="op">=</span> <span class="st">'plp_'</span>,</span>
-<span>      cohortTablePrefix <span class="op">=</span> <span class="st">'cg_'</span>,</span>
-<span>      databaseTablePrefix <span class="op">=</span> <span class="st">''</span>,</span>
-<span>      schema <span class="op">=</span> <span class="st">'main'</span>,</span>
-<span>      databaseTable <span class="op">=</span> <span class="st">'DATABASE_META_DATA'</span></span>
-<span>    <span class="op">)</span></span>
-<span></span>
-<span><span class="va">predictionModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createModuleConfig.html">createModuleConfig</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">predictionModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createModuleConfig.html">createModuleConfig</a></span><span class="op">(</span></span>
 <span>    moduleId <span class="op">=</span> <span class="st">'prediction'</span>,</span>
 <span>    tabName <span class="op">=</span> <span class="st">"Prediction"</span>,</span>
 <span>    shinyModulePackage <span class="op">=</span> <span class="st">'OhdsiShinyModules'</span>,</span>
 <span>    moduleUiFunction <span class="op">=</span> <span class="st">"predictionViewer"</span>,</span>
 <span>    moduleServerFunction <span class="op">=</span> <span class="st">"predictionServer"</span>,</span>
-<span>    moduleDatabaseConnectionKeyService <span class="op">=</span><span class="st">"resultDatabaseDetails"</span>,</span>
-<span>    moduleDatabaseConnectionKeyUsername <span class="op">=</span> <span class="st">"prediction"</span>,</span>
 <span>    moduleInfoBoxFile <span class="op">=</span>  <span class="st">"predictionHelperFile()"</span>,</span>
-<span>    moduleIcon <span class="op">=</span> <span class="st">"chart-line"</span>,</span>
-<span>    resultDatabaseDetails <span class="op">=</span> <span class="va">resultDatabaseDetails</span>,</span>
-<span>    useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    moduleIcon <span class="op">=</span> <span class="st">"chart-line"</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
 <p>For simplicity, the <code>ShinyAppBuilder</code> contains a function
 called <code>createDefaultPredictionConfig</code> with these default
-prediction settings, however, you must still specify whether you want to
-use keyring <code>useKeyring</code> and you must specify the
-<code>resultDatabaseDetails</code>. Atlernatively, you could just
-run:</p>
+prediction settings. Atlernatively, you could just run:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resultDatabaseDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      dbms <span class="op">=</span> <span class="st">'sqlite'</span>,</span>
-<span>      tablePrefix <span class="op">=</span> <span class="st">'plp_'</span>,</span>
-<span>      cohortTablePrefix <span class="op">=</span> <span class="st">'cg_'</span>,</span>
-<span>      databaseTablePrefix <span class="op">=</span> <span class="st">''</span>,</span>
-<span>      schema <span class="op">=</span> <span class="st">'main'</span>,</span>
-<span>      databaseTable <span class="op">=</span> <span class="st">'DATABASE_META_DATA'</span></span>
-<span>    <span class="op">)</span></span>
-<span></span>
-<span><span class="va">predictionModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultPredictionConfig.html">createDefaultPredictionConfig</a></span><span class="op">(</span></span>
-<span>      resultDatabaseDetails <span class="op">=</span> <span class="va">resultDatabaseDetails</span>,</span>
-<span>      useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>    <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">predictionModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultPredictionConfig.html">createDefaultPredictionConfig</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="creating-the-cohort-generation-and-cohort-method-using-default-functions">Creating the cohort generation and cohort method using default
@@ -328,19 +255,7 @@ functions<a class="anchor" aria-label="anchor" href="#creating-the-cohort-genera
 <p>We have default config creation for cohort method and cohort
 generation in <code>ShinyAppBuilder</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resultDatabaseDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      dbms <span class="op">=</span> <span class="st">'sqlite'</span>,</span>
-<span>      tablePrefix <span class="op">=</span> <span class="st">'cm_'</span>,</span>
-<span>      cohortTablePrefix <span class="op">=</span> <span class="st">'cg_'</span>,</span>
-<span>      databaseTablePrefix <span class="op">=</span> <span class="st">''</span>,</span>
-<span>      schema <span class="op">=</span> <span class="st">'main'</span>,</span>
-<span>      databaseTable <span class="op">=</span> <span class="st">'DATABASE_META_DATA'</span></span>
-<span>    <span class="op">)</span></span>
-<span></span>
-<span><span class="va">cohortMethodModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultEstimationConfig.html">createDefaultEstimationConfig</a></span><span class="op">(</span></span>
-<span>      resultDatabaseDetails <span class="op">=</span> <span class="va">resultDatabaseDetails</span>,</span>
-<span>      useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>    <span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">cohortMethodModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultEstimationConfig.html">createDefaultEstimationConfig</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cohortGeneratorModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultCohortGeneratorConfig.html">createDefaultCohortGeneratorConfig</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -374,10 +289,8 @@ details to the result database and then just add the following lines of
 code</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a connection to the result database</span></span>
-<span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html" class="external-link">createConnectionDetails</a></span><span class="op">(</span><span class="op">)</span> </span>
-<span><span class="va">connection</span> <span class="op">&lt;-</span> <span class="fu">ResultModelManager</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/ResultModelManager/man/ConnectionHandler.html" class="external-link">ConnectionHandler</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/createShinyApp.html">createShinyApp</a></span><span class="op">(</span><span class="va">shinyAppConfig</span>, <span class="va">connection</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html" class="external-link">createConnectionDetails</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/createShinyApp.html">createShinyApp</a></span><span class="op">(</span><span class="va">shinyAppConfig</span>, connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="view-shiny-app-1">View shiny app<a class="anchor" aria-label="anchor" href="#view-shiny-app-1"></a>
@@ -386,10 +299,8 @@ code</p>
 the result database and then just add the following lines of code</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a connection to the result database</span></span>
-<span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html" class="external-link">createConnectionDetails</a></span><span class="op">(</span><span class="op">)</span> </span>
-<span><span class="va">connection</span> <span class="op">&lt;-</span> <span class="fu">ResultModelManager</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/ResultModelManager/man/ConnectionHandler.html" class="external-link">ConnectionHandler</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/viewShiny.html">viewShiny</a></span><span class="op">(</span><span class="va">shinyAppConfig</span>, <span class="va">connection</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html" class="external-link">createConnectionDetails</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/viewShiny.html">viewShiny</a></span><span class="op">(</span><span class="va">shinyAppConfig</span>, connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -406,21 +317,8 @@ the result database and then just add the following lines of code</p>
 <span>      shinyModulePackage <span class="op">=</span> <span class="st">"OhdsiShinyModule"</span>,</span>
 <span>      moduleUiFunction <span class="op">=</span> <span class="st">'aboutViewer'</span>,</span>
 <span>      moduleServerFunction <span class="op">=</span> <span class="st">'aboutServer'</span>,</span>
-<span>      moduleDatabaseConnectionKeyService <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>      moduleDatabaseConnectionKeyUsername <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>      moduleInfoBoxFile <span class="op">=</span>  <span class="st">"aboutHelperFile()"</span>,</span>
-<span>      moduleIcon <span class="op">=</span> <span class="st">'info'</span>,</span>
-<span>      resultDatabaseDetails <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>      useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>    <span class="op">)</span></span>
-<span></span>
-<span><span class="va">resultDatabaseDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      dbms <span class="op">=</span> <span class="st">'sqlite'</span>,</span>
-<span>      tablePrefix <span class="op">=</span> <span class="st">'plp_'</span>,</span>
-<span>      cohortTablePrefix <span class="op">=</span> <span class="st">'cg_'</span>,</span>
-<span>      databaseTablePrefix <span class="op">=</span> <span class="st">''</span>,</span>
-<span>      schema <span class="op">=</span> <span class="st">'main'</span>,</span>
-<span>      databaseTable <span class="op">=</span> <span class="st">'DATABASE_META_DATA'</span></span>
+<span>      moduleIcon <span class="op">=</span> <span class="st">'info'</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="va">predictionModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createModuleConfig.html">createModuleConfig</a></span><span class="op">(</span></span>
@@ -429,27 +327,11 @@ the result database and then just add the following lines of code</p>
 <span>    shinyModulePackage <span class="op">=</span> <span class="st">'OhdsiShinyModules'</span>,</span>
 <span>    moduleUiFunction <span class="op">=</span> <span class="st">"predictionViewer"</span>,</span>
 <span>    moduleServerFunction <span class="op">=</span> <span class="st">"predictionServer"</span>,</span>
-<span>    moduleDatabaseConnectionKeyService <span class="op">=</span><span class="st">"resultDatabaseDetails"</span>,</span>
-<span>    moduleDatabaseConnectionKeyUsername <span class="op">=</span> <span class="st">"prediction"</span>,</span>
 <span>    moduleInfoBoxFile <span class="op">=</span>  <span class="st">"predictionHelperFile()"</span>,</span>
-<span>    moduleIcon <span class="op">=</span> <span class="st">"chart-line"</span>,</span>
-<span>    resultDatabaseDetails <span class="op">=</span> <span class="va">resultDatabaseDetails</span>,</span>
-<span>    useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    moduleIcon <span class="op">=</span> <span class="st">"chart-line"</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>
-<span><span class="va">resultDatabaseDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      dbms <span class="op">=</span> <span class="st">'sqlite'</span>,</span>
-<span>      tablePrefix <span class="op">=</span> <span class="st">'cm_'</span>,</span>
-<span>      cohortTablePrefix <span class="op">=</span> <span class="st">'cg_'</span>,</span>
-<span>      databaseTablePrefix <span class="op">=</span> <span class="st">''</span>,</span>
-<span>      schema <span class="op">=</span> <span class="st">'main'</span>,</span>
-<span>      databaseTable <span class="op">=</span> <span class="st">'DATABASE_META_DATA'</span></span>
-<span>    <span class="op">)</span></span>
-<span></span>
-<span><span class="va">cohortMethodModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultEstimationConfig.html">createDefaultEstimationConfig</a></span><span class="op">(</span></span>
-<span>      resultDatabaseDetails <span class="op">=</span> <span class="va">resultDatabaseDetails</span>,</span>
-<span>      useKeyring <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>    <span class="op">)</span></span>
+<span><span class="va">cohortMethodModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultEstimationConfig.html">createDefaultEstimationConfig</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cohortGeneratorModule</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createDefaultCohortGeneratorConfig.html">createDefaultCohortGeneratorConfig</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -463,10 +345,8 @@ the result database and then just add the following lines of code</p>
 <span></span>
 <span></span>
 <span><span class="co"># add connection details to result database</span></span>
-<span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html" class="external-link">createConnectionDetails</a></span><span class="op">(</span><span class="op">)</span> </span>
-<span><span class="va">connection</span> <span class="op">&lt;-</span> <span class="fu">ResultModelManager</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/ResultModelManager/man/ConnectionHandler.html" class="external-link">ConnectionHandler</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">connectionDetails</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/viewShiny.html">viewShiny</a></span><span class="op">(</span><span class="va">shinyAppConfig</span>, <span class="va">connection</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">DatabaseConnector</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html" class="external-link">createConnectionDetails</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/viewShiny.html">viewShiny</a></span><span class="op">(</span><span class="va">shinyAppConfig</span>, connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span><span class="op">)</span></span></code></pre></div>
 </div>
   </div>
 
@@ -482,7 +362,7 @@ the result database and then just add the following lines of code</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Jenna Reps, Josh Ide, Jamie Gibert.</p>
+<p>Developed by Jenna Reps, Nathan Hall, Josh Ide, Jamie Gibert.</p>
 </div>
 
 <div class="pkgdown">

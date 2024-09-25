@@ -1,3 +1,7 @@
+ShinyAppBuilder v3.1.0
+======================
+- Adding themes to the package (thanks Frank DeFalco and Nathan Hall)
+
 ShinyAppBuilder v3.0.0
 ======================
 - CM/SCCS/ES are now combined into Estimation 

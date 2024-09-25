@@ -30,6 +30,7 @@
 #' @param studyDescription A human-readable character string describing the study/analysis
 #' @param title The title for the app.  Defaults to: OHDSI Analysis Viewer
 #' @param protocolLink A link to a site containing the study protocol
+#' @param themePackage A package containing custom theme elements
 #'
 #' @return
 #' Shiny app instance
@@ -43,7 +44,8 @@ createShinyApp <- function(
     usePooledConnection = TRUE,
     studyDescription = "No description provided. Further details about the analyses used in this study can be found below.",
     title = "OHDSI Analysis Viewer",
-    protocolLink = 'http://ohdsi.org'
+    protocolLink = 'http://ohdsi.org',
+    themePackage = "ShinyAppBuilder"
       ){
   
   # if using connection details instead of connection
@@ -80,7 +82,8 @@ createShinyApp <- function(
       config = config,
       title = title,
       link = protocolLink,
-      studyDescription = studyDescription
+      studyDescription = studyDescription,
+      themePackage = themePackage
     ),
     server = server(
       config = config, 
@@ -116,7 +119,8 @@ viewShiny <- function(
     usePooledConnection = TRUE,
     studyDescription = NULL,
     title = "OHDSI Analysis Viewer",
-    protocolLink = 'http://ohdsi.org'
+    protocolLink = 'http://ohdsi.org',
+    themePackage = "ShinyAppBuilder"
     ){
   
   app <- createShinyApp(
@@ -127,7 +131,8 @@ viewShiny <- function(
     usePooledConnection = usePooledConnection,
     studyDescription = studyDescription,
     title = title,
-    protocolLink = protocolLink
+    protocolLink = protocolLink,
+    themePackage = themePackage
     )
   
   shiny::runApp(app)

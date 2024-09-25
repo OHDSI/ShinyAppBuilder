@@ -13,7 +13,8 @@ createShinyApp(
   studyDescription =
     "No description provided. Further details about the analyses used in this study can be found below.",
   title = "OHDSI Analysis Viewer",
-  protocolLink = "http://ohdsi.org"
+  protocolLink = "http://ohdsi.org",
+  themePackage = "ShinyAppBuilder"
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ createShinyApp(
 \item{title}{The title for the app.  Defaults to: OHDSI Analysis Viewer}
 
 \item{protocolLink}{A link to a site containing the study protocol}
+
+\item{themePackage}{A package containing custom theme elements}
 }
 \value{
 Shiny app instance
