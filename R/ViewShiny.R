@@ -31,6 +31,7 @@
 #' @param title The title for the app.  Defaults to: OHDSI Analysis Viewer
 #' @param protocolLink A link to a site containing the study protocol
 #' @param themePackage A package containing custom theme elements
+#' @param reportSummaryDetails NULL or a data.frame with the columns reportName and reportLocation
 #'
 #' @return
 #' Shiny app instance
@@ -45,8 +46,39 @@ createShinyApp <- function(
     studyDescription = "No description provided. Further details about the analyses used in this study can be found below.",
     title = "OHDSI Analysis Viewer",
     protocolLink = 'http://ohdsi.org',
-    themePackage = "ShinyAppBuilder"
+    themePackage = "ShinyAppBuilder",
+    reportSummaryDetails = NULL
       ){
+  
+  if(!is.null(reportSummaryDetails)){
+    
+    if(sum(c('reportLocation','reportName') %in% colnames(reportSummaryDetails)) == 2){
+      
+      # create a temp folder to move the reports into
+      # set a temp environmental var to the temp folder location
+      # then add a shiny resource path to map the temp folder 
+      # to www-reports - this will be used in the home module
+      summaryReportFolder <- file.path(tempdir(), 'reports')
+      if(!dir.exists(summaryReportFolder)){
+        dir.create(summaryReportFolder, recursive = T)
+      }
+      Sys.setenv(shiny_report_folder = summaryReportFolder)
+      shiny::addResourcePath("www-reports", summaryReportFolder)
+      
+      # now copy the html files 
+      for(i in 1:nrow(reportSummaryDetails)){
+        message(paste0('Copying summary report to temp folder ', reportSummaryDetails$reportLocation[i]))
+        file.copy(
+          from = reportSummaryDetails$reportLocation[i],
+          to = file.path(summaryReportFolder,paste0(reportSummaryDetails$reportName[i],'.html'))
+        )
+      }
+      
+    } else{
+      message('reportSummaryDetails must contains columns reportLocation and reportName')
+    }
+    
+  }
   
   # if using connection details instead of connection
   # configure connection from the details
