@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  ShinyAppBuilder:
+    image: ohdsi/shinyappbuilder
+    env_file: .Renviron
+    build:
+      context: .
+      args:
+        APP_NAME: shinyappbuilder
+    ports:
+      - "3838:3838"
