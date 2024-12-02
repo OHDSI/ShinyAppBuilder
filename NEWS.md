@@ -1,3 +1,7 @@
+ShinyAppBuilder v3.2.0
+======================
+- Added ability to include summary reports into a resource path to view via the home module
+
 ShinyAppBuilder v3.1.0
 ======================
 - Adding themes to the package (thanks Frank DeFalco and Nathan Hall)

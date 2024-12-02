@@ -87,3 +87,42 @@ test_that("shiny outside package loads", {
 
     })
 })
+
+# test app with summary reports
+# first create empty html file
+test_that("shiny works", {
+  
+  config <- initializeModuleConfig() 
+  config <-  addModuleConfig(config, createDefaultAboutConfig())
+  
+
+  # create a connection and check app works
+  tdb <- tempfile(fileext = "sqlite")
+  htmlFileLocation <- tempfile(fileext = ".html")
+  
+  on.exit(unlink(tdb))
+  on.exit(unlink(htmlFileLocation))
+  testCd <- DatabaseConnector::createConnectionDetails("sqlite", server = tdb)
+  app <- createShinyApp(
+    config = config, 
+    connectionDetails = testCd, 
+    reportSummaryDetails = data.frame(
+      reportLocation = htmlFileLocation,
+      reportName = 'test'
+    )
+  )
+  testthat::expect_s3_class(app, "shiny.appobj")
+  
+  # check error when incorrect reportSummaryDetails
+  testthat::expect_message(
+    createShinyApp(
+      config = config, 
+      connectionDetails = testCd, 
+      reportSummaryDetails = data.frame(
+        reportLocation5 = htmlFileLocation,
+        reportName = 'test'
+      )
+    )
+  )
+  
+})
