@@ -25,6 +25,7 @@
 #' @param moduleId  The shiny id for the tab containing the module UI
 #' @param tabName   The name of the tab in the shiny app (this will be the side menu button text)      
 #' @param shinyModulePackage  The R package to find the server and UI functions
+#' @param shinyModulePackageVersion The minimum version of the shinyModulePackage
 #' @param moduleUiFunction  The name of the UI function in the R package shinyModulePackage
 #' @param moduleServerFunction  The name of the server function in the R package shinyModulePackage
 #' @param moduleInfoBoxFile  The function in the R package shinyModulePackage that contains info text
@@ -38,6 +39,7 @@ createModuleConfig <- function(
  moduleId = 'about',
  tabName = "About",
  shinyModulePackage = 'OhdsiShinyModules',
+ shinyModulePackageVersion = '3.0.0',
  moduleUiFunction = "aboutViewer",
  moduleServerFunction = "aboutServer",
  moduleInfoBoxFile =  "aboutHelperFile()",
@@ -49,6 +51,7 @@ createModuleConfig <- function(
     tabName = tabName,
     tabText = tabName,
     shinyModulePackage = shinyModulePackage,
+    shinyModulePackageVersion = shinyModulePackageVersion,
     uiFunction = moduleUiFunction,
     serverFunction = moduleServerFunction,
     infoBoxFile = moduleInfoBoxFile,
@@ -79,6 +82,7 @@ createDefaultHomeConfig <- function(
     moduleId = 'home',
     tabName = "Home",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "homeViewer",
     moduleServerFunction = "homeServer",
     moduleInfoBoxFile =  "homeHelperFile()",
@@ -108,6 +112,7 @@ createDefaultAboutConfig <- function(
     moduleId = 'about',
     tabName = "About",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "aboutViewer",
     moduleServerFunction = "aboutServer",
     moduleInfoBoxFile =  "aboutHelperFile()",
@@ -138,6 +143,7 @@ createDefaultPredictionConfig <- function(
     moduleId = 'prediction',
     tabName = "Prediction",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "patientLevelPredictionViewer",
     moduleServerFunction = "patientLevelPredictionServer",
     moduleInfoBoxFile =  "patientLevelPredictionHelperFile()",
@@ -165,7 +171,8 @@ createDefaultEstimationConfig <- function(
   result <- createModuleConfig(
     moduleId = 'estimation', 
     tabName = 'Estimation', 
-    shinyModulePackage = 'OhdsiShinyModules', 
+    shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = 'estimationViewer', 
     moduleServerFunction = 'estimationServer', 
     moduleInfoBoxFile = 'estimationHelperFile()', 
@@ -194,6 +201,7 @@ createDefaultCharacterizationConfig <- function(
     moduleId = 'characterization',
     tabName = "Characterization",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "characterizationViewer",
     moduleServerFunction = "characterizationServer",
     moduleInfoBoxFile =  "characterizationHelperFile()",
@@ -224,6 +232,7 @@ createDefaultCohortGeneratorConfig <- function(
     moduleId = 'cohortGenerator',
     tabName = "Cohorts",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "cohortGeneratorViewer",
     moduleServerFunction = "cohortGeneratorServer",
     moduleInfoBoxFile =  "cohortGeneratorHelperFile()",
@@ -253,6 +262,7 @@ createDefaultCohortDiagnosticsConfig <- function(
     moduleId = 'cohortDiagnostics',
     tabName = "CohortDiagnostics",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "cohortDiagnosticsView",
     moduleServerFunction = "cohortDiagnosticsServer",
     moduleInfoBoxFile =  "cohortDiagnosticsHelperFile()",
@@ -282,6 +292,7 @@ createDefaultPhevaluatorConfig <- function(
     moduleId = 'phevaluator',
     tabName = "PheValuator",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "phevaluatorViewer",
     moduleServerFunction = "phevaluatorServer",
     moduleInfoBoxFile =  "phevaluatorHelperFile()",
@@ -310,6 +321,7 @@ createDefaultDatasourcesConfig <- function(
     moduleId = 'datasources',
     tabName = "DataSources",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "datasourcesViewer",
     moduleServerFunction = "datasourcesServer",
     moduleInfoBoxFile =  "datasourcesHelperFile()",
@@ -338,6 +350,7 @@ createDefaultReportConfig <- function(
     moduleId = 'report',
     tabName = "Report",
     shinyModulePackage = 'OhdsiShinyModules',
+    shinyModulePackageVersion = '3.0.0',
     moduleUiFunction = "reportViewer",
     moduleServerFunction = "reportServer",
     moduleInfoBoxFile =  "reportHelperFile()",
@@ -345,5 +358,66 @@ createDefaultReportConfig <- function(
   )
   
   class(result) <- c(class(result), "reportModuleConfig")
+  return(result)
+}
+
+
+#' createDefaultCohortMethodConfig
+#'
+#' @description
+#' Create an R list with the cohort method config specification (depreciated)
+#'
+#' @details
+#' User specifies the settings to create a default config for a cohort method module
+#' 
+#'                             
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultCohortMethodConfig <- function(
+){
+  warning('createDefaultCohortMethodConfig has been depreciated please use createDefaultEstimationConfig() instead.')
+  result <- createDefaultEstimationConfig()
+  return(result)
+}
+
+#' createDefaultSccsConfig
+#'
+#' @description
+#' Create an R list with the SCCS config specification (depreciated)
+#'
+#' @details
+#' User specifies the settings to create a default config for a SCCS module
+#' 
+#'                             
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultSccsConfig <- function(
+){
+  warning('createDefaultSccsConfig has been depreciated please use createDefaultEstimationConfig() instead.')
+  result <- createDefaultEstimationConfig()
+  return(result)
+}
+
+#' createDefaultEvidenceSynthesisConfig
+#'
+#' @description
+#' Create an R list with the Evidence Synthesis config specification (depreciated)
+#'
+#' @details
+#' User specifies the settings to create a default config for a Evidence Synthesis module
+#' 
+#'                             
+#' @return
+#' An R list with the module config settings
+#'
+#' @export
+createDefaultEvidenceSynthesisConfig <- function(
+){
+  warning('createDefaultEvidenceSynthesisConfig has been depreciated please use createDefaultEstimationConfig() instead.')
+  result <- createDefaultEstimationConfig()
   return(result)
 }

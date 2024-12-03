@@ -5,6 +5,9 @@ test_that("shiny works", {
   config <- initializeModuleConfig() 
   config <-  addModuleConfig(config, createDefaultAboutConfig())
   
+  # editing for tests run
+  config$shinyModules[[1]]$shinyModulePackageVersion <- '1.0.0'
+  
   # check app fails when NULL connection
   expect_error(createShinyApp(config = config, connection = NULL))
   expect_error(createShinyApp(config = config, connection = NULL, connectionDetails = list()))
@@ -71,7 +74,6 @@ test_that("shiny outside package loads", {
 
   config <- addModuleConfig(config, moduleConfig)
 
-
   app <- createShinyApp(config = config, connectionDetails = testCd)
   testthat::expect_s3_class(app, "shiny.appobj")
 
@@ -95,7 +97,9 @@ test_that("shiny works", {
   config <- initializeModuleConfig() 
   config <-  addModuleConfig(config, createDefaultAboutConfig())
   
-
+  # editing for tests run
+  config$shinyModules[[1]]$shinyModulePackageVersion <- '1.0.0'
+  
   # create a connection and check app works
   tdb <- tempfile(fileext = "sqlite")
   htmlFileLocation <- tempfile(fileext = ".html")

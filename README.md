@@ -41,7 +41,7 @@ config <- initializeModuleConfig() %>%
     createDefaultPredictionConfig()
   ) %>%
   addModuleConfig(
-    createDefaultCohortMethodConfig()
+    createDefaultEstimationConfig()
   )
 
 # Step 2: specify the connection details to the results database 

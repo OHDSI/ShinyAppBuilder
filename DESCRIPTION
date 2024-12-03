@@ -20,13 +20,14 @@ Depends:
 Imports:
   checkmate,
   DatabaseConnector,
+  devtools,
   dplyr,
-  OhdsiShinyModules (>= 3.0.0),
   ParallelLogger (>= 2.0.0),
   ResultModelManager (>= 0.4.0),
   rlang,
   shiny,
-  shinydashboard
+  shinydashboard,
+  utils
 Suggests:
   Eunomia,
   jsonlite,
@@ -35,8 +36,5 @@ Suggests:
   testthat,
   markdown,
   remotes
-Remotes:
-  ohdsi/Eunomia,
-  ohdsi/OhdsiShinyModules
 RoxygenNote: 7.3.1
 Encoding: UTF-8

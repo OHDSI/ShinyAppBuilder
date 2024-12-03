@@ -43,12 +43,65 @@ createShinyApp <- function(
     resultDatabaseSettings = createDefaultResultDatabaseSettings(),
     connectionDetails = NULL,
     usePooledConnection = TRUE,
-    studyDescription = "No description provided. Further details about the analyses used in this study can be found below.",
+    studyDescription = NULL,
     title = "OHDSI Analysis Viewer",
     protocolLink = 'http://ohdsi.org',
     themePackage = "ShinyAppBuilder",
     reportSummaryDetails = NULL
       ){
+  
+  if(is.null(studyDescription)){
+    studyDescription <- "No description provided. Further details about the analyses used in this study can be found below."
+  }
+  
+  
+  # check OhdsiShinyModules required version is installed
+  ##packageVersion("OhdsiShinyModules")
+  deps <- unique(do.call('rbind', lapply(config$shinyModules, function(x){
+    data.frame(
+      shinyModulePackage = ifelse(is.null(x$shinyModulePackage),'none',x$shinyModulePackage), 
+      shinyModulePackageVersion = ifelse(is.null(x$shinyModulePackageVersion),'none',x$shinyModulePackageVersion)
+      )
+    })))
+  
+  if(sum(deps$shinyModulePackage %in% 'none') != length(deps$shinyModulePackage)){
+      
+      for(i in 1:nrow(deps)){
+        
+        versionNum <- tryCatch({utils::packageVersion(deps$shinyModulePackage[i])}, error = function(e) return(NULL))
+        
+        if(is.null(versionNum)){
+          warning(paste0('Package ', deps$shinyModulePackage[i], ' required based on config but not installed'))
+          if(interactive()){
+            installVal <- utils::menu(c("Yes", "No"), title= paste0("Package ", deps$shinyModulePackage[i] ," required but not installed. Do you want to install?"))
+            if(installVal == 1){
+              if(deps$shinyModulePackage[i] != "OhdsiShinyModules"){
+                utils::install.packages(deps$shinyModulePackage[i])
+              } else{
+                devtools::install_github('ohdsi/OhdsiShinyModules')
+              }
+            }
+          }
+        }
+        
+        # if there is a min version check 
+        if(deps$shinyModulePackageVersion[i] != 'none'){
+          # check version is >= minVersion
+          minVersion <- deps$shinyModulePackageVersion[i]
+          checkVal <- utils::compareVersion( 
+            a = as.character(versionNum), 
+            b = minVersion
+            )
+          if(checkVal == -1){
+            stop(paste0('Package ', deps$shinyModulePackage[i], ' needs to be version ', minVersion, ' or higher but is ', as.character(versionNum)))
+          }
+        }
+        
+      }
+      
+    }
+  
+  
   
   if(!is.null(reportSummaryDetails)){
     

@@ -8,6 +8,7 @@ createModuleConfig(
   moduleId = "about",
   tabName = "About",
   shinyModulePackage = "OhdsiShinyModules",
+  shinyModulePackageVersion = "3.0.0",
   moduleUiFunction = "aboutViewer",
   moduleServerFunction = "aboutServer",
   moduleInfoBoxFile = "aboutHelperFile()",
@@ -20,6 +21,8 @@ createModuleConfig(
 \item{tabName}{The name of the tab in the shiny app (this will be the side menu button text)}
 
 \item{shinyModulePackage}{The R package to find the server and UI functions}
+
+\item{shinyModulePackageVersion}{The minimum version of the shinyModulePackage}
 
 \item{moduleUiFunction}{The name of the UI function in the R package shinyModulePackage}
 

@@ -10,8 +10,7 @@ createShinyApp(
   resultDatabaseSettings = createDefaultResultDatabaseSettings(),
   connectionDetails = NULL,
   usePooledConnection = TRUE,
-  studyDescription =
-    "No description provided. Further details about the analyses used in this study can be found below.",
+  studyDescription = NULL,
   title = "OHDSI Analysis Viewer",
   protocolLink = "http://ohdsi.org",
   themePackage = "ShinyAppBuilder",
