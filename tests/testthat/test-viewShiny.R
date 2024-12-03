@@ -3,10 +3,35 @@ context("view shiny")
 test_that("shiny works", {
   
   config <- initializeModuleConfig() 
-  config <-  addModuleConfig(config, createDefaultAboutConfig())
   
-  # editing for tests run
-  config$shinyModules[[1]]$shinyModulePackageVersion <- '1.0.0'
+  fooModuleUi <- function (id = "foo") {
+    shiny::fluidPage(title = "foo")
+  }
+  
+  fooModule <- function(
+    id = 'foo',
+    connectionHandler = NULL,
+    resultDatabaseSettings = NULL,
+    config
+    ) {
+    shiny::moduleServer(id, function(input, output, session) { })
+  }
+  
+  fooHelpInfo <- function() {
+    'NA'
+  }
+  
+  moduleConfig <- createModuleConfig(
+    moduleId = 'foo',
+    tabName = "foo",
+    shinyModulePackage = NULL,
+    moduleUiFunction = fooModuleUi,
+    moduleServerFunction = fooModule,
+    moduleInfoBoxFile = "fooHelpInfo()",
+    moduleIcon = "info"
+  )
+  
+  config <- addModuleConfig(config, moduleConfig)
   
   # check app fails when NULL connection
   expect_error(createShinyApp(config = config, connection = NULL))
@@ -28,10 +53,10 @@ test_that("shiny works", {
     args = list(
     ),
     expr = {
-
-      testthat::expect_equal(runServer[['About']], 0)
-      session$setInputs(menu = 'About')
-      testthat::expect_equal(runServer[['About']], 1)
+      
+      testthat::expect_equal(runServer[['foo']], 0)
+      session$setInputs(menu = 'foo')
+      testthat::expect_equal(runServer[['foo']], 1)
 
     })
 
@@ -43,37 +68,20 @@ test_that("shiny works", {
   testthat::expect_s3_class(app, "shiny.appobj")
 })
 
-test_that("shiny outside package loads", {
+test_that("shiny OhdsiShinyModules test", {
+  
+  # skip in cran and github actions
+  skip_if_not_installed("OhdsiShinyModules")
+  
+  config <- initializeModuleConfig() 
+  config <-  addModuleConfig(config, createDefaultAboutConfig())
+  
+  # editing for tests run
+  config$shinyModules[[1]]$shinyModulePackageVersion <- '1.0.0'
+  
   tdb <- tempfile(fileext = "sqlite")
   on.exit(unlink(tdb))
-
   testCd <- DatabaseConnector::createConnectionDetails("sqlite", server = tdb)
-  fooModuleUi <- function (id = "foo") {
-    shiny::fluidPage(title = "foo")
-  }
-
-  fooModule <- function(id = 'foo') {
-    shiny::moduleServer(id, function(input, output, session) { })
-  }
-
-  fooHelpInfo <- function() {
-    system.file('about-www', "about.html", package = "OhdsiShinyModules")
-  }
-
-  config <- initializeModuleConfig()
-
-  moduleConfig <- createModuleConfig(
-    moduleId = 'foo',
-    tabName = "foo",
-    shinyModulePackage = NULL,
-    moduleUiFunction = fooModuleUi,
-    moduleServerFunction = fooModule,
-    moduleInfoBoxFile = "fooHelpInfo()",
-    moduleIcon = "info"
-  )
-
-  config <- addModuleConfig(config, moduleConfig)
-
   app <- createShinyApp(config = config, connectionDetails = testCd)
   testthat::expect_s3_class(app, "shiny.appobj")
 
@@ -83,9 +91,9 @@ test_that("shiny outside package loads", {
     ),
     expr = {
 
-      testthat::expect_equal(runServer[['foo']], 0)
-      session$setInputs(menu = 'foo')
-      testthat::expect_equal(runServer[['foo']], 1)
+      testthat::expect_equal(runServer[['About']], 0)
+      session$setInputs(menu = 'About')
+      testthat::expect_equal(runServer[['About']], 1)
 
     })
 })
@@ -95,10 +103,35 @@ test_that("shiny outside package loads", {
 test_that("shiny works", {
   
   config <- initializeModuleConfig() 
-  config <-  addModuleConfig(config, createDefaultAboutConfig())
   
-  # editing for tests run
-  config$shinyModules[[1]]$shinyModulePackageVersion <- '1.0.0'
+  fooModuleUi <- function (id = "foo") {
+    shiny::fluidPage(title = "foo")
+  }
+  
+  fooModule <- function(
+    id = 'foo',
+    connectionHandler = NULL,
+    resultDatabaseSettings = NULL,
+    config
+  ) {
+    shiny::moduleServer(id, function(input, output, session) { })
+  }
+  
+  fooHelpInfo <- function() {
+    'NA'
+  }
+  
+  moduleConfig <- createModuleConfig(
+    moduleId = 'foo',
+    tabName = "foo",
+    shinyModulePackage = NULL,
+    moduleUiFunction = fooModuleUi,
+    moduleServerFunction = fooModule,
+    moduleInfoBoxFile = "fooHelpInfo()",
+    moduleIcon = "info"
+  )
+  
+  config <- addModuleConfig(config, moduleConfig)
   
   # create a connection and check app works
   tdb <- tempfile(fileext = "sqlite")
