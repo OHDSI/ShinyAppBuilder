@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 .github
+Docker
 docs
 extras
 _pkgdown.yml
