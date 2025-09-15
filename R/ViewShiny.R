@@ -123,7 +123,7 @@ createShinyApp <- function(
       resultDatabaseSettings = resultDatabaseSettings
       ),
     onStart = function() {
-     shiny::onStop(connection$finalize)
+     shiny::onStop(connection$closeConnection())
     }
   )
 
